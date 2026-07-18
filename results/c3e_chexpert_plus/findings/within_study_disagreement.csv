@@ -1,0 +1,6 @@
+label,status,n_multi_image_frontal_studies,studies_with_label_scope,studies_identical,studies_differing,disagreement_pct,cooc_pos_neg,cooc_pos_unc,cooc_pos_null,cooc_neg_unc,cooc_neg_null,cooc_unc_null,ap_only_differing,pa_only_differing,ap_and_pa_differing
+Cardiomegaly,ok,3356,3356,3354,2,0.0596,0,1,0,0,0,1,2,0,0
+Edema,ok,3356,3356,3352,4,0.1192,1,3,0,0,0,0,4,0,0
+Pleural Effusion,ok,3356,3356,3354,2,0.0596,0,1,1,0,0,0,2,0,0
+Atelectasis,ok,3356,3356,3355,1,0.0298,0,1,0,0,0,0,1,0,0
+Consolidation,ok,3356,3356,3356,0,0.0,0,0,0,0,0,0,0,0,0

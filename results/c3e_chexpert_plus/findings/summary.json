@@ -1,0 +1,100 @@
+{
+  "dataset_name": "CheXpert Plus (findings labels)",
+  "label_source": "findings",
+  "study_key_parse_failures": 0,
+  "join": {
+    "join_key": "path_to_image",
+    "table_rows": 223462,
+    "label_records": 223462,
+    "matched_keys": 223462,
+    "unmatched_main_rows": 0,
+    "unmatched_label_records": 0,
+    "duplicate_keys_table": 0,
+    "duplicate_keys_labels": 0,
+    "table_key_unique": true,
+    "labels_key_unique": true,
+    "cardinality": "one_to_one",
+    "expansion_factor": 1.0,
+    "merged_rows": 223462
+  },
+  "cohort_structure": {
+    "total_table_rows": 223462,
+    "frontal_image_rows": 191071,
+    "lateral_or_excluded_rows": 32391,
+    "patient_count_full": 64725,
+    "patient_count_frontal": 64710,
+    "study_count_full": 187711,
+    "study_count_frontal": 187674,
+    "frontal_images_per_study": {
+      "min": 1,
+      "median": 1.0,
+      "mean": 1.0181,
+      "max": 3,
+      "studies_with_more_than_one_frontal": 3356
+    },
+    "ap_pa_distribution_frontal_images": {
+      "AP": 161622,
+      "PA": 29432,
+      "LL": 16,
+      "RL": 1
+    },
+    "split_distribution_frontal_images": {
+      "train": 190869,
+      "valid": 202
+    },
+    "split_distribution_all_rows": {
+      "train": 223228,
+      "valid": 234
+    }
+  },
+  "missingness_relationship": {
+    "per_label_absent_fraction_spread": {
+      "Cardiomegaly": 0.097351,
+      "Edema": 0.072526,
+      "Pleural Effusion": 0.109395,
+      "Atelectasis": 0.094727,
+      "Consolidation": 0.097357
+    },
+    "max_absent_fraction_spread_across_states": 0.109395,
+    "context_missingness_appears_label_associated": true,
+    "note": "association only; no causal claim"
+  },
+  "patient_split_separation": {
+    "available": true,
+    "patients_per_split": {
+      "train": 64510,
+      "valid": 200
+    },
+    "overlap": {
+      "train__valid": 0
+    }
+  },
+  "analysis_policy": {
+    "primary_observation_unit": "image",
+    "study_equal_weighting": true,
+    "patient_clustered_bootstrap": true,
+    "bootstrap_replicates_final": 1000,
+    "retain_all_frontal_images": true,
+    "aggregate_labels": false
+  },
+  "sensitivity_analyses": {
+    "unweighted_image_level": true,
+    "one_image_per_study": {
+      "enabled": true,
+      "selection_rule": "lowest_view_number_then_stable_lexical",
+      "label_blind": true
+    },
+    "concordant_study_subset": {
+      "enabled": true,
+      "target_specific": true,
+      "disagreement_policy": "exclude_for_target"
+    }
+  },
+  "gate_passed": true,
+  "encoding": {
+    "positive": 1,
+    "negative": 0,
+    "uncertain": -1,
+    "unmentioned": null
+  }
+}

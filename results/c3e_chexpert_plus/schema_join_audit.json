@@ -1,0 +1,215 @@
+{
+  "audit": "C3E-E2 CheXpert Plus schema + join audit",
+  "date": "2026-07-18",
+  "safety": "aggregate/schema only; no raw text, no identifier values, source files unmodified",
+  "parquet": {
+    "file": "data/chexpert_plus/df_chexpert_plus_240401.parquet",
+    "total_rows": 223462,
+    "n_columns": 27,
+    "column_dtypes": {
+      "path_to_image": "string",
+      "path_to_dcm": "string",
+      "frontal_lateral": "string",
+      "ap_pa": "string",
+      "deid_patient_id": "string",
+      "patient_report_date_order": "int64",
+      "report": "string",
+      "section_narrative": "string",
+      "section_clinical_history": "string",
+      "section_history": "string",
+      "section_comparison": "string",
+      "section_technique": "string",
+      "section_procedure_comments": "string",
+      "section_findings": "string",
+      "section_impression": "string",
+      "section_end_of_impression": "string",
+      "section_summary": "string",
+      "section_accession_number": "string",
+      "age": "double",
+      "sex": "string",
+      "race": "string",
+      "ethnicity": "string",
+      "interpreter_needed": "string",
+      "insurance_type": "string",
+      "recent_bmi": "double",
+      "deceased": "string",
+      "split": "string"
+    },
+    "null_count_by_column": {
+      "path_to_image": 0, "path_to_dcm": 0, "frontal_lateral": 0, "ap_pa": 32391,
+      "deid_patient_id": 0, "patient_report_date_order": 0, "report": 0,
+      "section_narrative": 28, "section_clinical_history": 84596, "section_history": 185270,
+      "section_comparison": 10337, "section_technique": 212730, "section_procedure_comments": 197793,
+      "section_findings": 163993, "section_impression": 145, "section_end_of_impression": 149724,
+      "section_summary": 33814, "section_accession_number": 0, "age": 278, "sex": 0, "race": 0,
+      "ethnicity": 0, "interpreter_needed": 0, "insurance_type": 0, "recent_bmi": 58477,
+      "deceased": 0, "split": 0
+    },
+    "unique_count_by_column": {
+      "path_to_image": 223462, "path_to_dcm": 223462, "frontal_lateral": 2, "ap_pa": 4,
+      "deid_patient_id": 64725, "patient_report_date_order": 92, "report": 223460,
+      "section_narrative": 201343, "section_clinical_history": 93944, "section_history": 26424,
+      "section_comparison": 165395, "section_technique": 3452, "section_procedure_comments": 924,
+      "section_findings": 48161, "section_impression": 188296, "section_end_of_impression": 4220,
+      "section_summary": 44624, "section_accession_number": 175848, "age": 73, "sex": 3, "race": 8,
+      "ethnicity": 4, "interpreter_needed": 3, "insurance_type": 5, "recent_bmi": 396,
+      "deceased": 3, "split": 2
+    },
+    "candidate_identifier_columns": {
+      "path_to_image": {"unique": 223462, "nulls": 0, "unique_rate": 1.0, "row_unique": true, "role": "image_id (verified unique, non-null)"},
+      "path_to_dcm": {"unique": 223462, "nulls": 0, "unique_rate": 1.0, "row_unique": true, "role": "image_id alt (DICOM path)"},
+      "deid_patient_id": {"unique": 64725, "nulls": 0, "unique_rate": 0.289647, "row_unique": false, "role": "patient_id (verified)"},
+      "patient_report_date_order": {"unique": 92, "role": "per-patient ordinal index (1..92), not a global key"},
+      "section_accession_number": {"unique": 175848, "nulls": 0, "unique_rate": 0.786926, "row_unique": false, "role": "unreliable study proxy (mega-bucket max 776 images/accession; many-to-many with path-study)"},
+      "report": {"unique": 223460, "nulls": 0, "unique_rate": 0.999991, "role": "near-unique per image row; denormalized full report text"}
+    },
+    "categorical_counts": {
+      "split": {"train": 223228, "valid": 234},
+      "frontal_lateral": {"Frontal": 191071, "Lateral": 32391},
+      "ap_pa": {"AP": 161622, "NULL": 32391, "PA": 29432, "LL": 16, "RL": 1}
+    },
+    "categorical_casing_confirmed": {
+      "split_values": ["train", "valid"],
+      "frontal_lateral_values": ["Frontal", "Lateral"],
+      "ap_pa_values": ["AP", "PA", "LL", "RL", "(null on all lateral rows)"]
+    },
+    "text_column_stats": {
+      "section_clinical_history": {"null_count": 84596, "empty_string_count": 6, "non_empty_count": 138860, "median_char_count": 42.0, "median_token_count": 6.0, "count_below_3_tokens": 13360, "count_below_5_tokens": 32835, "count_below_10_tokens": 115056},
+      "section_history": {"null_count": 185270, "empty_string_count": 1, "non_empty_count": 38191, "median_char_count": 36.0, "median_token_count": 6.0, "count_below_3_tokens": 3210, "count_below_5_tokens": 9357, "count_below_10_tokens": 32596},
+      "section_narrative": {"null_count": 28, "empty_string_count": 5512, "non_empty_count": 217922, "median_char_count": 31.0, "median_token_count": 5.0, "count_below_3_tokens": 11889, "count_below_5_tokens": 72849, "count_below_10_tokens": 200511},
+      "section_procedure_comments": {"null_count": 197793, "empty_string_count": 0, "non_empty_count": 25669, "median_char_count": 25.0, "median_token_count": 5.0, "count_below_3_tokens": 3, "count_below_5_tokens": 21, "count_below_10_tokens": 24918}
+    }
+  },
+  "unit_of_observation": {
+    "parquet": "image-level (one row per chest-X-ray image)",
+    "evidence": {
+      "path_to_image_row_unique": true,
+      "path_to_dcm_row_unique": true,
+      "rows_per_patient": {"n_patients": 64725, "min": 1, "median": 2.0, "mean": 3.4525, "max": 92},
+      "path_pattern": "SPLIT/patientN/studyN/VIEW.jpg (100% of rows, depth 3)",
+      "path_patient_consistency": {"patient_dirs_to_multiple_deid_ids": 0, "deid_ids_to_multiple_patient_dirs": 0},
+      "path_studyN_is_not_semantic_study": {
+        "path_studies_total": 187711,
+        "path_studies_with_multiple_report_text": 33971,
+        "path_studies_with_multiple_report_date_order": 33973,
+        "path_studies_with_multiple_accession": 33898,
+        "interpretation": "path studyN is a per-image folder counter, not a stable study grouping"
+      },
+      "no_reliable_study_key": true
+    },
+    "json_labels": "image-level (one record per path_to_image)"
+  },
+  "json_label_files": {
+    "structure": "JSON Lines (one JSON object per line); NOT a single JSON document",
+    "record_field_names": ["path_to_image", "Enlarged Cardiomediastinum", "Cardiomegaly", "Lung Opacity", "Lung Lesion", "Edema", "Consolidation", "Pneumonia", "Atelectasis", "Pneumothorax", "Pleural Effusion", "Pleural Other", "Fracture", "Support Devices", "No Finding"],
+    "identifier_field": "path_to_image",
+    "pathology_label_fields": 14,
+    "label_value_encoding": {"1.0": "positive", "0.0": "negative", "-1.0": "uncertain", "null": "unmentioned"},
+    "per_file": {
+      "findings_fixed.json": {"records": 223462, "unique_keys": 223462, "duplicate_keys": 0},
+      "impression_fixed.json": {"records": 223462, "unique_keys": 223462, "duplicate_keys": 0},
+      "report_fixed.json": {"records": 223462, "unique_keys": 223462, "duplicate_keys": 0}
+    },
+    "five_target_label_distributions": {
+      "note": "counts of pos / neg / uncertain(-1) / unmentioned(null)",
+      "findings_fixed.json": {
+        "Cardiomegaly": {"pos": 10971, "neg": 11261, "unc": 1554, "unmentioned": 199676},
+        "Edema": {"pos": 12148, "neg": 4443, "unc": 2687, "unmentioned": 204184},
+        "Pleural Effusion": {"pos": 24511, "neg": 10586, "unc": 2281, "unmentioned": 186084},
+        "Atelectasis": {"pos": 9136, "neg": 167, "unc": 8371, "unmentioned": 205788},
+        "Consolidation": {"pos": 4159, "neg": 7083, "unc": 5938, "unmentioned": 206282}
+      },
+      "impression_fixed.json": {
+        "Cardiomegaly": {"pos": 30558, "neg": 16160, "unc": 3921, "unmentioned": 172823},
+        "Edema": {"pos": 53011, "neg": 21229, "unc": 12217, "unmentioned": 137005},
+        "Pleural Effusion": {"pos": 89267, "neg": 36290, "unc": 7614, "unmentioned": 90291},
+        "Atelectasis": {"pos": 33851, "neg": 727, "unc": 34401, "unmentioned": 154483},
+        "Consolidation": {"pos": 13702, "neg": 31452, "unc": 26627, "unmentioned": 151681}
+      },
+      "report_fixed.json": {
+        "Cardiomegaly": {"pos": 36172, "neg": 25996, "unc": 7023, "unmentioned": 154271},
+        "Edema": {"pos": 54255, "neg": 23071, "unc": 13032, "unmentioned": 133104},
+        "Pleural Effusion": {"pos": 94076, "neg": 43956, "unc": 7472, "unmentioned": 77958},
+        "Atelectasis": {"pos": 38283, "neg": 745, "unc": 35267, "unmentioned": 149167},
+        "Consolidation": {"pos": 14709, "neg": 33262, "unc": 28101, "unmentioned": 147390}
+      }
+    }
+  },
+  "json_comparison": {
+    "same_record_count": true,
+    "identical_key_sets": true,
+    "key_order_identical_across_files": true,
+    "same_ontology": true,
+    "pairwise_key_overlap_all": 223462,
+    "differ_only_by_source_text_scope": true,
+    "produce_different_label_distributions": true,
+    "five_label_value_disagreement_counts": {
+      "Cardiomegaly": {"findings_vs_impression": 63575, "findings_vs_report": 82302, "impression_vs_report": 96840},
+      "Edema": {"findings_vs_impression": 76534, "findings_vs_report": 98359, "impression_vs_report": 125845},
+      "Pleural Effusion": {"findings_vs_impression": 125763, "findings_vs_report": 145975, "impression_vs_report": 144071},
+      "Atelectasis": {"findings_vs_impression": 65130, "findings_vs_report": 83235, "impression_vs_report": 108863},
+      "Consolidation": {"findings_vs_impression": 67627, "findings_vs_report": 85316, "impression_vs_report": 114232}
+    },
+    "inferred_meaning": {
+      "status": "INFERRED (no explicit metadata in files; consistent with CheXpert Plus CheXbert-labeler design)",
+      "findings_fixed": "labels from section_findings text scope",
+      "impression_fixed": "labels from section_impression text scope",
+      "report_fixed": "labels from the full report text scope (superset containing all sections)"
+    }
+  },
+  "join_audit": {
+    "join_key": "path_to_image",
+    "parquet_unique_path_to_image": 223462,
+    "parquet_path_unique_rate": 1.0,
+    "per_file": {
+      "findings_fixed.json": {"matched_main_rows": 223462, "unmatched_main_rows": 0, "unmatched_label_records": 0, "duplicate_keys": 0, "expansion_factor": 1.0, "cardinality": "one-to-one", "match_rate": 1.0},
+      "impression_fixed.json": {"matched_main_rows": 223462, "unmatched_main_rows": 0, "unmatched_label_records": 0, "duplicate_keys": 0, "expansion_factor": 1.0, "cardinality": "one-to-one", "match_rate": 1.0},
+      "report_fixed.json": {"matched_main_rows": 223462, "unmatched_main_rows": 0, "unmatched_label_records": 0, "duplicate_keys": 0, "expansion_factor": 1.0, "cardinality": "one-to-one", "match_rate": 1.0}
+    },
+    "rejected_many_to_many": "none proposed; only the verified one-to-one path_to_image join is used",
+    "alternative_keys_rejected": {
+      "section_accession_number": "many-to-many with path-study; mega-bucket of 776 images/accession; unusable as study or image key",
+      "path_studyN": "not a semantic study key (same folder holds distinct reports/accessions)",
+      "report_text": "near-unique but text-valued; unsuitable as a join key and cannot be exported"
+    }
+  },
+  "leakage_assessment": {
+    "permitted_model_inputs": ["section_clinical_history", "section_history"],
+    "excluded_from_input": ["section_narrative", "section_findings", "section_impression", "diagnostic summary / any target-source text"],
+    "report_contains_input_sections_fraction": {
+      "section_clinical_history_in_report": 1.0,
+      "section_history_in_report": 1.0,
+      "section_findings_in_report": 1.0,
+      "section_impression_in_report": 1.0,
+      "section_narrative_in_report": 1.0
+    },
+    "input_leaks_into_label_source_fraction": {
+      "clinical_history_in_impression": 0.000108,
+      "clinical_history_in_findings": 0.000111,
+      "history_in_impression": 0.000079,
+      "history_in_findings": 0.0
+    },
+    "verdicts": {
+      "findings_fixed.json": "NO apparent input leakage (labels from section_findings, which is excluded from input and effectively never contains input text); document indirect derivation",
+      "impression_fixed.json": "NO apparent input leakage (labels from section_impression, excluded from input, effectively never contains input text); document indirect derivation",
+      "report_fixed.json": "DIRECT input-target leakage / circular evaluation — report text contains 100% of section_clinical_history and section_history, the permitted model inputs"
+    }
+  },
+  "final_decisions": {
+    "unit_of_observation_parquet": "image-level",
+    "unit_of_observation_json": "image-level",
+    "verified_join_key": "path_to_image",
+    "join_cardinality": "one-to-one (223462 rows <-> 223462 label records, full match, no duplicates, expansion 1.0)",
+    "frontal_category_exact": "Frontal",
+    "lateral_category_exact": "Lateral",
+    "label_encoding": {"positive": 1, "negative": 0, "uncertain": -1, "unmentioned": null},
+    "recommended_label_resource": "impression_fixed.json (primary); findings_fixed.json (conservative alternative). report_fixed.json REJECTED for leakage.",
+    "recommended_label_resource_status": "RECOMMENDED pending researcher sign-off on impression-vs-findings target choice",
+    "study_id": "UNRESOLVED / not available (no reliable study key in data)",
+    "image_id": "path_to_image",
+    "patient_id": "deid_patient_id",
+    "safe_merged_manifest_possible": true,
+    "run_chexpert_audit_authorized": false,
+    "verdict": "MODIFY"
+  }
+}

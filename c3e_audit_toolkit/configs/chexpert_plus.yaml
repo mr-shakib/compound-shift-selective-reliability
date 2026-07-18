@@ -1,0 +1,79 @@
+# CheXpert Plus audit config — PARTIALLY VERIFIED.
+#
+# Column names below marked "confirmed" come from the Redivis dataset schema
+# export (chexpert_plus.json, table df_chexpert_plus_240401) inspected on
+# 2026-07-15 — this is real schema metadata from the dataset's own Redivis
+# page (id 5yyj-1a9f6ap0x, DOI 10.57761/fzna-pm76), not a guess. It contains
+# no patient records, report text, or images — column names/types only.
+#
+# Everything still marked TODO could not be resolved from that schema export
+# and remains a placeholder. See docs/CHEXPERT_SCHEMA_MAPPING.md for the full
+# tracking table and reasoning.
+#
+# Do not run c3e-audit table against real data with this file until every
+# remaining TODO has been checked against the real row-level data.
+
+dataset_name: CheXpert Plus
+
+id_columns:
+  patient: deid_patient_id   # confirmed: df_chexpert_plus_240401.deid_patient_id
+  study: study_id        # TODO: no dedicated study_id column found in df_chexpert_plus_240401's 27 columns;
+                          # candidates to evaluate once real data is visible: section_accession_number,
+                          # or deriving a study key from (deid_patient_id, patient_report_date_order)
+  image: image_id         # TODO: no dedicated image_id column found; only path_to_dcm / path_to_image exist.
+                           # Using a path column as an identifier is possible but unverified — confirm
+                           # paths are unique per image and stable before relying on them as an ID.
+
+split_column: split        # confirmed: df_chexpert_plus_240401.split (values not yet inspected — verify
+                            # they map to train/valid/test as expected)
+
+view_column: frontal_lateral   # confirmed column exists, but toolkit only supports one view column;
+                                # df_chexpert_plus_240401 has TWO relevant columns: ap_pa and
+                                # frontal_lateral. frontal_lateral was chosen as the frontal/lateral gate
+                                # since it directly encodes that distinction; ap_pa is orthogonal
+                                # (AP vs PA, only meaningful for frontal views). Confirm the exact string
+                                # values (e.g. "Frontal"/"Lateral") once real data is visible.
+frontal_values: [Frontal]  # TODO: verify exact casing/spelling used in the real frontal_lateral column
+
+context_columns:                    # confirmed columns exist; selection below is a judgment call, not
+                                     # exhaustive — see docs/CHEXPERT_SCHEMA_MAPPING.md
+  - section_clinical_history          # confirmed: df_chexpert_plus_240401.section_clinical_history
+  - section_history                    # confirmed: df_chexpert_plus_240401.section_history
+  # No column named "indication" exists in the confirmed schema. section_narrative and
+  # section_procedure_comments also exist but were NOT added here — their relationship to
+  # pre-diagnostic context vs. other report content needs manual review before inclusion
+  # (see docs/CHEXPERT_SCHEMA_MAPPING.md, "Indication" row).
+
+labels:                     # TODO: the "chexpert_labels" table in the Redivis schema export is itself a
+                             # file-index table (file_id/file_name/size/md5_hash), not a table of label
+                             # columns — the actual label column names are inside the referenced file(s)
+                             # and were NOT visible in the schema export. Still unverified.
+  - Cardiomegaly
+  - Edema
+  - Pleural Effusion
+  - Atelectasis
+  - Consolidation
+
+uncertain_value: -1         # TODO: verify uncertain-label encoding matches CheXpert Plus (may differ from MIMIC)
+positive_value: 1           # TODO: verify positive-label encoding
+negative_value: 0           # TODO: verify negative-label encoding
+unmentioned_is_missing: true
+
+low_information:
+  min_tokens: 5
+  generic_phrases:
+    - chest xray
+    - chest radiograph
+    - follow up
+    - follow-up
+    - rule out
+    - evaluate
+    - portable chest
+
+gate:
+  min_usable_context_fraction: 0.40
+  min_missing_or_low_info_fraction: 0.05
+  min_source_positive: 1000
+  min_target_positive: 200
+  min_viable_labels: 3
+  max_direct_mention_fraction_among_positives: 0.70

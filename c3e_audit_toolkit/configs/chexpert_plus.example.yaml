@@ -1,0 +1,39 @@
+dataset_name: CheXpert Plus
+id_columns:
+  patient: patient_id
+  study: study_id
+  image: image_id
+split_column: null
+view_column: view_position
+frontal_values: [AP, PA, Frontal]
+context_columns:
+  - clinical_history
+  - history
+  - indication
+labels:
+  - Cardiomegaly
+  - Edema
+  - Pleural Effusion
+  - Atelectasis
+  - Consolidation
+uncertain_value: -1
+positive_value: 1
+negative_value: 0
+unmentioned_is_missing: true
+low_information:
+  min_tokens: 5
+  generic_phrases:
+    - chest xray
+    - chest radiograph
+    - follow up
+    - follow-up
+    - rule out
+    - evaluate
+    - portable chest
+gate:
+  min_usable_context_fraction: 0.40
+  min_missing_or_low_info_fraction: 0.05
+  min_source_positive: 1000
+  min_target_positive: 200
+  min_viable_labels: 3
+  max_direct_mention_fraction_among_positives: 0.70

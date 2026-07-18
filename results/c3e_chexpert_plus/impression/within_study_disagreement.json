@@ -1,0 +1,255 @@
+{
+  "n_multi_image_frontal_studies": 3356,
+  "labels": {
+    "Cardiomegaly": {
+      "status": "ok",
+      "multi_image_studies_with_label_scope": 3356,
+      "studies_identical": 3353,
+      "studies_differing": 3,
+      "disagreement_pct": 0.0894,
+      "state_cooccurrence_matrix": {
+        "pos": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "neg": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 3
+        },
+        "unc": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "null": {
+          "pos": 0,
+          "neg": 3,
+          "unc": 0,
+          "null": 0
+        }
+      },
+      "by_view_stratum": {
+        "ap_only": {
+          "identical": 2531,
+          "differing": 2,
+          "disagreement_pct": 0.079
+        },
+        "pa_only": {
+          "identical": 700,
+          "differing": 1,
+          "disagreement_pct": 0.1427
+        },
+        "ap_and_pa": {
+          "identical": 122,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        }
+      }
+    },
+    "Edema": {
+      "status": "ok",
+      "multi_image_studies_with_label_scope": 3356,
+      "studies_identical": 3356,
+      "studies_differing": 0,
+      "disagreement_pct": 0.0,
+      "state_cooccurrence_matrix": {
+        "pos": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "neg": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "unc": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "null": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        }
+      },
+      "by_view_stratum": {
+        "ap_only": {
+          "identical": 2533,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        },
+        "pa_only": {
+          "identical": 701,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        },
+        "ap_and_pa": {
+          "identical": 122,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        }
+      }
+    },
+    "Pleural Effusion": {
+      "status": "ok",
+      "multi_image_studies_with_label_scope": 3356,
+      "studies_identical": 3354,
+      "studies_differing": 2,
+      "disagreement_pct": 0.0596,
+      "state_cooccurrence_matrix": {
+        "pos": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 1,
+          "null": 1
+        },
+        "neg": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "unc": {
+          "pos": 1,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "null": {
+          "pos": 1,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        }
+      },
+      "by_view_stratum": {
+        "ap_only": {
+          "identical": 2531,
+          "differing": 2,
+          "disagreement_pct": 0.079
+        },
+        "pa_only": {
+          "identical": 701,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        },
+        "ap_and_pa": {
+          "identical": 122,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        }
+      }
+    },
+    "Atelectasis": {
+      "status": "ok",
+      "multi_image_studies_with_label_scope": 3356,
+      "studies_identical": 3355,
+      "studies_differing": 1,
+      "disagreement_pct": 0.0298,
+      "state_cooccurrence_matrix": {
+        "pos": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 1,
+          "null": 0
+        },
+        "neg": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "unc": {
+          "pos": 1,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        },
+        "null": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        }
+      },
+      "by_view_stratum": {
+        "ap_only": {
+          "identical": 2532,
+          "differing": 1,
+          "disagreement_pct": 0.0395
+        },
+        "pa_only": {
+          "identical": 701,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        },
+        "ap_and_pa": {
+          "identical": 122,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        }
+      }
+    },
+    "Consolidation": {
+      "status": "ok",
+      "multi_image_studies_with_label_scope": 3356,
+      "studies_identical": 3354,
+      "studies_differing": 2,
+      "disagreement_pct": 0.0596,
+      "state_cooccurrence_matrix": {
+        "pos": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 0,
+          "null": 1
+        },
+        "neg": {
+          "pos": 0,
+          "neg": 0,
+          "unc": 1,
+          "null": 0
+        },
+        "unc": {
+          "pos": 0,
+          "neg": 1,
+          "unc": 0,
+          "null": 0
+        },
+        "null": {
+          "pos": 1,
+          "neg": 0,
+          "unc": 0,
+          "null": 0
+        }
+      },
+      "by_view_stratum": {
+        "ap_only": {
+          "identical": 2533,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        },
+        "pa_only": {
+          "identical": 699,
+          "differing": 2,
+          "disagreement_pct": 0.2853
+        },
+        "ap_and_pa": {
+          "identical": 122,
+          "differing": 0,
+          "disagreement_pct": 0.0
+        }
+      }
+    }
+  }
+}

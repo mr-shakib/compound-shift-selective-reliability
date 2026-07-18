@@ -1,0 +1,122 @@
+{
+  "audit": "C3E-E2 corrective study-key audit",
+  "date": "2026-07-18",
+  "safety": "aggregate/schema only; no paths, identifiers, hashes, or clinical text emitted; source files unmodified",
+  "previous_conclusion": "no reliable study identifier available (INCORRECT)",
+  "correction_verdict": "CORRECTED: a reliable composite study key exists",
+  "path_parse": {
+    "parser": "PurePosixPath",
+    "expected_components": 4,
+    "component_roles": ["split", "patient_folder", "study_folder", "image_filename"],
+    "rows_with_4_components": 223462,
+    "parse_failures": 0,
+    "unique_split_components": 2,
+    "unique_patient_folders": 64725,
+    "unique_study_folder_labels_local": 91,
+    "unique_image_filenames": 6,
+    "note": "study_folder label is NOT globally unique (restarts within each patient), so it must be combined with the patient component"
+  },
+  "candidate_study_keys": {
+    "cand1_patientfolder_studyfolder": {
+      "unique_studies": 187711, "parse_or_null_keys": 0,
+      "images_per_study": {"min": 1, "median": 1.0, "mean": 1.1905, "max": 3},
+      "studies_gt1_image": 33973, "studies_gt1_frontal_image": 3356,
+      "studies_multi_patient": 0, "studies_multi_split": 0, "studies_inconsistent_deid_patient": 0
+    },
+    "cand2_deidpatient_studyfolder": {
+      "unique_studies": 187711, "parse_or_null_keys": 0,
+      "images_per_study": {"min": 1, "median": 1.0, "mean": 1.1905, "max": 3},
+      "studies_gt1_image": 33973, "studies_gt1_frontal_image": 3356,
+      "studies_multi_patient": 0, "studies_multi_split": 0, "studies_inconsistent_deid_patient": 0
+    },
+    "cand3_split_patientfolder_studyfolder": {
+      "unique_studies": 187711, "parse_or_null_keys": 0,
+      "images_per_study": {"min": 1, "median": 1.0, "mean": 1.1905, "max": 3},
+      "studies_gt1_image": 33973, "studies_gt1_frontal_image": 3356,
+      "studies_multi_patient": 0, "studies_multi_split": 0, "studies_inconsistent_deid_patient": 0
+    }
+  },
+  "partition_identity": {
+    "cand1_vs_cand2_identical_partition": true,
+    "cand1_vs_cand3_identical_partition": true,
+    "note": "deid_patient_id maps 1:1 to the patient folder; split is fully determined by patient. All three candidates are the same partition. cand1 (patient_folder + study_folder) is the recommended definition (self-contained in the path, no dependence on split labels)."
+  },
+  "official_comparison": {
+    "official_image_report_pairs": 223462,
+    "observed_rows": 223462,
+    "official_studies_approx": 187711,
+    "observed_unique_studies": 187711,
+    "discrepancy": 0,
+    "mean_images_per_study_observed": 1.1905,
+    "conclusion": "observed study count matches the officially documented total exactly (not forced)"
+  },
+  "within_study_report_consistency_normalized": {
+    "method": "sha1 over whitespace-collapsed, lowercased, stripped section text; distinct non-null hashes per study",
+    "section_impression": {"studies_with_nonnull": 187573, "inconsistent": 5462, "consistent": 182111, "consistent_pct": 97.09},
+    "section_findings": {"studies_with_nonnull": 48148, "inconsistent": 1699, "consistent": 46449, "consistent_pct": 96.47},
+    "section_clinical_history": {"studies_with_nonnull": 116228, "inconsistent": 838, "consistent": 115390, "consistent_pct": 99.28},
+    "section_history": {"studies_with_nonnull": 30864, "inconsistent": 274, "consistent": 30590, "consistent_pct": 99.11},
+    "report_full_field": {"studies_with_nonnull": 187711, "inconsistent": 33971, "consistent": 153740, "consistent_pct": 81.9},
+    "complete_section_tuple": {"studies_with_nonnull": 187711, "inconsistent": 7271, "consistent": 180440, "consistent_pct": 96.13}
+  },
+  "report_near_unique_reexamination": {
+    "distinct_raw_report_strings_total": 223460,
+    "distinct_normalized_report_hashes_total": 223460,
+    "studies_multi_distinct_raw_report": 33971,
+    "studies_multi_distinct_normalized_report": 33971,
+    "normalization_changed_result": false,
+    "n_studies": 187711,
+    "n_multi_image_studies": 33973,
+    "root_cause": "previous 'near-unique report per image' was a field-choice + grouping misinterpretation, NOT a normalization bug: the FULL report field is genuinely captured per-image (varies in ~all multi-image studies), but the label-source sections (impression/findings) are ~97% duplicated across a study's images. The prior audit read full-report variance as 'no study structure', which was wrong.",
+    "multi_image_study_section_divergence": {
+      "impression_inconsistent_among_multi_image_studies": 5462,
+      "impression_inconsistent_among_multi_image_studies_pct": 16.08,
+      "any_section_inconsistent_among_multi_image_studies": 7271,
+      "any_section_inconsistent_among_multi_image_studies_pct": 21.4,
+      "note": "a real minority of multi-image studies pair genuinely different section text; documented caveat, does not invalidate the key (count matches official; 0 multi-patient/multi-split)"
+    }
+  },
+  "hierarchy_confirmed": {
+    "structure": "patient -> study/report -> image(s)",
+    "study_key": "patient_folder + study_folder (equivalently deid_patient_id + study_folder)",
+    "report_sections_duplicated_across_study_images": "largely yes (impression 97.1%, clinical_history 99.3%); full raw report field is per-image and not duplicated",
+    "unit_of_row": "image (path_to_image row-unique)",
+    "label_records_unit": "image (labels/*_fixed.json keyed by path_to_image)"
+  },
+  "frontal_structure": {
+    "total_studies": 187711,
+    "studies_zero_frontal": 37,
+    "studies_exactly_one_frontal": 184318,
+    "studies_more_than_one_frontal": 3356,
+    "studies_ap_only": 158938,
+    "studies_pa_only": 28614,
+    "studies_both_ap_and_pa": 122,
+    "note": "37 lateral-only studies; 3,356 studies (1.8%) carry >1 frontal image; image-selection policy deferred"
+  },
+  "label_source_decision": {
+    "primary_full_cohort_endpoint": "impression_fixed.json",
+    "mandatory_sensitivity_endpoint": "findings_fixed.json",
+    "excluded": "report_fixed.json (direct input-target leakage)",
+    "status": "APPROVED research decision (recorded 2026-07-18)"
+  },
+  "cross_site_harmonization": {
+    "requirement": "labeler must match across sites",
+    "rules": [
+      "CheXbert impression labels at BOTH MIMIC and CheXpert Plus",
+      "CheXbert findings labels at BOTH MIMIC and CheXpert Plus",
+      "do NOT mix MIMIC CheXpert-labeler outputs with CheXpert Plus CheXbert outputs in the primary experiment"
+    ],
+    "chexbert_run_now": false,
+    "reason": "MIMIC data access still pending"
+  },
+  "recommendations": {
+    "study_key": "use derived composite study key: patient_folder + study_folder",
+    "splitting_unit": "patient-level (deid_patient_id) — non-negotiable for leakage-safe splits",
+    "evaluation_clustering_unit": "study-level clustering (report sections shared within study; account for intra-study correlation)",
+    "config_layout": "separate proposed configs: chexpert_plus_impression.yaml (primary) and chexpert_plus_findings.yaml (sensitivity)",
+    "create_configs_now": false,
+    "yaml_modification_authorized": false,
+    "full_chexpert_audit_authorized": false,
+    "verdict": "MODIFY"
+  }
+}

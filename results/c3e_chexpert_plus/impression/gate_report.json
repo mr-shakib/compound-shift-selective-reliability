@@ -1,0 +1,23 @@
+{
+  "role": "target",
+  "checks": {
+    "usable_context": true,
+    "enough_missing_or_low_information": true,
+    "enough_viable_labels": true,
+    "direct_mentions_below_limit_for_viable_labels": true
+  },
+  "passed": true,
+  "viable_labels": [
+    "Cardiomegaly",
+    "Edema",
+    "Pleural Effusion",
+    "Atelectasis",
+    "Consolidation"
+  ],
+  "leakage_failures": [],
+  "fractions": {
+    "usable": 0.6026241554186663,
+    "absent": 0.21545917486170063,
+    "low_information": 0.18191666971963302
+  }
+}

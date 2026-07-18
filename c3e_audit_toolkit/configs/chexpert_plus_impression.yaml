@@ -1,0 +1,126 @@
+# CheXpert Plus audit config — PRIMARY label endpoint (impression).
+#
+# Verified against real row-level data on 2026-07-18 (C3-E2). All identifiers,
+# encodings, the view value, the split values, the label join key, and the
+# derived composite study key were confirmed. See:
+#   docs/CHEXPERT_SCHEMA_MAPPING.md, docs/CHEXPERT_JOIN_AUDIT.md,
+#   docs/CHEXPERT_CONFIG_DECISION.md, docs/LABEL_HARMONIZATION_PLAN.md
+#
+# This config is consumed by:  c3e-audit chexpert --config <this file> [--dry-run]
+# Paths are relative to this file's directory (c3e_audit_toolkit/configs/).
+
+dataset_name: CheXpert Plus (impression labels)
+
+# Main image-level table (one row per image; path_to_image is row-unique).
+table_path: ../../data/chexpert_plus/df_chexpert_plus_240401.parquet
+
+# Primary label source. impression_fixed = CheXbert labels over the impression
+# section scope. Dense (impression present in 99.9% of rows) and free of
+# input-target leakage. report_fixed.json is FORBIDDEN (leakage) and rejected
+# by the schema validator.
+label_source:
+  path: ../../data/chexpert_plus/labels/impression_fixed.json
+  format: jsonl                 # JSON Lines: one object per line
+  join_key: path_to_image       # one-to-one with the main table
+  cardinality: one_to_one
+  on_duplicate_keys: fail        # refuse duplicate join keys
+  on_unmatched: fail             # refuse any unmatched record (override only deliberately)
+
+id_columns:
+  patient: deid_patient_id       # confirmed patient key (64,725 patients)
+  image: path_to_image           # confirmed row-unique image key / join key
+  # NOTE: no native study column exists. Do not add id_columns.study — the
+  # study grouping is DERIVED (see study_key below). The schema validator
+  # rejects a native study column here.
+
+# Derived composite study key: patient_folder + study_folder, parsed from
+# path_to_image with PurePosixPath. Yields 187,711 studies (= official count).
+# Kept only in an internal temporary column; never written to any safe output.
+study_key:
+  derived: true
+  source_column: path_to_image
+  method: pureposixpath_patient_study
+  internal_column: _c3e_study_key
+
+grouping:
+  split_unit: patient            # leakage-safe splits group by deid_patient_id
+  cluster_unit: study            # evaluation clusters by the derived study key
+  observation_unit: image        # rows kept at image level; no per-study selection
+
+split_column: split              # values: train / valid (no test)
+view_column: frontal_lateral     # values: Frontal / Lateral
+frontal_values: [Frontal]        # exact casing confirmed
+ap_pa_column: ap_pa              # AP / PA / LL / RL / null — used for view-stratified disagreement
+
+context_columns:                 # permitted model-input context (pre-diagnostic)
+  - section_clinical_history
+  - section_history
+
+labels:
+  - Cardiomegaly
+  - Edema
+  - Pleural Effusion
+  - Atelectasis
+  - Consolidation
+
+# Four-state encoding (confirmed): 1 positive / 0 negative / -1 uncertain /
+# null unmentioned. unmentioned is treated as missing.
+positive_value: 1
+negative_value: 0
+uncertain_value: -1
+unmentioned_is_missing: true
+
+# Multiple-image policy for THIS phase: no image selection, no label
+# aggregation. Observation unit stays image; frontal images only.
+image_policy:
+  select_one_per_study: false
+  aggregate_labels: false
+  frontal_only: true
+
+# Preregistered multiple-image analysis policy (LOCKED before audit results;
+# see docs/CHEXPERT_MULTIPLE_IMAGE_POLICY.md). Identical in both configs.
+analysis_policy:
+  primary_observation_unit: image        # frontal image
+  study_equal_weighting: true            # each study's images share weight 1 (1/m each)
+  patient_clustered_bootstrap: true      # resample patients, keep whole clusters
+  bootstrap_replicates_final: 1000       # >= 1000 replicates for final evaluation
+  retain_all_frontal_images: true        # no image dropped in the primary analysis
+  aggregate_labels: false
+
+sensitivity_analyses:
+  unweighted_image_level: true           # Sensitivity A
+  one_image_per_study:                   # Sensitivity B
+    enabled: true
+    selection_rule: lowest_view_number_then_stable_lexical
+    label_blind: true
+  concordant_study_subset:               # Sensitivity C
+    enabled: true
+    target_specific: true
+    disagreement_policy: exclude_for_target
+
+# Safe-output restrictions: never write a patient/study/image-level manifest;
+# strip all internal (_c3e_) and identifier columns before writing.
+safe_output:
+  write_manifest: false
+  forbid_identifier_columns: true
+
+output_dir: ../../results/c3e_chexpert_plus/impression
+
+low_information:
+  min_tokens: 5
+  generic_phrases:
+    - chest xray
+    - chest radiograph
+    - follow up
+    - follow-up
+    - rule out
+    - evaluate
+    - portable chest
+
+gate:
+  min_usable_context_fraction: 0.40
+  min_missing_or_low_info_fraction: 0.05
+  min_source_positive: 1000
+  min_target_positive: 200
+  min_viable_labels: 3
+  max_direct_mention_fraction_among_positives: 0.70

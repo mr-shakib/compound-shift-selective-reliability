@@ -1,0 +1,6 @@
+label,status,pos_frac_known_primary_weighted,pos_frac_known_unweighted,pos_frac_known_one_image,pos_frac_known_concordant,max_minus_min_across_policies,unweighted_minus_primary,one_image_minus_primary,concordant_minus_primary,concordant_excluded_studies,concordant_excluded_pct_of_multi
+Cardiomegaly,ok,0.485634,0.487071,0.48562,0.48707,0.001451,0.001437,-1.4e-05,0.001436,1,0.0298
+Edema,ok,0.666306,0.666414,0.666306,0.666492,0.000186,0.000108,0.0,0.000186,4,0.1192
+Pleural Effusion,ok,0.679211,0.679274,0.679217,0.679275,6.4e-05,6.3e-05,6e-06,6.4e-05,1,0.0298
+Atelectasis,ok,0.519052,0.518636,0.519017,0.518639,0.000416,-0.000416,-3.5e-05,-0.000413,1,0.0298
+Consolidation,ok,0.2544,0.255387,0.2544,0.255387,0.000987,0.000987,0.0,0.000987,0,0.0

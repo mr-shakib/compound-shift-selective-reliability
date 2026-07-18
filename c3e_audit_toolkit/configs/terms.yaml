@@ -1,0 +1,39 @@
+Cardiomegaly:
+  direct:
+    - cardiomegaly
+  synonyms:
+    - enlarged heart
+    - cardiac enlargement
+    - enlarged cardiac silhouette
+    - enlarged cardiomediastinal silhouette
+Edema:
+  direct:
+    - edema
+    - pulmonary edema
+  synonyms:
+    - vascular congestion
+    - pulmonary vascular congestion
+    - fluid overload
+    - interstitial edema
+Pleural Effusion:
+  direct:
+    - pleural effusion
+    - effusion
+  synonyms:
+    - pleural fluid
+    - fluid in the pleural space
+    - blunting of the costophrenic angle
+Atelectasis:
+  direct:
+    - atelectasis
+  synonyms:
+    - subsegmental collapse
+    - linear opacity
+    - plate-like atelectasis
+Consolidation:
+  direct:
+    - consolidation
+  synonyms:
+    - airspace consolidation
+    - focal airspace disease
+    - lobar opacity

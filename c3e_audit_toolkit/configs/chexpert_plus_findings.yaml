@@ -1,0 +1,110 @@
+# CheXpert Plus audit config — MANDATORY SENSITIVITY label endpoint (findings).
+#
+# Identical to chexpert_plus_impression.yaml except for the three label-source-
+# specific fields (dataset_name, label_source.path, output_dir). findings_fixed
+# = CheXbert labels over the findings section scope: the purest imaging-
+# observation target, but sparse (section_findings present in ~27% of rows), so
+# it is the sensitivity endpoint, not the primary. See docs/CHEXPERT_CONFIG_DECISION.md.
+#
+# Consumed by:  c3e-audit chexpert --config <this file> [--dry-run]
+# Paths are relative to this file's directory (c3e_audit_toolkit/configs/).
+
+dataset_name: CheXpert Plus (findings labels)
+
+table_path: ../../data/chexpert_plus/df_chexpert_plus_240401.parquet
+
+label_source:
+  path: ../../data/chexpert_plus/labels/findings_fixed.json
+  format: jsonl
+  join_key: path_to_image
+  cardinality: one_to_one
+  on_duplicate_keys: fail
+  on_unmatched: fail
+
+id_columns:
+  patient: deid_patient_id
+  image: path_to_image
+  # No native study column — study grouping is derived (see study_key).
+
+study_key:
+  derived: true
+  source_column: path_to_image
+  method: pureposixpath_patient_study
+  internal_column: _c3e_study_key
+
+grouping:
+  split_unit: patient
+  cluster_unit: study
+  observation_unit: image
+
+split_column: split
+view_column: frontal_lateral
+frontal_values: [Frontal]
+ap_pa_column: ap_pa
+
+context_columns:
+  - section_clinical_history
+  - section_history
+
+labels:
+  - Cardiomegaly
+  - Edema
+  - Pleural Effusion
+  - Atelectasis
+  - Consolidation
+
+positive_value: 1
+negative_value: 0
+uncertain_value: -1
+unmentioned_is_missing: true
+
+image_policy:
+  select_one_per_study: false
+  aggregate_labels: false
+  frontal_only: true
+
+# Preregistered multiple-image analysis policy (LOCKED before audit results;
+# see docs/CHEXPERT_MULTIPLE_IMAGE_POLICY.md). Identical to the impression config.
+analysis_policy:
+  primary_observation_unit: image
+  study_equal_weighting: true
+  patient_clustered_bootstrap: true
+  bootstrap_replicates_final: 1000
+  retain_all_frontal_images: true
+  aggregate_labels: false
+
+sensitivity_analyses:
+  unweighted_image_level: true
+  one_image_per_study:
+    enabled: true
+    selection_rule: lowest_view_number_then_stable_lexical
+    label_blind: true
+  concordant_study_subset:
+    enabled: true
+    target_specific: true
+    disagreement_policy: exclude_for_target
+
+safe_output:
+  write_manifest: false
+  forbid_identifier_columns: true
+
+output_dir: ../../results/c3e_chexpert_plus/findings
+
+low_information:
+  min_tokens: 5
+  generic_phrases:
+    - chest xray
+    - chest radiograph
+    - follow up
+    - follow-up
+    - rule out
+    - evaluate
+    - portable chest
+
+gate:
+  min_usable_context_fraction: 0.40
+  min_missing_or_low_info_fraction: 0.05
+  min_source_positive: 1000
+  min_target_positive: 200
+  min_viable_labels: 3
+  max_direct_mention_fraction_among_positives: 0.70

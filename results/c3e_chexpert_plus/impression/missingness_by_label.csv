@@ -1,0 +1,21 @@
+label,label_state,n,context_absent_fraction,context_low_info_fraction,context_usable_fraction
+Cardiomegaly,pos,26281,0.211674,0.197938,0.590388
+Cardiomegaly,neg,11462,0.171611,0.206247,0.622143
+Cardiomegaly,unc,3376,0.242002,0.215936,0.542062
+Cardiomegaly,unmentioned,149952,0.218877,0.176483,0.60464
+Edema,pos,50475,0.276513,0.182982,0.540505
+Edema,neg,16256,0.181102,0.172429,0.646469
+Edema,unc,11144,0.216439,0.190506,0.593055
+Edema,unmentioned,113196,0.193072,0.181959,0.624969
+Pleural Effusion,pos,79671,0.209449,0.183693,0.606858
+Pleural Effusion,neg,25810,0.140759,0.18458,0.674661
+Pleural Effusion,unc,6330,0.232859,0.212164,0.554976
+Pleural Effusion,unmentioned,79260,0.244436,0.176848,0.578716
+Atelectasis,pos,30169,0.268653,0.18403,0.547317
+Atelectasis,neg,528,0.164773,0.136364,0.698864
+Atelectasis,unc,30446,0.20965,0.176345,0.614005
+Atelectasis,unmentioned,129928,0.204675,0.182917,0.612408
+Consolidation,pos,12181,0.235367,0.143502,0.621131
+Consolidation,neg,22032,0.15532,0.175744,0.668936
+Consolidation,unc,23707,0.224153,0.186063,0.589784
+Consolidation,unmentioned,133151,0.222041,0.185714,0.592245

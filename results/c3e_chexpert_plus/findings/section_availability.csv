@@ -1,0 +1,4 @@
+context_field,n_images,null_rate,empty_rate,non_empty_rate,usable_rate,low_information_rate,null_rate_weighted,non_empty_rate_weighted,usable_rate_weighted,low_information_rate_weighted,median_char_count_nonempty,median_token_count_nonempty,median_token_count_weighted_nonempty,count_below_3_tokens,count_below_5_tokens,count_below_10_tokens
+section_clinical_history,191071,0.379288,3.7e-05,0.999963,0.480115,0.519849,0.380804,0.999968,0.478106,0.521862,27.0,4.0,4.0,83540,98151,167432
+section_history,191071,0.836113,5e-06,0.999995,0.122525,0.87747,0.835571,0.999995,0.123017,0.876978,3.0,1.0,1.0,161647,167245,186097
+__combined__,191071,0.215459,0.0,0.784541,0.602624,0.181917,0.216428,0.783572,0.601106,0.182465,40.0,7.0,7.0,12959,33168,121297

@@ -1,0 +1,142 @@
+# C3E repository safety boundary
+# Track reproducibility artifacts and aggregate-safe outputs only. Raw medical
+# data, identifiers, credentials, model artifacts, and local environments must
+# never enter Git. See docs/DATA_SAFETY.md.
+
+# Credentialed and derived data trees
+/data/
+/private/
+/sensitive/
+
+# Columnar datasets and row-oriented clinical exports
+*.parquet
+*.PARQUET
+*.pq
+*.jsonl
+*.JSONL
+*.ndjson
+**/findings_fixed.json
+**/impression_fixed.json
+**/report_fixed.json
+
+# Medical images and DICOM
+*.dcm
+*.DCM
+*.dicom
+*.DICOM
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.webp
+*.WEBP
+
+# Downloaded/compressed dataset archives
+*.zip
+*.ZIP
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.bz2
+*.xz
+*.zst
+*.7z
+*.rar
+
+# Model checkpoints, weights, and downloaded model artifacts
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.onnx
+*.h5
+*.hdf5
+*.weights
+**/checkpoints/
+**/model_weights/
+**/downloaded_models/
+
+# Virtual environments and local package/build state
+.venv/
+venv/
+env/
+.conda/
+*.egg-info/
+build/
+dist/
+
+# Python, test, notebook, and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+.jupyter/
+/c3e_audit_toolkit/demo/output/
+
+# Secrets, credentials, access material, cookies, and signed URLs
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+*.pfx
+**/*credential*
+**/*credentials*
+**/*secret*
+**/*token*
+**/*api_key*
+**/*apikey*
+**/*cookie*
+**/*signed_url*
+**/*signed-url*
+**/*access_url*
+**/*access-url*
+
+# Temporary/private manifests and patient-, study-, or image-level exports
+**/study_aggregate.csv
+**/patient_aggregate.csv
+**/image_aggregate.csv
+**/*patient_manifest*
+**/*study_manifest*
+**/*image_manifest*
+**/*patient-level*
+**/*study-level*
+**/*image-level*
+**/*patient_level*
+**/*study_level*
+**/*image_level*
+**/tmp_manifest*
+**/temporary_manifest*
+**/manifest.tmp
+**/local_paths.*
+**/private_paths.*
+
+# Raw logs and text dumps may contain paths, identifiers, or report text
+/logs/
+*.log
+*.out
+*.err
+*.trace
+*.txt
+
+# Local editor/OS state and scratch files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+/tmp/
+/scratch/
+
+# Non-reproducibility proposal/media assets are deliberately not versioned
+/docs/assets/
+/docs/proposals/
+*.docx
