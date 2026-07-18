@@ -1,0 +1,151 @@
+protocol_id: C3E6-STAGE2
+protocol_version: 0.1.0
+status: preflight_only
+created_for: C3E multimodal selective-reliability transport study
+authorization:
+  documentation: true
+  configuration_validation: true
+  metadata_audit_after_access: true
+  medical_image_loading: false
+  model_training: false
+  target_site_tuning: false
+  cross_site_claims_before_results: false
+research_question: Does a selective policy calibrated at the source hospital remain
+  reliable at an external hospital when pre-diagnostic clinical context changes in
+  availability or alignment?
+study_identity:
+  study_type: retrospective_predeployment_evaluation
+  primary_contribution: compound_shift_selective_reliability_protocol
+  not_claimed:
+  - new_multimodal_architecture
+  - new_uncertainty_algorithm
+  - prospective_clinical_validation
+  - patient_outcome_improvement
+  - regulatory_validation
+datasets:
+  source:
+    id: mimic_cxr_jpg
+    version: 2.1.0
+    role: development_and_internal_evaluation
+    official_splits_required: true
+    calibration_subset:
+      parent_split: train
+      unit: patient
+      seed: 20260718
+  external:
+    id: chexpert_plus
+    role: locked_external_evaluation_only
+    tuning_allowed: false
+analysis_units:
+  model_inference_unit: image
+  decision_unit: study
+  statistical_cluster_unit: patient
+  study_weighting: equal
+  frontal_image_aggregation: arithmetic_mean_probability
+targets:
+  pathologies:
+  - Cardiomegaly
+  - Edema
+  - Pleural Effusion
+  - Atelectasis
+  - Consolidation
+  primary_label_source: impression_fixed.json
+  sensitivity_label_source: findings_fixed.json
+  forbidden_label_source: report_fixed.json
+  official_mimic_labels_role: auxiliary_concordance_audit_only
+text_policy:
+  permitted_sections_external:
+  - section_clinical_history
+  - section_history
+  permitted_sections_source:
+  - PENDING_MIMIC_INTAKE_MAPPING
+  forbidden_sections:
+  - findings
+  - impression
+  - report
+  - summary
+  prediction_time_requirement: pre_diagnostic_only
+models:
+  core:
+  - id: M1
+    name: image_only
+    modalities:
+    - image
+    purpose: non_multimodal_control
+  - id: M2
+    name: text_only
+    modalities:
+    - pre_diagnostic_text
+    purpose: text_signal_and_shortcut_control
+  - id: M3
+    name: probability_late_fusion
+    modalities:
+    - image
+    - pre_diagnostic_text
+    purpose: transparent_multimodal_baseline
+  - id: M4
+    name: feature_concatenation_fusion
+    modalities:
+    - image
+    - pre_diagnostic_text
+    purpose: learned_multimodal_baseline
+  conditional:
+  - id: M5
+    name: missing_context_aware_mitigation
+    authorization: requires_prespecified_amendment_after_baseline_failure
+  exact_backbones: PENDING_HARDWARE_GATE
+  architecture_selection_must_precede_external_results: true
+classification_policy:
+  threshold_scope: per_pathology
+  threshold_selection_dataset: mimic_train_calibration
+  criterion: balanced_accuracy
+  frozen_for_internal_and_external_evaluation: true
+selective_policy:
+  confidence_per_pathology: abs(2*p-1)
+  primary_study_confidence: minimum_pathology_confidence
+  secondary_study_confidence: mean_pathology_confidence
+  primary_loss: five_label_hamming_error
+  abstention_meaning: refer_for_human_interpretation
+  threshold_selection_dataset: mimic_train_calibration
+  primary_source_coverage: 0.8
+  sensitivity_source_coverages:
+  - 0.9
+  - 0.7
+  frozen_threshold_transfer: true
+uncertainty_baselines:
+  required:
+  - raw_probability_margin
+  - temperature_scaled_probability_margin
+  - split_conformal_singleton_acceptance
+  conditional:
+  - three_seed_ensemble
+statistics:
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20260718
+  interval: 95_percent_percentile
+  resampling_unit: patient
+  controlled_context_comparisons: paired_patient_bootstrap
+  cross_institution_comparisons: independent_within_site_patient_bootstrap
+  pathology_multiplicity: holm
+failure_criteria:
+  selective_transport_failure:
+    ci_excludes_zero: true
+    minimum_absolute_risk_increase: 0.02
+  material_coverage_drift: 0.05
+  compound_shift_failure:
+    ci_excludes_zero: true
+    minimum_absolute_interaction: 0.02
+governance:
+  external_dataset_prohibited_uses:
+  - architecture_selection
+  - fusion_weight_selection
+  - early_stopping
+  - temperature_selection
+  - classification_threshold_selection
+  - confidence_score_selection
+  - abstention_threshold_selection
+  - text_cleaning_rule_revision
+  - context_state_rule_revision
+  - model_retraining
+  post_target_inspection_changes_label: post_hoc_exploratory
+  training_authorized: false

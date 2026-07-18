@@ -1,0 +1,49 @@
+registry_id: C3E6-CONTEXT-001
+version: 0.1.0
+natural_context_states:
+- id: N1
+  name: informative
+  definition: Permitted context exists and passes the frozen informativeness rules.
+  causal_interpretation_allowed: false
+- id: N2
+  name: low_information
+  definition: Context is present but primarily boilerplate, vague, or clinically insufficient.
+  causal_interpretation_allowed: false
+- id: N3
+  name: absent
+  definition: Neither permitted section contains usable text.
+  causal_interpretation_allowed: false
+controlled_interventions:
+- id: C0
+  name: original_context
+  eligible_base_state: informative
+  operator: identity
+  replacement_token: null
+  confirmatory: true
+- id: C1
+  name: no_context
+  eligible_base_state: informative
+  operator: replace_all_permitted_context
+  replacement_token: '[NO_CONTEXT]'
+  confirmatory: true
+- id: C2
+  name: misaligned_context
+  eligible_base_state: informative
+  operator: deterministic_permutation
+  constraints:
+    same_institution: true
+    same_split: true
+    different_patient: true
+    same_context_length_bin: true
+    seed: 20260718
+  confirmatory: true
+exploratory_only:
+- id: E1
+  name: random_token_deletion
+  reason: Clinically difficult to interpret as a primary deployment failure.
+required_invariants:
+- Every C2 recipient must receive text from a different patient.
+- C2 pairing must remain within institution and split.
+- C0, C1, and C2 must contain identical study identifiers.
+- Image-only predictions must be identical across C0, C1, and C2.
+- No forbidden report section may enter any intervention payload.

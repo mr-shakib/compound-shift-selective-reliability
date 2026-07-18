@@ -1,0 +1,130 @@
+{
+  "protocol_id": "C3E6-STAGE2",
+  "protocol_version": "0.1.0",
+  "status": "PASS",
+  "checks_passed": 30,
+  "checks_failed": 0,
+  "passes": [
+    {
+      "code": "SCHEMA_EXPERIMENT_REGISTRY",
+      "message": "experiment_registry conforms to JSON Schema"
+    },
+    {
+      "code": "SCHEMA_CONTEXT_INTERVENTIONS",
+      "message": "context_interventions conforms to JSON Schema"
+    },
+    {
+      "code": "SCHEMA_METRIC_REGISTRY",
+      "message": "metric_registry conforms to JSON Schema"
+    },
+    {
+      "code": "AUTH_TRAINING_LOCK",
+      "message": "Model training remains unauthorized."
+    },
+    {
+      "code": "AUTH_IMAGE_LOCK",
+      "message": "Medical image loading remains unauthorized."
+    },
+    {
+      "code": "TARGET_TUNING_LOCK",
+      "message": "External-site tuning is prohibited."
+    },
+    {
+      "code": "GOV_TRAINING_LOCK",
+      "message": "Governance training flag is false."
+    },
+    {
+      "code": "TARGET_SET",
+      "message": "Exactly the five locked pathologies are present."
+    },
+    {
+      "code": "LABEL_PRIMARY",
+      "message": "Primary label source is impression_fixed.json."
+    },
+    {
+      "code": "LABEL_SENSITIVITY",
+      "message": "Sensitivity label source is findings_fixed.json."
+    },
+    {
+      "code": "LABEL_FORBIDDEN",
+      "message": "report_fixed.json is forbidden."
+    },
+    {
+      "code": "TEXT_SECTION_DISJOINT",
+      "message": "Permitted and forbidden text sections are disjoint."
+    },
+    {
+      "code": "DATA_INPUT_LEAKAGE",
+      "message": "Post-diagnostic report fields are prohibited model inputs."
+    },
+    {
+      "code": "CTX_NATURAL_UNIQUE",
+      "message": "Natural context IDs are unique."
+    },
+    {
+      "code": "CTX_CONTROLLED_SET",
+      "message": "Controlled interventions are exactly C0, C1, C2."
+    },
+    {
+      "code": "CTX_NO_CONTEXT_TOKEN",
+      "message": "C1 uses the locked [NO_CONTEXT] token."
+    },
+    {
+      "code": "CTX_C2_DIFFERENT_PATIENT",
+      "message": "C2 requires a different-patient donor."
+    },
+    {
+      "code": "CTX_C2_WITHIN_DOMAIN",
+      "message": "C2 remains within institution and split."
+    },
+    {
+      "code": "MODEL_CORE_SET",
+      "message": "Core model set is exactly M1-M4."
+    },
+    {
+      "code": "MODEL_M1_IMAGE_ONLY",
+      "message": "M1 is image-only."
+    },
+    {
+      "code": "SELECTIVE_PRIMARY_COVERAGE",
+      "message": "Primary source coverage is 80%."
+    },
+    {
+      "code": "SELECTIVE_FROZEN_TRANSFER",
+      "message": "Threshold transfer is frozen."
+    },
+    {
+      "code": "STATS_BOOTSTRAP_REPS",
+      "message": "Bootstrap replicates equal 2000."
+    },
+    {
+      "code": "STATS_BOOTSTRAP_SEED",
+      "message": "Bootstrap seed is 20260718."
+    },
+    {
+      "code": "STATS_CLUSTER_UNIT",
+      "message": "Bootstrap resampling unit is patient."
+    },
+    {
+      "code": "METRIC_ID_UNIQUE",
+      "message": "Metric IDs are unique."
+    },
+    {
+      "code": "METRIC_REQUIRED_SET",
+      "message": "All locked primary metrics are registered."
+    },
+    {
+      "code": "HYP_METRIC_REFS",
+      "message": "Every hypothesis references a registered metric."
+    },
+    {
+      "code": "HYP_MODEL_REFS",
+      "message": "Every hypothesis references a registered core model."
+    },
+    {
+      "code": "TARGET_PROHIBITIONS",
+      "message": "Core target-site prohibited uses are registered."
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,56 @@
+registry_id: C3E6-HYPOTHESES-001
+version: 0.1.0
+hypotheses:
+- id: H1
+  name: selective_policy_transport_failure
+  status: confirmatory
+  models:
+  - M3
+  - M4
+  context: original_context
+  estimand_metric_id: MET003
+  direction: greater_than_zero
+  materiality_threshold: 0.02
+- id: H2
+  name: compound_context_interaction
+  status: confirmatory
+  models:
+  - M3
+  - M4
+  context:
+  - original_context
+  - no_context
+  estimand_metric_id: MET006
+  direction: greater_than_zero
+  materiality_threshold: 0.02
+- id: H3
+  name: multimodal_vulnerability_vs_image_only
+  status: confirmatory
+  models:
+  - M1
+  - M3
+  - M4
+  estimand_metric_id: MET006
+  contrast: Omega_multimodal - Omega_image_only
+  direction: greater_than_zero
+- id: H4
+  name: context_conflict_not_better_than_absence
+  status: secondary
+  models:
+  - M3
+  - M4
+  context:
+  - misaligned_context
+  - no_context
+  estimand_metric_id: MET001
+  contrast: R_misaligned - R_no_context
+  direction: greater_than_or_equal_zero
+sensitivity_analyses:
+- id: S1
+  name: findings_derived_labels
+  label_source: findings_fixed.json
+  required_checks:
+  - effect_direction
+  - confidence_interval_change
+  - pathology_conclusion_change
+  - overall_decision_change

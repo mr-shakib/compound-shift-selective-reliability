@@ -1,0 +1,42 @@
+registry_id: C3E6-DATA-001
+version: 0.1.0
+identifiers:
+  patient: required
+  study: required
+  image: required
+eligible_view: frontal
+hierarchy:
+- patient
+- study
+- image
+required_columns_after_harmonization:
+- site_id
+- split_id
+- patient_id
+- study_id
+- image_id
+- view
+- context_text
+- context_state
+- label_source
+- Cardiomegaly
+- Edema
+- Pleural Effusion
+- Atelectasis
+- Consolidation
+prohibited_columns_in_model_input:
+- findings
+- impression
+- full_report
+- report_fixed
+- post_diagnostic_summary
+minimum_preflight_checks:
+- unique_image_id
+- study_belongs_to_one_patient
+- image_belongs_to_one_study
+- no_patient_overlap_across_source_splits
+- no_patient_overlap_across_external_splits_if_defined
+- five_target_labels_present
+- context_state_mutually_exclusive
+- forbidden_text_absent
+- C2_different_patient_pairing

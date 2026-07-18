@@ -1,0 +1,105 @@
+registry_id: C3E6-METRICS-001
+version: 0.1.0
+metrics:
+- id: MET001
+  name: selective_risk_at_frozen_threshold
+  status: primary
+  level: study
+  formula: mean(L_i | g_i >= tau_source)
+  higher_is_better: false
+- id: MET002
+  name: coverage_at_frozen_threshold
+  status: primary
+  level: study
+  formula: mean(g_i >= tau_source)
+  higher_is_better: null
+- id: MET003
+  name: risk_transport_gap
+  status: primary
+  level: study
+  formula: R_external - R_source
+  higher_is_better: false
+- id: MET004
+  name: coverage_transport_gap
+  status: primary
+  level: study
+  formula: C_external - C_source
+  higher_is_better: null
+- id: MET005
+  name: controlled_context_penalty
+  status: primary
+  level: study
+  formula: R_no_context - R_original
+  higher_is_better: false
+- id: MET006
+  name: compound_shift_interaction
+  status: primary
+  level: study
+  formula: (R_external_no_context-R_external_original) - (R_source_no_context-R_source_original)
+  higher_is_better: false
+- id: MET007
+  name: AUGRC
+  status: primary_threshold_free
+  level: study
+  formula: area_under_generalized_risk_coverage_curve
+  higher_is_better: false
+- id: MET008
+  name: AURC
+  status: secondary
+  level: study
+  formula: area_under_risk_coverage_curve
+  higher_is_better: false
+- id: MET009
+  name: failure_detection_AUROC
+  status: secondary
+  level: study
+  formula: AUROC(confidence, correctness)
+  higher_is_better: true
+- id: MET010
+  name: AUROC
+  status: secondary
+  level: pathology
+  formula: binary_auroc
+  higher_is_better: true
+- id: MET011
+  name: AUPRC
+  status: secondary
+  level: pathology
+  formula: binary_auprc
+  higher_is_better: true
+- id: MET012
+  name: brier_score
+  status: secondary
+  level: pathology
+  formula: mean((p-y)^2)
+  higher_is_better: false
+- id: MET013
+  name: calibration_intercept
+  status: secondary
+  level: pathology
+  formula: logistic_calibration_intercept
+  higher_is_better: null
+- id: MET014
+  name: calibration_slope
+  status: secondary
+  level: pathology
+  formula: logistic_calibration_slope
+  higher_is_better: null
+- id: MET015
+  name: adaptive_ECE
+  status: secondary
+  level: pathology
+  formula: adaptive_expected_calibration_error
+  higher_is_better: false
+- id: MET016
+  name: subgroup_coverage_disparity
+  status: secondary
+  level: subgroup
+  formula: max_group_coverage - min_group_coverage
+  higher_is_better: false
+- id: MET017
+  name: worst_group_selective_risk
+  status: secondary
+  level: subgroup
+  formula: max_group_selective_risk
+  higher_is_better: false

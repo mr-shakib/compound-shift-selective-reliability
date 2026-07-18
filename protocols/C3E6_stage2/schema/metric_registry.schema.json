@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C3E6 Metric Registry",
+  "type": "object",
+  "required": [
+    "registry_id",
+    "version",
+    "metrics"
+  ],
+  "properties": {
+    "registry_id": {
+      "const": "C3E6-METRICS-001"
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status",
+          "level",
+          "formula",
+          "higher_is_better"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

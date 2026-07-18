@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C3E6 Context Intervention Registry",
+  "type": "object",
+  "required": [
+    "registry_id",
+    "version",
+    "natural_context_states",
+    "controlled_interventions",
+    "required_invariants"
+  ],
+  "properties": {
+    "registry_id": {
+      "const": "C3E6-CONTEXT-001"
+    },
+    "natural_context_states": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "definition",
+          "causal_interpretation_allowed"
+        ],
+        "properties": {
+          "causal_interpretation_allowed": {
+            "const": false
+          }
+        }
+      }
+    },
+    "controlled_interventions": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "eligible_base_state",
+          "operator",
+          "confirmatory"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

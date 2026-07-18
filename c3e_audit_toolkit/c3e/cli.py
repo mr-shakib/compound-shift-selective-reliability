@@ -93,6 +93,16 @@ def chexpert(args):
     print(f"  frontal studies: {s['cohort_structure']['study_count_frontal']}")
     print(f"  gate passed:     {s['gate_passed']}")
 
+def stage2b_preflight(args):
+    """Run the synthetic-only Stage 2B preflight through the existing CLI."""
+    from .preflight.runner import execute
+    raise SystemExit(execute(
+        protocol_root=args.protocol_root,
+        output_dir=args.output,
+        project_root=args.project_root,
+        run_tests=args.run_tests,
+    ))
+
 def main():
     parser = argparse.ArgumentParser(prog="c3e-audit")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -127,6 +137,14 @@ def main():
     p.add_argument("--dry-run", action="store_true",
                    help="validate config + labels + join only; no aggregate outputs, no manifest")
     p.set_defaults(func=chexpert)
+
+    project_root = Path(__file__).resolve().parents[2]
+    p = sub.add_parser("stage2b-preflight", help="Run synthetic-only C3-E6 Stage 2B preflight")
+    p.add_argument("--protocol-root", default=str(project_root / "protocols" / "C3E6_stage2"))
+    p.add_argument("--output", default=str(project_root / "results" / "c3e_preflight"))
+    p.add_argument("--project-root", default=str(project_root))
+    p.add_argument("--run-tests", action="store_true")
+    p.set_defaults(func=stage2b_preflight)
 
     args = parser.parse_args()
     args.func(args)

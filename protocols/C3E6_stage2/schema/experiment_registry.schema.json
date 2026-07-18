@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C3E6 Experiment Registry",
+  "type": "object",
+  "required": [
+    "protocol_id",
+    "protocol_version",
+    "status",
+    "authorization",
+    "research_question",
+    "datasets",
+    "analysis_units",
+    "targets",
+    "text_policy",
+    "models",
+    "classification_policy",
+    "selective_policy",
+    "statistics",
+    "failure_criteria",
+    "governance"
+  ],
+  "properties": {
+    "protocol_id": {
+      "const": "C3E6-STAGE2"
+    },
+    "protocol_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "enum": [
+        "preflight_only",
+        "frozen",
+        "amended"
+      ]
+    },
+    "authorization": {
+      "type": "object",
+      "required": [
+        "medical_image_loading",
+        "model_training",
+        "target_site_tuning"
+      ],
+      "properties": {
+        "medical_image_loading": {
+          "type": "boolean"
+        },
+        "model_training": {
+          "type": "boolean"
+        },
+        "target_site_tuning": {
+          "type": "boolean"
+        }
+      }
+    },
+    "datasets": {
+      "type": "object",
+      "required": [
+        "source",
+        "external"
+      ],
+      "properties": {
+        "source": {
+          "type": "object",
+          "required": [
+            "id",
+            "version",
+            "calibration_subset"
+          ]
+        },
+        "external": {
+          "type": "object",
+          "required": [
+            "id",
+            "role",
+            "tuning_allowed"
+          ],
+          "properties": {
+            "tuning_allowed": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "required": [
+        "pathologies",
+        "primary_label_source",
+        "sensitivity_label_source",
+        "forbidden_label_source"
+      ],
+      "properties": {
+        "pathologies": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true
+        },
+        "primary_label_source": {
+          "const": "impression_fixed.json"
+        },
+        "sensitivity_label_source": {
+          "const": "findings_fixed.json"
+        },
+        "forbidden_label_source": {
+          "const": "report_fixed.json"
+        }
+      }
+    },
+    "selective_policy": {
+      "type": "object",
+      "required": [
+        "primary_source_coverage",
+        "sensitivity_source_coverages",
+        "frozen_threshold_transfer",
+        "threshold_selection_dataset"
+      ],
+      "properties": {
+        "primary_source_coverage": {
+          "const": 0.8
+        },
+        "frozen_threshold_transfer": {
+          "const": true
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "required": [
+        "bootstrap_replicates",
+        "bootstrap_seed",
+        "resampling_unit"
+      ],
+      "properties": {
+        "bootstrap_replicates": {
+          "const": 2000
+        },
+        "bootstrap_seed": {
+          "const": 20260718
+        },
+        "resampling_unit": {
+          "const": "patient"
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "required": [
+        "external_dataset_prohibited_uses",
+        "training_authorized"
+      ],
+      "properties": {
+        "training_authorized": {
+          "const": false
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

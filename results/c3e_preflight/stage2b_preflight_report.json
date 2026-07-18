@@ -1,0 +1,417 @@
+{
+  "context_intervention_counts": {
+    "C0": {
+      "images": 64,
+      "studies": 32
+    },
+    "C1": {
+      "images": 64,
+      "studies": 32
+    },
+    "C2": {
+      "images": 64,
+      "studies": 32
+    }
+  },
+  "declarations": [
+    "SYNTHETIC DATA ONLY",
+    "NO MEDICAL IMAGES LOADED",
+    "NO MODEL TRAINING PERFORMED",
+    "EXTERNAL TUNING DISABLED"
+  ],
+  "deliberate_negative_cases_rejected": [
+    "duplicate image IDs",
+    "one study assigned to multiple patients",
+    "one image assigned to multiple studies",
+    "patient overlap across source splits",
+    "missing required identifiers",
+    "missing pathology columns",
+    "invalid pathology values",
+    "unsupported label sources",
+    "report_fixed.json",
+    "Findings as model input",
+    "Impression as model input",
+    "complete report as model input",
+    "inconsistent natural context states",
+    "C2 same-patient pairing",
+    "C2 cross-site pairing",
+    "C2 cross-split pairing",
+    "target-site threshold fitting",
+    "target-site temperature fitting",
+    "target-site architecture selection",
+    "target-site context-rule revision"
+  ],
+  "deterministic_seed": 20260718,
+  "exact_commands": [
+    "cd protocols/C3E6_stage2 && sha256sum -c MANIFEST.sha256 && cd ../..",
+    "c3e_audit_toolkit/.venv/bin/python protocols/C3E6_stage2/scripts/validate_protocol.py",
+    "c3e_audit_toolkit/.venv/bin/python -m unittest discover -s protocols/C3E6_stage2/tests -v",
+    "cd c3e_audit_toolkit && .venv/bin/python -m pytest tests -q && cd ..",
+    "cd c3e_audit_toolkit && .venv/bin/python -m pytest tests/preflight -q && cd ..",
+    "scripts/run_stage2b_preflight.sh"
+  ],
+  "failed_checks": [],
+  "metric_results": {
+    "conditions": {
+      "external_C0": {
+        "AURC": 0.22002976190476192,
+        "any_label_error": 0.875,
+        "coverage": 0.375,
+        "failure_detection_AUROC": 0.14285714285714285,
+        "five_label_Hamming_loss": 0.225,
+        "minimum_margin_confidence_mean": 0.19999999999999998,
+        "n_studies": 8,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.10207656250000001,
+            "binary_error": 0.5
+          },
+          "Cardiomegaly": {
+            "AUPRC": 0.95,
+            "AUROC": 0.9375,
+            "Brier_score": 0.12886328125000002,
+            "binary_error": 0.125
+          },
+          "Consolidation": {
+            "AUPRC": 0.875,
+            "AUROC": 0.75,
+            "Brier_score": 0.1477140625,
+            "binary_error": 0.125
+          },
+          "Edema": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.12724140625000002,
+            "binary_error": 0.25
+          },
+          "Pleural Effusion": {
+            "AUPRC": 0.875,
+            "AUROC": 0.75,
+            "Brier_score": 0.1421171875,
+            "binary_error": 0.125
+          }
+        },
+        "selective_risk": 0.20000000000000004
+      },
+      "external_C1": {
+        "AURC": 0.18770833333333334,
+        "any_label_error": 0.875,
+        "coverage": 0.375,
+        "failure_detection_AUROC": 0.5714285714285714,
+        "five_label_Hamming_loss": 0.225,
+        "minimum_margin_confidence_mean": 0.15875,
+        "n_studies": 8,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.12873281250000002,
+            "binary_error": 0.5
+          },
+          "Cardiomegaly": {
+            "AUPRC": 0.8928571428571428,
+            "AUROC": 0.8125,
+            "Brier_score": 0.15139453125,
+            "binary_error": 0.125
+          },
+          "Consolidation": {
+            "AUPRC": 0.8928571428571428,
+            "AUROC": 0.8125,
+            "Brier_score": 0.16240156249999999,
+            "binary_error": 0.125
+          },
+          "Edema": {
+            "AUPRC": 0.8875,
+            "AUROC": 0.875,
+            "Brier_score": 0.15996015625,
+            "binary_error": 0.25
+          },
+          "Pleural Effusion": {
+            "AUPRC": 0.8928571428571428,
+            "AUROC": 0.8125,
+            "Brier_score": 0.15624218750000002,
+            "binary_error": 0.125
+          }
+        },
+        "selective_risk": 0.20000000000000004
+      },
+      "external_C2": {
+        "AURC": 0.18770833333333334,
+        "any_label_error": 0.875,
+        "coverage": 0.5,
+        "failure_detection_AUROC": 0.5714285714285714,
+        "five_label_Hamming_loss": 0.225,
+        "minimum_margin_confidence_mean": 0.18945833333333337,
+        "n_studies": 8,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.12517274714052287,
+            "binary_error": 0.5
+          },
+          "Cardiomegaly": {
+            "AUPRC": 0.8928571428571428,
+            "AUROC": 0.8125,
+            "Brier_score": 0.1585840487432718,
+            "binary_error": 0.125
+          },
+          "Consolidation": {
+            "AUPRC": 0.9166666666666666,
+            "AUROC": 0.875,
+            "Brier_score": 0.16011145331122645,
+            "binary_error": 0.125
+          },
+          "Edema": {
+            "AUPRC": 0.8875,
+            "AUROC": 0.875,
+            "Brier_score": 0.16873940307814303,
+            "binary_error": 0.25
+          },
+          "Pleural Effusion": {
+            "AUPRC": 0.8928571428571428,
+            "AUROC": 0.8125,
+            "Brier_score": 0.15042581687331794,
+            "binary_error": 0.125
+          }
+        },
+        "selective_risk": 0.15000000000000002
+      },
+      "source_C0": {
+        "AURC": 0.05777777777777779,
+        "any_label_error": 0.5,
+        "coverage": 0.5,
+        "failure_detection_AUROC": 0.7777777777777779,
+        "five_label_Hamming_loss": 0.1,
+        "minimum_margin_confidence_mean": 0.25333333333333335,
+        "n_studies": 6,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.09672291666666667,
+            "binary_error": 0.3333333333333333
+          },
+          "Cardiomegaly": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.07489270833333334,
+            "binary_error": 0.0
+          },
+          "Consolidation": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.03923541666666668,
+            "binary_error": 0.16666666666666666
+          },
+          "Edema": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.06432916666666667,
+            "binary_error": 0.0
+          },
+          "Pleural Effusion": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.018259374999999998,
+            "binary_error": 0.0
+          }
+        },
+        "selective_risk": 0.06666666666666667
+      },
+      "source_C1": {
+        "AURC": 0.1738888888888889,
+        "any_label_error": 0.6666666666666666,
+        "coverage": 0.3333333333333333,
+        "failure_detection_AUROC": 0.125,
+        "five_label_Hamming_loss": 0.13333333333333333,
+        "minimum_margin_confidence_mean": 0.2233333333333333,
+        "n_studies": 6,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 0.9166666666666665,
+            "AUROC": 0.888888888888889,
+            "Brier_score": 0.13617291666666667,
+            "binary_error": 0.5
+          },
+          "Cardiomegaly": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.10541770833333332,
+            "binary_error": 0.0
+          },
+          "Consolidation": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.08003541666666668,
+            "binary_error": 0.16666666666666666
+          },
+          "Edema": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.09687916666666667,
+            "binary_error": 0.0
+          },
+          "Pleural Effusion": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.042634374999999995,
+            "binary_error": 0.0
+          }
+        },
+        "selective_risk": 0.2
+      },
+      "source_C2": {
+        "AURC": 0.1738888888888889,
+        "any_label_error": 0.6666666666666666,
+        "coverage": 0.5,
+        "failure_detection_AUROC": 0.125,
+        "five_label_Hamming_loss": 0.13333333333333333,
+        "minimum_margin_confidence_mean": 0.21852287581699345,
+        "n_studies": 6,
+        "pathology_metrics": {
+          "Atelectasis": {
+            "AUPRC": 0.9166666666666665,
+            "AUROC": 0.888888888888889,
+            "Brier_score": 0.12966326755734975,
+            "binary_error": 0.5
+          },
+          "Cardiomegaly": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.10976672947904649,
+            "binary_error": 0.0
+          },
+          "Consolidation": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.07821104860310137,
+            "binary_error": 0.16666666666666666
+          },
+          "Edema": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.09819339247725235,
+            "binary_error": 0.0
+          },
+          "Pleural Effusion": {
+            "AUPRC": 1.0,
+            "AUROC": 1.0,
+            "Brier_score": 0.03472976446559014,
+            "binary_error": 0.0
+          }
+        },
+        "selective_risk": 0.20000000000000004
+      }
+    },
+    "transport": {
+      "compound_shift_interaction_C1": -0.13333333333333336,
+      "coverage_transport_gap_C0": -0.125,
+      "external_no_context_penalty": 0.0,
+      "risk_transport_gap_C0": 0.13333333333333336,
+      "source_no_context_penalty": 0.13333333333333336
+    }
+  },
+  "metrics_successfully_executed": [
+    "five-label Hamming loss",
+    "any-label error",
+    "pathology-specific binary error",
+    "study-level minimum-margin confidence",
+    "selective risk",
+    "coverage",
+    "risk transport gap",
+    "coverage transport gap",
+    "controlled context penalty",
+    "compound-shift interaction",
+    "AURC",
+    "failure-detection AUROC",
+    "AUROC",
+    "AUPRC",
+    "Brier score"
+  ],
+  "natural_context_study_counts": {
+    "absent": 16,
+    "informative": 32,
+    "low_information": 16
+  },
+  "positive_checks_passed": [
+    "frozen protocol lock validated",
+    "primary synthetic data contract validated",
+    "findings sensitivity synthetic contract validated",
+    "patient split isolation validated",
+    "forbidden input leakage checks passed",
+    "C0/C1/C2 study sets validated",
+    "C2 donor constraints validated",
+    "image-only invariance validated",
+    "study-equal aggregation produced one row per study",
+    "classification and abstention thresholds frozen from source calibration only",
+    "all mandatory Stage 2B metrics executed",
+    "all deliberate negative fixtures rejected"
+  ],
+  "positive_tests_passed": {
+    "Stage 2B tests": 42,
+    "audit toolkit and Stage 2B tests": 81,
+    "protocol tests": 3
+  },
+  "protocol_id": "C3E6-STAGE2",
+  "protocol_version": "0.1.0",
+  "source_only_synthetic_thresholds": {
+    "abstention_thresholds": {
+      "0.70": 0.20000000000000018,
+      "0.80": 0.20000000000000018,
+      "0.90": 0.050000000000000044
+    },
+    "classification_thresholds": {
+      "Atelectasis": 0.87,
+      "Cardiomegaly": 0.635,
+      "Consolidation": 0.6599999999999999,
+      "Edema": 0.64,
+      "Pleural Effusion": 0.6475
+    },
+    "confidence_definition": "minimum_abs_2p_minus_1",
+    "criterion": "balanced_accuracy",
+    "fit_site_id": "SYNTH_SOURCE",
+    "fit_split_id": "calibration",
+    "frozen": true
+  },
+  "status": "PASS",
+  "synthetic_counts": {
+    "images": 128,
+    "patients": 32,
+    "studies": 64
+  },
+  "test_execution": [
+    {
+      "command": "c3e_audit_toolkit/.venv/bin/python -m unittest discover -s protocols/C3E6_stage2/tests -v",
+      "return_code": 0,
+      "status": "PASS",
+      "suite": "protocol tests",
+      "tests_passed": 3
+    },
+    {
+      "command": "cd c3e_audit_toolkit && .venv/bin/python -m pytest tests -q && cd ..",
+      "return_code": 0,
+      "status": "PASS",
+      "suite": "audit toolkit and Stage 2B tests",
+      "tests_passed": 81
+    },
+    {
+      "command": "cd c3e_audit_toolkit && .venv/bin/python -m pytest tests/preflight -q && cd ..",
+      "return_code": 0,
+      "status": "PASS",
+      "suite": "Stage 2B tests",
+      "tests_passed": 42
+    }
+  ],
+  "unresolved_pending_fields": [
+    "exact MIMIC pre-diagnostic section mapping",
+    "exact image backbone",
+    "exact text backbone",
+    "actual dataset counts",
+    "real-data batch-size feasibility",
+    "three-seed ensemble feasibility",
+    "verified AUGRC implementation"
+  ]
+}
