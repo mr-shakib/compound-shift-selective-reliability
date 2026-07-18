@@ -95,3 +95,16 @@ unauthorized.
   statistical analysis plan, and the sequential MIMIC intake/readiness protocol.
 - Authorized MIMIC reports/metadata intake only after access/DUA verification. No images, MIMIC
   processing in this session, external API use, statistical tests, or model training occurred.
+
+## Session update — 2026-07-18 (C3-E4 provenance repair)
+
+- Confirmed the project-root `.git` entry was absent, initialized a local repository on `main`, and
+  created baseline commit `6b02a62de50ffe36fc336eb3201ababbd109f19b` from an explicit 76-file
+  allowlist after staged-name, size, identifier/path, secret, and long-line scans passed.
+- Hardened `.gitignore`; verified the main CheXpert Parquet and three raw label files are ignored.
+- Removed local absolute workspace paths from tracked historical Markdown; clearly synthetic test
+  identifiers remain only in a test file that declares all fixtures synthetic.
+- Locked the final patient-clustered bootstrap to 2,000 replicates, seed 20260718, and primary 95%
+  percentile intervals before model results.
+- Added provenance/versioning and CheXbert artifact-pinning policies. No raw data, MIMIC processing,
+  image download, model training, CheXbert download/execution, external API, or upload occurred.

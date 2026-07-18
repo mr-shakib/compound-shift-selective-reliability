@@ -69,7 +69,9 @@ analysis_policy:
   primary_observation_unit: image
   study_equal_weighting: true
   patient_clustered_bootstrap: true
-  bootstrap_replicates_final: 1000
+  bootstrap_replicates_final: 2000
+  bootstrap_seed_final: 20260718
+  bootstrap_interval_primary: percentile
   retain_all_frontal_images: true
   aggregate_labels: false
 

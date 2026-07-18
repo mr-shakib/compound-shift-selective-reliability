@@ -4,9 +4,15 @@ Status: **FROZEN / PASSED**
 
 Closure date: **2026-07-18**
 
-Current Git commit: **UNAVAILABLE — no Git commit can be resolved because the workspace's `.git/`
-directory contains no repository metadata (`git rev-parse HEAD` fails).** This limitation is recorded
-rather than substituting a fabricated identifier. The content freeze is represented by
+Baseline Git commit: **`6b02a62de50ffe36fc336eb3201ababbd109f19b`**
+
+Branch: **`main`**
+
+Baseline commit date: **2026-07-18T17:14:17+06:00**
+
+The project did not contain a Git repository when C3-E2 originally closed. C3-E4 repaired that
+limitation by initializing a repository and creating the baseline commit above with an explicit
+76-file safety allowlist. The original content freeze remains recorded in
 `results/c3e_chexpert_plus/C3E2_ARTIFACT_HASHES.sha256`.
 
 This closure freezes the aggregate-safe C3-E2 evidence and decisions. It does not authorize raw-data
@@ -110,8 +116,8 @@ did not justify changing this preregistered policy.
 - CheXpert context missingness is label-associated and may bias subgroup comparisons.
 - Cardiomegaly is sensitive to label-source scope.
 - Findings-derived labels are sparse, so sensitivity estimates may have wider uncertainty.
-- The fixed Git commit is unavailable because repository metadata is absent; artifact hashes are the
-  available content-integrity anchor.
+- Git provenance is now available from the C3-E4 baseline commit. The original C3-E2 manifest remains
+  the content-integrity anchor for the pre-Git phase snapshot.
 - Model selection, operating thresholds, calibration, and stopping rules remain future MIMIC-only
   decisions. No model training is authorized by this closure.
 
@@ -121,3 +127,17 @@ Primary narrative evidence is in `CHEXPERT_FULL_AUDIT_REPORT.md`; policy and pro
 `CHEXPERT_CONFIG_DECISION.md`, `CHEXPERT_MULTIPLE_IMAGE_POLICY.md`,
 `LABEL_HARMONIZATION_PLAN.md`, and the SHA-256 manifest named above. The manifest deliberately
 excludes raw medical-data files, identifiers, report text, images, and row-level manifests.
+
+## C3-E4 provenance amendment — 2026-07-18
+
+The original C3-E2 SHA-256 manifest **predates Git initialization** and is retained unchanged as a
+historical pre-Git manifest. It must not be silently regenerated to make later policy amendments look
+like original C3-E2 content. C3-E4 deliberately amended this closure, the statistical plan, and some
+path-bearing documentation after the baseline checkpoint; therefore the historical manifest is not a
+checksum declaration for every post-C3-E4 documentation byte. Git records those amendments.
+
+The frozen CheXpert aggregate result files were not recomputed or edited during provenance repair.
+Raw medical data remains outside Git. Before the baseline commit, `git check-ignore` confirmed that
+the main CheXpert Parquet table and all three raw label JSON files were ignored; the staged-file audit
+confirmed that no raw data, identifiers, credentials, model artifacts, virtual environments, or
+images were committed.

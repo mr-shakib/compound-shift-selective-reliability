@@ -61,17 +61,25 @@ on MIMIC only and applied unchanged to CheXpert.
 
 ## Confidence intervals and bootstrap
 
-- Final evaluation uses **at least 1,000 valid bootstrap replicates**; 2,000 is preferred when
-  computationally feasible. The replicate count and random seed must be frozen before external
-  evaluation.
-- Resampling is by patient, with all of a sampled patient's studies/images retained and the primary
-  study-equal weights recomputed within each replicate.
-- Use two-sided **95% percentile bootstrap confidence intervals** (2.5th and 97.5th percentiles).
+- **Bootstrap unit:** patient.
+- **Complete clusters:** resample patients with replacement and retain every eligible study and image
+  for each sampled patient. Never resample individual images or split a patient cluster.
+- **Final bootstrap replicates:** exactly **2,000 valid replicates**.
+- **Random seed:** **20260718**.
+- **Confidence interval:** two-sided **95%**.
+- **Primary interval method:** percentile bootstrap (2.5th and 97.5th percentiles).
+- **Optional sensitivity:** BCa intervals may be reported only when the implementation has been
+  technically validated for the weighted, clustered statistic and is computationally feasible. BCa
+  cannot replace or suppress the primary percentile interval.
+- Recompute the primary study-equal weights within each replicate.
 - For within-site paired model/subgroup contrasts, use the same sampled patient clusters in both arms.
   For MIMIC-versus-CheXpert contrasts, resample patients independently within each institution in each
   replicate and calculate the between-site difference.
-- Report the number of valid replicates. If fewer than 1,000 are valid for a metric, do not report a
+- Report the number of valid replicates. If fewer than 2,000 are valid for a metric, do not report a
   final interval; diagnose the cause without changing the endpoint based on its direction.
+
+The seed, unit, interval method, confidence level, and replicate count were fixed on 2026-07-18
+**before model training or model results were available**. No bootstrap is run in C3-E4.
 
 ## Primary comparisons
 

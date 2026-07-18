@@ -83,7 +83,9 @@ analysis_policy:
   primary_observation_unit: image        # frontal image
   study_equal_weighting: true            # each study's images share weight 1 (1/m each)
   patient_clustered_bootstrap: true      # resample patients, keep whole clusters
-  bootstrap_replicates_final: 1000       # >= 1000 replicates for final evaluation
+  bootstrap_replicates_final: 2000       # locked in C3-E4 before model results
+  bootstrap_seed_final: 20260718          # locked in C3-E4 before model results
+  bootstrap_interval_primary: percentile # two-sided 95% CI
   retain_all_frontal_images: true        # no image dropped in the primary analysis
   aggregate_labels: false
 
