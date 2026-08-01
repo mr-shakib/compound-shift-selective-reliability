@@ -39,14 +39,14 @@
     {
       "endpoint": "impression",
       "relative_path": "data/mimic/labels/mimic_impression_labels.csv",
-      "rows": 200,
-      "sha256": "36bb74c04c92754da21c150d583be115b161ffba415cfd8a4d68004d4dca1e70"
+      "rows": 173572,
+      "sha256": "fbc13ce22ecf78430e1dcc64ddec79d934d30cb15089b65b2517e574828ee2e7"
     },
     {
       "endpoint": "findings",
       "relative_path": "data/mimic/labels/mimic_findings_labels.csv",
-      "rows": 133,
-      "sha256": "2c03c020284b7d8a36b3923368c85bde207ceec20f10d820f547055129976d71"
+      "rows": 110740,
+      "sha256": "9ef501e3e65cc05505bb209945cd914e4e41dd414b9e49796acfdd88cadfa127"
     }
   ],
   "section_extraction": "header-driven, frozen synonym map from experiment_registry text_policy",

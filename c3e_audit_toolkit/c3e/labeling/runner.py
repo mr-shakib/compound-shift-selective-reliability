@@ -114,7 +114,8 @@ def build_cohort(data_root: Path) -> pd.DataFrame:
     return assign_partitions(frame[eligible])
 
 
-def read_scope_text(data_root: Path, paths: set[str], wanted: tuple[str, ...]) -> dict[str, str]:
+def read_scope_text(data_root: Path, paths: set[str], wanted: tuple[str, ...],
+                    progress: Any | None = None) -> dict[str, str]:
     out: dict[str, str] = {}
     with zipfile.ZipFile(data_root / REPORTS_ZIP) as zf:
         for info in zf.infolist():
@@ -123,7 +124,51 @@ def read_scope_text(data_root: Path, paths: set[str], wanted: tuple[str, ...]) -
             text = zf.read(info).decode("utf-8", errors="replace")
             out[info.filename] = extract_sections(text, wanted)
             del text
+            if progress is not None:
+                progress(len(out), len(paths))
     return out
+
+
+def _log(message: str) -> None:
+    """Status line for the operator. stderr, so stdout stays parseable JSON."""
+    print(message, file=sys.stderr, flush=True)
+
+
+class _Progress:
+    """Throttled in-place progress line.
+
+    Counts and rates only — never report text, never an identifier. Redraws in
+    place on a TTY and falls back to periodic newlines when redirected to a log.
+    """
+
+    def __init__(self, label: str, min_interval: float = 2.0) -> None:
+        self.label = label
+        self.min_interval = min_interval
+        self.started = time.time()
+        self.last = 0.0
+        self.tty = sys.stderr.isatty()
+
+    def __call__(self, done: int, total: int) -> None:
+        now = time.time()
+        if done < total and now - self.last < self.min_interval:
+            return
+        self.last = now
+        elapsed = now - self.started
+        rate = done / elapsed if elapsed > 0 else 0.0
+        eta = (total - done) / rate if rate > 0 else 0.0
+        pct = done / total if total else 0.0
+        line = (f"  {self.label}: {done:,}/{total:,} ({pct:6.1%})  "
+                f"{rate:,.0f} rep/s  elapsed {_hms(elapsed)}  eta {_hms(eta)}")
+        if self.tty:
+            print(f"\r{line:<96}", end="" if done < total else "\n",
+                  file=sys.stderr, flush=True)
+        else:
+            print(line, file=sys.stderr, flush=True)
+
+
+def _hms(seconds: float) -> str:
+    seconds = int(max(seconds, 0))
+    return f"{seconds // 3600:d}:{(seconds % 3600) // 60:02d}:{seconds % 60:02d}"
 
 
 def _prevalence(frame: pd.DataFrame, endpoint: str) -> list[dict[str, Any]]:
@@ -158,20 +203,30 @@ def run(*, project_root: str | Path, checkpoint: str | Path, batch_size: int = 3
     label_dir = root / LABEL_DIR
     label_dir.mkdir(parents=True, exist_ok=True)
 
+    _log(f"{STAGE} — {TITLE}")
+    _log(f"[1/5] loading labeller from {Path(checkpoint).name} ...")
     labeler = CheXbertLabeler(checkpoint, batch_size=batch_size)
+    prov = labeler.provenance()
+    _log(f"      device={prov.device}  batch_size={prov.batch_size}  "
+         f"torch={prov.torch_version}")
 
     # Fidelity gate. Refuse to label project data with an unvalidated port.
+    _log("[2/5] fidelity gate against upstream reference labels ...")
     gate = validate_against_reference(labeler, root / "data/models/CheXbert/src")
     if not gate["exact_match"]:
         raise IntakeContractError(
             f"CheXbert port failed its fidelity gate: {gate['cells_agreeing']}/"
             f"{gate['cells_compared']} cells agree. Refusing to label project data."
         )
+    _log(f"      PASS — {gate['cells_agreeing']}/{gate['cells_compared']} cells agree")
 
+    _log("[3/5] building cohort (this reads the report archive, ~1-2 min) ...")
     cohort = build_cohort(data_root)
     if limit:
         cohort = cohort.head(limit)
     paths = set(cohort["path"])
+    _log(f"      cohort: {len(cohort):,} studies"
+         + (f"  (LIMITED to {limit:,})" if limit else ""))
 
     endpoints = {
         "impression": IMPRESSION_SECTIONS,
@@ -183,13 +238,19 @@ def run(*, project_root: str | Path, checkpoint: str | Path, batch_size: int = 3
     prevalence_rows: list[dict[str, Any]] = []
     written: list[dict[str, Any]] = []
 
-    for endpoint, wanted in endpoints.items():
+    for step, (endpoint, wanted) in enumerate(endpoints.items(), start=4):
         started = time.time()
-        texts = read_scope_text(data_root, paths, wanted)
+        _log(f"[{step}/5] endpoint '{endpoint}' — extracting section text ...")
+        texts = read_scope_text(data_root, paths, wanted,
+                                progress=_Progress(f"{endpoint} extract"))
         sub = cohort[cohort["path"].map(lambda p: bool(texts.get(p, "").strip()))].copy()
         reports = [texts[p] for p in sub["path"]]
+        _log(f"      {len(sub):,}/{len(cohort):,} studies have '{endpoint}' text "
+             f"({len(sub) / len(cohort):.2%} coverage)")
 
-        labels = labeler.label_c3e_targets(reports)
+        _log(f"      labelling {len(reports):,} reports ...")
+        labels = labeler.label_c3e_targets(reports,
+                                           progress=_Progress(f"{endpoint} label"))
         label_frame = pd.DataFrame(labels)
         for name in C3E_TARGETS:
             sub[name] = label_frame[name].values
@@ -203,6 +264,9 @@ def run(*, project_root: str | Path, checkpoint: str | Path, batch_size: int = 3
             "rows": int(len(sub)),
             "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
         })
+
+        _log(f"      wrote {len(sub):,} rows to {LABEL_DIR}/{target.name} "
+             f"(restricted tree)  [{_hms(time.time() - started)}]")
 
         prevalence_rows.extend(_prevalence(sub, endpoint))
         summaries.append({
@@ -267,7 +331,9 @@ def run(*, project_root: str | Path, checkpoint: str | Path, batch_size: int = 3
         },
     }
 
+    _log("      writing aggregate artifacts and safety-validating payloads ...")
     _write_outputs(output_dir, report, provenance, root)
+    _log(f"done — artifacts in {OUTPUT_DIR}")
     return report
 
 

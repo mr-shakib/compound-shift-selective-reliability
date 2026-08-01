@@ -1,24 +1,24 @@
 {
   "artifacts": [
     {
-      "byte_size": 4287,
+      "byte_size": 4506,
       "name": "stage4_label_summary.json",
-      "sha256": "73e16f44edf7a06a64d7cdec6c6732b98d638dbe69d2b922afb6263a36360321"
+      "sha256": "0b6b20c03b58a5ee4b016ef23a7c23d9c50a3e78187835e3e672eaac35999ea8"
     },
     {
-      "byte_size": 1436,
+      "byte_size": 1565,
       "name": "stage4_label_summary.md",
-      "sha256": "342e2d6468d830f7adea7ccc67039089e125361e51e92a0f06c7da2e879db9ef"
+      "sha256": "f178d3bdfa0e27f0443ee15833083033beef5fa835becf567352fd58537ad87f"
     },
     {
-      "byte_size": 719,
+      "byte_size": 914,
       "name": "stage4_label_prevalence.csv",
-      "sha256": "5166a0b80f2cc36552fd65475754472a0a78bcb3708e4f7272dabf8dd1d49dab"
+      "sha256": "5d78b866cd35399f06d7bac808873c68daf082a77f110e2c90afd0e6afbe61b4"
     },
     {
-      "byte_size": 2519,
+      "byte_size": 2525,
       "name": "stage4_provenance.json",
-      "sha256": "2453682fc2694accbea2d90a0f07dde0d06abb5e97b19fe701425f6861805b7e"
+      "sha256": "456c7001f7cd184fc8dde2cee17c88f5efcf0481b4cc0f5e5b4ed2962ebc1a25"
     }
   ],
   "compliance": {

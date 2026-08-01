@@ -35,7 +35,7 @@ from dataclasses import dataclass
 import hashlib
 from pathlib import Path
 import random
-from typing import Any, Iterable, Sequence
+from typing import Any, Callable, Iterable, Sequence
 
 import numpy as np
 import torch
@@ -231,8 +231,14 @@ class CheXbertLabeler:
             deterministic=True,
         )
 
-    def predict_classes(self, reports: Sequence[str]) -> np.ndarray:
-        """Return an (n_reports, 14) array of upstream class indices."""
+    def predict_classes(self, reports: Sequence[str],
+                        progress: Callable[[int, int], None] | None = None) -> np.ndarray:
+        """Return an (n_reports, 14) array of upstream class indices.
+
+        `progress` is an optional observer called with (completed, total) after
+        each batch. It receives counts only, never report text, and cannot
+        affect the computation.
+        """
         encoded = tokenize_reports(reports, self.tokenizer)
         out = np.zeros((len(encoded), 14), dtype=np.int64)
         for start in range(0, len(encoded), self.batch_size):
@@ -246,11 +252,15 @@ class CheXbertLabeler:
                 heads = self.model(padded, mask)
             for j, logits in enumerate(heads):
                 out[start:start + len(chunk), j] = logits.argmax(dim=1).cpu().numpy()
+            if progress is not None:
+                progress(min(start + len(chunk), len(encoded)), len(encoded))
         return out
 
-    def label_c3e_targets(self, reports: Sequence[str]) -> list[dict[str, float | None]]:
+    def label_c3e_targets(self, reports: Sequence[str],
+                          progress: Callable[[int, int], None] | None = None
+                          ) -> list[dict[str, float | None]]:
         """Label the five frozen C3E pathologies in the C3E encoding."""
-        classes = self.predict_classes(reports)
+        classes = self.predict_classes(reports, progress=progress)
         rows = []
         for row in classes:
             rows.append(
