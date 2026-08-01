@@ -1,0 +1,12 @@
+table,column,storage_dtype,semantic_type,row_count,null_count,blank_count,distinct_count,is_unique_not_null,expected_column
+cxr-record-list,subject_id,str,identifier:int64-safe-8-digit-string,377110,0,0,65379,False,True
+cxr-record-list,study_id,str,identifier:int64-safe-8-digit-string,377110,0,0,227835,False,True
+cxr-record-list,dicom_id,str,identifier:hex-uuid5x8,377110,0,0,377110,True,True
+cxr-record-list,path,str,relative_posix_path,377110,0,0,377110,True,True
+cxr-study-list,subject_id,str,identifier:int64-safe-8-digit-string,227835,0,0,65379,False,True
+cxr-study-list,study_id,str,identifier:int64-safe-8-digit-string,227835,0,0,227835,True,True
+cxr-study-list,path,str,relative_posix_path,227835,0,0,227835,True,True
+cxr-provider-list,study_id,str,identifier:int64-safe-8-digit-string,227835,0,0,227835,True,True
+cxr-provider-list,ordering_provider_id,str,identifier:deidentified-provider-code,227835,358,358,2755,False,True
+cxr-provider-list,attending_provider_id,str,identifier:deidentified-provider-code,227835,0,0,55,False,True
+cxr-provider-list,resident_provider_id,str,identifier:deidentified-provider-code,227835,144790,144790,115,False,True

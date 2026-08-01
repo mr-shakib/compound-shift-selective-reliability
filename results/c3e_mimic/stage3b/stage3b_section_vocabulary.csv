@@ -1,0 +1,63 @@
+label,canonical_section,section_class,recognised
+ADDENDUM,addendum,post_diagnostic,True
+CC,administrative,administrative,True
+CLINICAL HISTORY,history,pre_diagnostic,True
+CLINICAL INDICATION,indication,pre_diagnostic,True
+CLINICAL INFORMATION,history,pre_diagnostic,True
+CLINICAL INFORMATION & QUESTIONS TO BE ANSWERED,history,pre_diagnostic,True
+COMMENT,comment,post_diagnostic,True
+COMMENTS,comment,post_diagnostic,True
+COMPARISON,comparison,pre_diagnostic,True
+COMPARISON EXAM,comparison,pre_diagnostic,True
+COMPARISON FILM,comparison,pre_diagnostic,True
+COMPARISONS,comparison,pre_diagnostic,True
+CONCLUSION,impression,label_source,True
+DATE,administrative,administrative,True
+EXAM,examination,pre_diagnostic,True
+EXAMINATION,examination,pre_diagnostic,True
+FINAL ADDENDUM,addendum,post_diagnostic,True
+FINDINGS,findings,label_source,True
+FINDINGS AND IMPRESSION,findings_impression_combined,label_source,True
+FINDINGS/IMPRESSION,findings_impression_combined,label_source,True
+FROM,administrative,administrative,True
+HISTORY,history,pre_diagnostic,True
+IMPRESSION,impression,label_source,True
+IMPRESSION AND FINDINGS,findings_impression_combined,label_source,True
+INDICATION,indication,pre_diagnostic,True
+NOTE,comment,post_diagnostic,True
+NOTIFICATION,notification,post_diagnostic,True
+NOTIFICATIONS,notification,post_diagnostic,True
+PATIENT HISTORY,history,pre_diagnostic,True
+PFI,provisional_impression,post_diagnostic,True
+PROCEDURE,examination,pre_diagnostic,True
+PROVISIONAL FINDINGS IMPRESSION,provisional_impression,post_diagnostic,True
+PROVISIONAL FINDINGS IMPRESSION (PFI),provisional_impression,post_diagnostic,True
+REASON FOR EXAM,indication,pre_diagnostic,True
+REASON FOR EXAMINATION,indication,pre_diagnostic,True
+RECOMMENDATION,recommendation,post_diagnostic,True
+RECOMMENDATION(S),recommendation,post_diagnostic,True
+RECOMMENDATIONS,recommendation,post_diagnostic,True
+REFERENCE EXAM,comparison,pre_diagnostic,True
+REPORT,examination,pre_diagnostic,True
+STUDY,examination,pre_diagnostic,True
+TECHNIQUE,technique,pre_diagnostic,True
+TO,administrative,administrative,True
+TYPE OF EXAMINATION,examination,pre_diagnostic,True
+WET READ,wet_read,post_diagnostic,True
+"AP CHEST, #",,unrecognised,False
+"CHEST, TWO VIEWS",,unrecognised,False
+PA AND LATERAL VIEWS OF THE CHEST,,unrecognised,False
+AP CHEST #,,unrecognised,False
+FRONTAL AND LATERAL CHEST RADIOGRAPHS,,unrecognised,False
+PA AND LATERAL CHEST RADIOGRAPHS,,unrecognised,False
+PORTABLE CHEST,,unrecognised,False
+PA AND LATERAL CHEST RADIOGRAPH,,unrecognised,False
+"CHEST, PA AND LATERAL",,unrecognised,False
+TWO VIEWS OF THE CHEST,,unrecognised,False
+FRONTAL AND LATERAL VIEWS OF THE CHEST,,unrecognised,False
+PORTABLE AP CHEST RADIOGRAPH,,unrecognised,False
+FRONTAL CHEST RADIOGRAPH,,unrecognised,False
+CHEST,,unrecognised,False
+PORTABLE FRONTAL CHEST RADIOGRAPH,,unrecognised,False
+CHEST RADIOGRAPH,,unrecognised,False
+"CHEST, AP",,unrecognised,False

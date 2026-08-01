@@ -1,0 +1,762 @@
+{
+  "anomalies": [
+    "66 reports (0.0290%) expose no recognised section header; their narrative cannot be split into pre-diagnostic and diagnostic parts",
+    "181 reports place a pre-diagnostic section AFTER the first label-source section; a naive split-at-FINDINGS extractor would mis-assign that text",
+    "17551 reports carry a WET READ preliminary interpretation (7.7034%); this is post-diagnostic text and must be excluded from context_text",
+    "134 reports merge findings and impression into a single section, so the frozen primary/sensitivity label-source separation is not recoverable for them",
+    "6 reports have an indication section whose body is de-identification placeholders only, yielding empty effective context_text",
+    "13571 header-shaped lines are view descriptors in old-style reports rather than named sections"
+  ],
+  "banner_first_line": {
+    "FINAL ADDENDUM": 843,
+    "FINAL REPORT": 226992
+  },
+  "compliance": {
+    "chexbert_executed": false,
+    "dicom_opened": false,
+    "evaluation_performed": false,
+    "external_downloads": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "jpg_opened": false,
+    "labels_created": false,
+    "model_inference": false,
+    "model_training": false,
+    "previous_artifacts_modified": false,
+    "protocol_modified": false,
+    "report_text_exported": false,
+    "threshold_selection": false
+  },
+  "contract_availability": {
+    "availability_combination_counts": {
+      "pre_diagnostic=0;impression=0;findings=0": 15,
+      "pre_diagnostic=0;impression=0;findings=1": 215,
+      "pre_diagnostic=0;impression=1;findings=0": 79,
+      "pre_diagnostic=0;impression=1;findings=1": 172,
+      "pre_diagnostic=1;impression=0;findings=0": 11281,
+      "pre_diagnostic=1;impression=0;findings=1": 26681,
+      "pre_diagnostic=1;impression=1;findings=0": 66523,
+      "pre_diagnostic=1;impression=1;findings=1": 122803
+    },
+    "reports_with_findings_label_source": 149871,
+    "reports_with_findings_label_source_fraction": 0.657805,
+    "reports_with_impression_label_source": 189577,
+    "reports_with_impression_label_source_fraction": 0.83208,
+    "reports_with_pre_diagnostic_context": 227288,
+    "reports_with_pre_diagnostic_context_fraction": 0.997599,
+    "usable_for_primary_analysis": 189326,
+    "usable_for_primary_analysis_fraction": 0.830979,
+    "usable_for_sensitivity_analysis": 149484,
+    "usable_for_sensitivity_analysis_fraction": 0.656106
+  },
+  "cooccurrence_top": [
+    {
+      "reports": 146603,
+      "section_a": "comparison",
+      "section_b": "impression"
+    },
+    {
+      "reports": 144075,
+      "section_a": "impression",
+      "section_b": "indication"
+    },
+    {
+      "reports": 133236,
+      "section_a": "comparison",
+      "section_b": "findings"
+    },
+    {
+      "reports": 124403,
+      "section_a": "comparison",
+      "section_b": "indication"
+    },
+    {
+      "reports": 122841,
+      "section_a": "findings",
+      "section_b": "impression"
+    },
+    {
+      "reports": 99021,
+      "section_a": "findings",
+      "section_b": "indication"
+    },
+    {
+      "reports": 98777,
+      "section_a": "examination",
+      "section_b": "impression"
+    },
+    {
+      "reports": 95896,
+      "section_a": "examination",
+      "section_b": "indication"
+    },
+    {
+      "reports": 80106,
+      "section_a": "comparison",
+      "section_b": "technique"
+    },
+    {
+      "reports": 79791,
+      "section_a": "impression",
+      "section_b": "technique"
+    },
+    {
+      "reports": 75465,
+      "section_a": "findings",
+      "section_b": "technique"
+    },
+    {
+      "reports": 72357,
+      "section_a": "comparison",
+      "section_b": "examination"
+    },
+    {
+      "reports": 67977,
+      "section_a": "indication",
+      "section_b": "technique"
+    },
+    {
+      "reports": 55031,
+      "section_a": "examination",
+      "section_b": "findings"
+    },
+    {
+      "reports": 46103,
+      "section_a": "findings",
+      "section_b": "history"
+    },
+    {
+      "reports": 43802,
+      "section_a": "history",
+      "section_b": "impression"
+    },
+    {
+      "reports": 40944,
+      "section_a": "examination",
+      "section_b": "technique"
+    },
+    {
+      "reports": 35471,
+      "section_a": "comparison",
+      "section_b": "history"
+    },
+    {
+      "reports": 14086,
+      "section_a": "indication",
+      "section_b": "wet_read"
+    },
+    {
+      "reports": 13997,
+      "section_a": "impression",
+      "section_b": "wet_read"
+    },
+    {
+      "reports": 12993,
+      "section_a": "history",
+      "section_b": "technique"
+    },
+    {
+      "reports": 12412,
+      "section_a": "comparison",
+      "section_b": "wet_read"
+    },
+    {
+      "reports": 10909,
+      "section_a": "findings",
+      "section_b": "wet_read"
+    },
+    {
+      "reports": 8601,
+      "section_a": "examination",
+      "section_b": "wet_read"
+    },
+    {
+      "reports": 7229,
+      "section_a": "technique",
+      "section_b": "wet_read"
+    }
+  ],
+  "declarations": [
+    "STAGE 3B ONLY",
+    "REPORT STRUCTURE AND SECTION STATISTICS",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM OR JPG DECODED",
+    "NO REPORT TEXT EXPORTED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO EXTERNAL DOWNLOADS",
+    "NO PROTOCOL MODIFICATION"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "headers_per_report_histogram": {
+    "0": 59,
+    "1": 8671,
+    "10": 4,
+    "11": 4,
+    "14": 1,
+    "15": 1,
+    "17": 1,
+    "2": 17531,
+    "21": 1,
+    "3": 48226,
+    "4": 54001,
+    "5": 57255,
+    "6": 35694,
+    "7": 5684,
+    "8": 647,
+    "9": 55
+  },
+  "ordering": {
+    "fraction": 0.000794,
+    "interpretation": "a non-zero count means section order alone is not a safe extraction rule; extraction must be header-driven, not position-driven",
+    "reports_with_pre_diagnostic_after_label_section": 181
+  },
+  "report_count_matches_study_list": true,
+  "report_size": {
+    "chars": {
+      "max": 3933,
+      "mean": 665.77,
+      "median": 609,
+      "min": 46,
+      "n": 227835,
+      "p95": 1146
+    },
+    "whitespace_tokens": {
+      "max": 552,
+      "mean": 87.09,
+      "median": 79,
+      "min": 2,
+      "n": 227835,
+      "p95": 156
+    }
+  },
+  "reports_expected_from_study_list": 227835,
+  "reports_parsed": 227835,
+  "reports_without_any_header": 59,
+  "reports_without_recognised_section": 66,
+  "scope": "structural section parsing and aggregate statistics only",
+  "section_class_presence": {
+    "administrative": 158,
+    "label_source": 216473,
+    "post_diagnostic": 24161,
+    "pre_diagnostic": 227288
+  },
+  "sections": [
+    {
+      "body_chars": {
+        "max": 1201,
+        "mean": 298.73,
+        "median": 273,
+        "min": 82,
+        "n": 181,
+        "p95": 545
+      },
+      "body_tokens": {
+        "max": 178,
+        "mean": 30.6,
+        "median": 24,
+        "min": 6,
+        "n": 181,
+        "p95": 68
+      },
+      "coverage_fraction": 0.000799,
+      "empty_body_occurrences": 3,
+      "reports_body_deidentified_only": 0,
+      "reports_with_deidentified_span": 178,
+      "reports_with_repeated_section": 2,
+      "reports_with_section": 182,
+      "section": "addendum",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 184
+    },
+    {
+      "body_chars": {
+        "max": 134,
+        "mean": 5.99,
+        "median": 4,
+        "min": 3,
+        "n": 159,
+        "p95": 7
+      },
+      "body_tokens": {
+        "max": 5,
+        "mean": 1.38,
+        "median": 1,
+        "min": 1,
+        "n": 159,
+        "p95": 2
+      },
+      "coverage_fraction": 0.000693,
+      "empty_body_occurrences": 0,
+      "reports_body_deidentified_only": 108,
+      "reports_with_deidentified_span": 159,
+      "reports_with_repeated_section": 1,
+      "reports_with_section": 158,
+      "section": "administrative",
+      "section_class": "administrative",
+      "total_occurrences": 159
+    },
+    {
+      "body_chars": {
+        "max": 509,
+        "mean": 110.34,
+        "median": 99,
+        "min": 23,
+        "n": 197,
+        "p95": 224
+      },
+      "body_tokens": {
+        "max": 74,
+        "mean": 19.59,
+        "median": 19,
+        "min": 4,
+        "n": 197,
+        "p95": 36
+      },
+      "coverage_fraction": 0.00086,
+      "empty_body_occurrences": 0,
+      "reports_body_deidentified_only": 0,
+      "reports_with_deidentified_span": 190,
+      "reports_with_repeated_section": 1,
+      "reports_with_section": 196,
+      "section": "comment",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 197
+    },
+    {
+      "body_chars": {
+        "max": 1518,
+        "mean": 24.45,
+        "median": 13,
+        "min": 1,
+        "n": 163830,
+        "p95": 62
+      },
+      "body_tokens": {
+        "max": 249,
+        "mean": 4.14,
+        "median": 2,
+        "min": 1,
+        "n": 163830,
+        "p95": 11
+      },
+      "coverage_fraction": 0.719174,
+      "empty_body_occurrences": 73,
+      "reports_body_deidentified_only": 57005,
+      "reports_with_deidentified_span": 130799,
+      "reports_with_repeated_section": 46,
+      "reports_with_section": 163853,
+      "section": "comparison",
+      "section_class": "pre_diagnostic",
+      "total_occurrences": 163903
+    },
+    {
+      "body_chars": {
+        "max": 876,
+        "mean": 21.53,
+        "median": 19,
+        "min": 1,
+        "n": 102588,
+        "p95": 33
+      },
+      "body_tokens": {
+        "max": 132,
+        "mean": 3.66,
+        "median": 3,
+        "min": 1,
+        "n": 102588,
+        "p95": 5
+      },
+      "coverage_fraction": 0.449711,
+      "empty_body_occurrences": 24,
+      "reports_body_deidentified_only": 5,
+      "reports_with_deidentified_span": 2380,
+      "reports_with_repeated_section": 152,
+      "reports_with_section": 102460,
+      "section": "examination",
+      "section_class": "pre_diagnostic",
+      "total_occurrences": 102612
+    },
+    {
+      "body_chars": {
+        "max": 2501,
+        "mean": 339.76,
+        "median": 316,
+        "min": 1,
+        "n": 149711,
+        "p95": 616
+      },
+      "body_tokens": {
+        "max": 351,
+        "mean": 49.24,
+        "median": 45,
+        "min": 1,
+        "n": 149711,
+        "p95": 91
+      },
+      "coverage_fraction": 0.657221,
+      "empty_body_occurrences": 109,
+      "reports_body_deidentified_only": 4,
+      "reports_with_deidentified_span": 25163,
+      "reports_with_repeated_section": 77,
+      "reports_with_section": 149738,
+      "section": "findings",
+      "section_class": "label_source",
+      "total_occurrences": 149820
+    },
+    {
+      "body_chars": {
+        "max": 869,
+        "mean": 337.6,
+        "median": 298,
+        "min": 120,
+        "n": 133,
+        "p95": 634
+      },
+      "body_tokens": {
+        "max": 141,
+        "mean": 50.08,
+        "median": 43,
+        "min": 17,
+        "n": 133,
+        "p95": 96
+      },
+      "coverage_fraction": 0.000588,
+      "empty_body_occurrences": 1,
+      "reports_body_deidentified_only": 0,
+      "reports_with_deidentified_span": 14,
+      "reports_with_repeated_section": 0,
+      "reports_with_section": 134,
+      "section": "findings_impression_combined",
+      "section_class": "label_source",
+      "total_occurrences": 134
+    },
+    {
+      "body_chars": {
+        "max": 1674,
+        "mean": 62.6,
+        "median": 46,
+        "min": 3,
+        "n": 57034,
+        "p95": 127
+      },
+      "body_tokens": {
+        "max": 258,
+        "mean": 8.68,
+        "median": 6,
+        "min": 1,
+        "n": 57034,
+        "p95": 17
+      },
+      "coverage_fraction": 0.250264,
+      "empty_body_occurrences": 6,
+      "reports_body_deidentified_only": 8,
+      "reports_with_deidentified_span": 20613,
+      "reports_with_repeated_section": 19,
+      "reports_with_section": 57019,
+      "section": "history",
+      "section_class": "pre_diagnostic",
+      "total_occurrences": 57040
+    },
+    {
+      "body_chars": {
+        "max": 1618,
+        "mean": 176.09,
+        "median": 125,
+        "min": 1,
+        "n": 189554,
+        "p95": 488
+      },
+      "body_tokens": {
+        "max": 244,
+        "mean": 25.41,
+        "median": 17,
+        "min": 1,
+        "n": 189554,
+        "p95": 72
+      },
+      "coverage_fraction": 0.831496,
+      "empty_body_occurrences": 30,
+      "reports_body_deidentified_only": 4,
+      "reports_with_deidentified_span": 40753,
+      "reports_with_repeated_section": 134,
+      "reports_with_section": 189444,
+      "section": "impression",
+      "section_class": "label_source",
+      "total_occurrences": 189584
+    },
+    {
+      "body_chars": {
+        "max": 1885,
+        "mean": 110.16,
+        "median": 79,
+        "min": 1,
+        "n": 165889,
+        "p95": 342
+      },
+      "body_tokens": {
+        "max": 262,
+        "mean": 17.09,
+        "median": 13,
+        "min": 1,
+        "n": 165889,
+        "p95": 51
+      },
+      "coverage_fraction": 0.727992,
+      "empty_body_occurrences": 4,
+      "reports_body_deidentified_only": 6,
+      "reports_with_deidentified_span": 132546,
+      "reports_with_repeated_section": 28,
+      "reports_with_section": 165862,
+      "section": "indication",
+      "section_class": "pre_diagnostic",
+      "total_occurrences": 165893
+    },
+    {
+      "body_chars": {
+        "max": 619,
+        "mean": 127.63,
+        "median": 132,
+        "min": 1,
+        "n": 5729,
+        "p95": 197
+      },
+      "body_tokens": {
+        "max": 105,
+        "mean": 22.87,
+        "median": 24,
+        "min": 1,
+        "n": 5729,
+        "p95": 31
+      },
+      "coverage_fraction": 0.02526,
+      "empty_body_occurrences": 26,
+      "reports_body_deidentified_only": 1,
+      "reports_with_deidentified_span": 5521,
+      "reports_with_repeated_section": 0,
+      "reports_with_section": 5755,
+      "section": "notification",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 5755
+    },
+    {
+      "body_chars": {
+        "max": 594,
+        "mean": 201.02,
+        "median": 217,
+        "min": 15,
+        "n": 238,
+        "p95": 406
+      },
+      "body_tokens": {
+        "max": 74,
+        "mean": 19.92,
+        "median": 17,
+        "min": 4,
+        "n": 238,
+        "p95": 48
+      },
+      "coverage_fraction": 0.000873,
+      "empty_body_occurrences": 0,
+      "reports_body_deidentified_only": 0,
+      "reports_with_deidentified_span": 238,
+      "reports_with_repeated_section": 37,
+      "reports_with_section": 199,
+      "section": "provisional_impression",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 238
+    },
+    {
+      "body_chars": {
+        "max": 694,
+        "mean": 108.73,
+        "median": 90,
+        "min": 1,
+        "n": 1804,
+        "p95": 259
+      },
+      "body_tokens": {
+        "max": 105,
+        "mean": 16.12,
+        "median": 13,
+        "min": 1,
+        "n": 1804,
+        "p95": 39
+      },
+      "coverage_fraction": 0.007944,
+      "empty_body_occurrences": 7,
+      "reports_body_deidentified_only": 1,
+      "reports_with_deidentified_span": 197,
+      "reports_with_repeated_section": 1,
+      "reports_with_section": 1810,
+      "section": "recommendation",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 1811
+    },
+    {
+      "body_chars": {
+        "max": 905,
+        "mean": 31.04,
+        "median": 28,
+        "min": 1,
+        "n": 81379,
+        "p95": 52
+      },
+      "body_tokens": {
+        "max": 134,
+        "mean": 5.4,
+        "median": 4,
+        "min": 1,
+        "n": 81379,
+        "p95": 8
+      },
+      "coverage_fraction": 0.357122,
+      "empty_body_occurrences": 7,
+      "reports_body_deidentified_only": 13,
+      "reports_with_deidentified_span": 1217,
+      "reports_with_repeated_section": 16,
+      "reports_with_section": 81365,
+      "section": "technique",
+      "section_class": "pre_diagnostic",
+      "total_occurrences": 81386
+    },
+    {
+      "body_chars": {
+        "max": 2649,
+        "mean": 375.62,
+        "median": 323,
+        "min": 14,
+        "n": 17550,
+        "p95": 779
+      },
+      "body_tokens": {
+        "max": 387,
+        "mean": 41.02,
+        "median": 33,
+        "min": 3,
+        "n": 17550,
+        "p95": 102
+      },
+      "coverage_fraction": 0.077034,
+      "empty_body_occurrences": 1,
+      "reports_body_deidentified_only": 0,
+      "reports_with_deidentified_span": 17550,
+      "reports_with_repeated_section": 0,
+      "reports_with_section": 17551,
+      "section": "wet_read",
+      "section_class": "post_diagnostic",
+      "total_occurrences": 17551
+    }
+  ],
+  "stage": "C3-E6 Stage 3B",
+  "status": "PASS",
+  "title": "MIMIC REPORT STRUCTURE AND SECTION AVAILABILITY AUDIT",
+  "unrecognised_headers": {
+    "distinct_masked_labels": 499,
+    "labels_at_or_above_threshold": [
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "AP CHEST, #",
+        "occurrences": 4369
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "CHEST, TWO VIEWS",
+        "occurrences": 1735
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PA AND LATERAL VIEWS OF THE CHEST",
+        "occurrences": 913
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "AP CHEST #",
+        "occurrences": 801
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "FRONTAL AND LATERAL CHEST RADIOGRAPHS",
+        "occurrences": 603
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PA AND LATERAL CHEST RADIOGRAPHS",
+        "occurrences": 528
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PORTABLE CHEST",
+        "occurrences": 485
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PA AND LATERAL CHEST RADIOGRAPH",
+        "occurrences": 393
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "CHEST, PA AND LATERAL",
+        "occurrences": 327
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "TWO VIEWS OF THE CHEST",
+        "occurrences": 321
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "FRONTAL AND LATERAL VIEWS OF THE CHEST",
+        "occurrences": 320
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PORTABLE AP CHEST RADIOGRAPH",
+        "occurrences": 240
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "FRONTAL CHEST RADIOGRAPH",
+        "occurrences": 236
+      },
+      {
+        "looks_like_view_descriptor": false,
+        "masked_label": "CHEST",
+        "occurrences": 207
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "PORTABLE FRONTAL CHEST RADIOGRAPH",
+        "occurrences": 173
+      },
+      {
+        "looks_like_view_descriptor": false,
+        "masked_label": "CHEST RADIOGRAPH",
+        "occurrences": 137
+      },
+      {
+        "looks_like_view_descriptor": true,
+        "masked_label": "CHEST, AP",
+        "occurrences": 113
+      }
+    ],
+    "occurrences_below_threshold_suppressed": 2296,
+    "suppression_note": "labels below the threshold are counted but never printed, and digit runs are masked, so no rare free-text fragment can reach an artifact",
+    "threshold": 100,
+    "total_occurrences": 14197,
+    "view_descriptor_occurrences": 13571
+  },
+  "unresolved_risks": [
+    "eligible_view is frozen to 'frontal', but view position is still unavailable: it lives in mimic-cxr-2.0.0-metadata.csv.gz, which remains absent. View filtering cannot be applied yet.",
+    "No official split file is present, so patient-disjoint split construction remains unverified.",
+    "Section boundaries are derived from a curated header vocabulary. Reports without recognised headers, and reports merging findings with impression, are not contract-recoverable and must be excluded or handled explicitly by an approved Stage 3C rule.",
+    "COMPARISON bodies are treated as pre-diagnostic because prior-study references precede interpretation, but they can quote prior diagnostic conclusions; if COMPARISON is admitted into context_text this must be justified in a protocol amendment.",
+    "No label was extracted and no CheXbert-equivalent was executed, so the MIMIC analogue of impression_fixed.json / findings_fixed.json still does not exist."
+  ]
+}

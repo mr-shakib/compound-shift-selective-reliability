@@ -35,7 +35,10 @@ Any change after external-result inspection must receive a new protocol version,
 
 ## Intentionally pending
 
-- Exact MIMIC pre-diagnostic section mapping.
+- ~~Exact MIMIC pre-diagnostic section mapping.~~ **Resolved in v0.2.0 (2026-07-28)**
+  through MIMIC intake; see `AMENDMENT_LOG.md` and
+  `docs/C3E6_SOURCE_TEXT_MAPPING_AND_INFORMATIVENESS_RULE.md`. No CheXpert result was
+  inspected.
 - Exact image and text backbones after the hardware gate.
 
 These may be resolved only through the MIMIC intake and compute preflight, never by inspecting CheXpert results.

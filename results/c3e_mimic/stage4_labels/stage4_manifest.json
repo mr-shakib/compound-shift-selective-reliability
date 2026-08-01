@@ -1,0 +1,52 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 4287,
+      "name": "stage4_label_summary.json",
+      "sha256": "73e16f44edf7a06a64d7cdec6c6732b98d638dbe69d2b922afb6263a36360321"
+    },
+    {
+      "byte_size": 1436,
+      "name": "stage4_label_summary.md",
+      "sha256": "342e2d6468d830f7adea7ccc67039089e125361e51e92a0f06c7da2e879db9ef"
+    },
+    {
+      "byte_size": 719,
+      "name": "stage4_label_prevalence.csv",
+      "sha256": "5166a0b80f2cc36552fd65475754472a0a78bcb3708e4f7272dabf8dd1d49dab"
+    },
+    {
+      "byte_size": 2519,
+      "name": "stage4_provenance.json",
+      "sha256": "2453682fc2694accbea2d90a0f07dde0d06abb5e97b19fe701425f6861805b7e"
+    }
+  ],
+  "compliance": {
+    "evaluation_performed": false,
+    "external_site_labels_generated": false,
+    "identifiers_emitted_to_results": false,
+    "images_accessed": false,
+    "model_training": false,
+    "report_text_exported": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 4 ONLY",
+    "LABEL GENERATION AT THE SOURCE SITE",
+    "NO MEDICAL IMAGES OPENED",
+    "NO MODEL TRAINING",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO EXTERNAL SITE LABELS GENERATED IN THIS RUN",
+    "ROW-LEVEL LABELS CONFINED TO THE PROTECTED DATA TREE",
+    "NO REPORT TEXT EXPORTED"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage4_labels",
+  "stage": "C3-E6 Stage 4",
+  "status": "PASS",
+  "title": "SOURCE-SITE LABEL GENERATION (CHEXBERT)"
+}

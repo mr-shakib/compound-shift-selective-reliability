@@ -1,0 +1,4 @@
+split,studies,patients,frontal_images,with_findings_sensitivity_label,studies_at_T5,patients_at_T5,studies_at_T10,patients_at_T10
+train,170252,57959,189543,108622,156915,54001,95186,34814
+validate,1391,448,1584,844,1291,423,801,268
+test,1929,282,2155,1256,1732,277,998,230

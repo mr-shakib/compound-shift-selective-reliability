@@ -1,0 +1,6 @@
+tier,role,patients,studies,frontal_images,estimated_download_gb
+model_train,model fitting,49959,146253,162823,240.1
+threshold_calibration,frozen threshold selection,3000,9233,10264,15.14
+prespecified_eval,primary confirmatory evaluation,5000,14766,16456,24.27
+official_validate,secondary confirmation (official split),448,1391,1584,2.34
+official_test,secondary confirmation (official split),282,1929,2155,3.18

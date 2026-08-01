@@ -1,0 +1,93 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 6598,
+      "name": "stage3e_partition_audit.json",
+      "sha256": "a20c96018de4a2bb126dcd99f47ef2873387954016df5a2ec7d84711836fa8b3"
+    },
+    {
+      "byte_size": 4171,
+      "name": "stage3e_partition_audit.md",
+      "sha256": "d608f3dda48b645822c6b5bc3bbd4879df4c4b251b6ca07fba68d1f1db9ce543"
+    },
+    {
+      "byte_size": 410,
+      "name": "stage3e_partition_summary.csv",
+      "sha256": "e86110fc97171ece7fcc9c57b9a9dd685ff5f873bb0bd177bbb242d15fdae1d4"
+    },
+    {
+      "byte_size": 300,
+      "name": "stage3e_image_budget.csv",
+      "sha256": "d8249d51590e06292a3ca46369036baa479f6c53072affcec1b7b53039f622ad"
+    }
+  ],
+  "compliance": {
+    "chexbert_executed": false,
+    "identifiers_emitted_to_results": false,
+    "images_accessed": false,
+    "labels_used_in_partitioning": false,
+    "model_run": false,
+    "outcomes_used_in_partitioning": false
+  },
+  "declarations": [
+    "STAGE 3E ONLY",
+    "DESIGN-STAGE PARTITION CONSTRUCTION",
+    "PARTITION DEPENDS ONLY ON PATIENT IDENTIFIERS AND A FROZEN SEED",
+    "NO LABEL, OUTCOME, OR MODEL OUTPUT USED",
+    "NO MEDICAL IMAGES OPENED",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO IDENTIFIERS IN SAFE OUTPUTS"
+  ],
+  "download_manifests": [
+    {
+      "line_count": 162823,
+      "relative_path": "data/mimic/download_manifests/model_train_frontal_jpg_paths.txt",
+      "sha256": "2bc807936ddacdef8c5992ec79695cfa2726014ca6a924995f730a747e1b996f",
+      "tier": "model_train"
+    },
+    {
+      "line_count": 10264,
+      "relative_path": "data/mimic/download_manifests/threshold_calibration_frontal_jpg_paths.txt",
+      "sha256": "57badd2877a0ea98f8a3da0c74c0d298472add10217af19878fa082e7f39d7b9",
+      "tier": "threshold_calibration"
+    },
+    {
+      "line_count": 16456,
+      "relative_path": "data/mimic/download_manifests/prespecified_eval_frontal_jpg_paths.txt",
+      "sha256": "247a313d8ebcd14acc6c2841bade197fee600ec51fc81122c875322ac8450175",
+      "tier": "prespecified_eval"
+    },
+    {
+      "line_count": 1584,
+      "relative_path": "data/mimic/download_manifests/official_validate_frontal_jpg_paths.txt",
+      "sha256": "1630515275af0caf1c26d975072eb1f84e217cd7b38f772bbf61ff9d30b0708e",
+      "tier": "official_validate"
+    },
+    {
+      "line_count": 2155,
+      "relative_path": "data/mimic/download_manifests/official_test_frontal_jpg_paths.txt",
+      "sha256": "c97d2e9313b15606cebc04e61883cf3f7e37ae2cc15168ca3102b65cb6623c4e",
+      "tier": "official_test"
+    }
+  ],
+  "environment": {
+    "numpy": "2.5.1",
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage3e",
+  "partition_policy": {
+    "calibration_patients_requested": 3000,
+    "depends_on": "patient identifiers and frozen seed only",
+    "eval_patients_requested": 5000,
+    "official_splits_retained_as": "secondary confirmation",
+    "seed": 20260718,
+    "source_split": "train",
+    "unit": "patient"
+  },
+  "stage": "C3-E6 Stage 3E",
+  "status": "PASS",
+  "title": "PRESPECIFIED PATIENT-DISJOINT EVALUATION PARTITION"
+}

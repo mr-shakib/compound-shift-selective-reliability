@@ -1,0 +1,576 @@
+{
+  "anomalies": [
+    "9 patient directories in the report archive contain no report members and correspond to no row in any metadata table (packaging residue, inert)",
+    "4 report members contain valid UTF-8 non-ASCII bytes; all members decode cleanly, but Stage 3B text handling must not assume pure ASCII",
+    "cxr-record-list carries no view_position column, so the requested view-position audit could not be executed from this download",
+    "resident_provider_id is populated for only 36.45% of studies",
+    "ordering_provider_id is null for 358 studies (0.1571% of rows)"
+  ],
+  "check_summary": {
+    "FAIL": 0,
+    "PASS": 70,
+    "WARN": 3,
+    "total": 73
+  },
+  "checksum_audit": {
+    "all_verified": true,
+    "files_verified": [
+      {
+        "byte_size": 14871705,
+        "digest_match": true,
+        "expected_present_in_manifest": true,
+        "file": "cxr-record-list.csv.gz",
+        "sha256_prefix": "161cb75e043a405d"
+      },
+      {
+        "byte_size": 2343957,
+        "digest_match": true,
+        "expected_present_in_manifest": true,
+        "file": "cxr-study-list.csv.gz",
+        "sha256_prefix": "debed407e0182b27"
+      },
+      {
+        "byte_size": 1843629,
+        "digest_match": true,
+        "expected_present_in_manifest": true,
+        "file": "cxr-provider-list.csv.gz",
+        "sha256_prefix": "c83a21b602e1dc4e"
+      },
+      {
+        "byte_size": 141942511,
+        "digest_match": true,
+        "expected_present_in_manifest": true,
+        "file": "mimic-cxr-reports.zip",
+        "sha256_prefix": "8c654ccfa6d94a45"
+      }
+    ],
+    "manifest_entries_by_extension": {
+      "dcm": 377110,
+      "gz": 3,
+      "txt": 227836,
+      "zip": 1
+    },
+    "manifest_entry_count": 604950,
+    "note": "SHA256SUMS.txt is the full MIMIC-CXR manifest and also lists DICOM filenames and digests. Image digests were used for name-level reconciliation only; no image bytes were read."
+  },
+  "compliance": {
+    "chexbert_executed": false,
+    "dicom_opened": false,
+    "external_downloads": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "jpg_opened": false,
+    "labels_created": false,
+    "leakage_introduced": false,
+    "metrics_computed": false,
+    "model_inference": false,
+    "model_training": false,
+    "nlp_performed": false,
+    "previous_artifacts_modified": false,
+    "protocol_modified": false,
+    "threshold_tuning": false
+  },
+  "cross_table_audit": {
+    "duplicate_joins": 0,
+    "joins": [
+      {
+        "expected_cardinality": "many-to-one",
+        "join": "cxr-record-list -> cxr-study-list on (patient, study)",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "cxr-provider-list -> cxr-study-list on study",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "cxr-study-list -> cxr-provider-list on study",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "cxr-study-list -> report archive on path",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "report archive -> cxr-study-list on path",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "cxr-study-list -> SHA256SUMS .txt entries",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "SHA256SUMS .txt entries -> cxr-study-list",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "cxr-record-list -> SHA256SUMS .dcm entries",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "SHA256SUMS .dcm entries -> cxr-record-list",
+        "resolved": true,
+        "unmatched_keys": 0
+      },
+      {
+        "expected_cardinality": "one-to-one",
+        "join": "report archive -> SHA256SUMS .txt entries",
+        "resolved": true,
+        "unmatched_keys": 0
+      }
+    ],
+    "manifest_dcm_entries": 377110,
+    "manifest_txt_entries": 227835,
+    "missing_joins": 0,
+    "orphan_entries": 0,
+    "record_manifest_agreement": true,
+    "three_way_agreement": true,
+    "unexpected_cardinalities": 0
+  },
+  "declarations": [
+    "STAGE 3A ONLY",
+    "METADATA AND REPORT-CONTAINER AUDIT",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM DECODED",
+    "NO REPORT TEXT PARSED OR EXPORTED",
+    "NO NLP OR LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO THRESHOLD TUNING",
+    "NO EXTERNAL DOWNLOADS",
+    "NO PROTOCOL MODIFICATION"
+  ],
+  "environment": {
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "failures": [],
+  "hierarchy_audit": {
+    "broken_references": 0,
+    "cardinality_patient_to_study": "one-to-many",
+    "cardinality_study_to_provider_row": "one-to-one",
+    "cardinality_study_to_record": "one-to-many",
+    "cardinality_study_to_report": "one-to-one",
+    "duplicate_record_identifiers": 0,
+    "duplicate_study_identifiers": 0,
+    "orphan_records": 0,
+    "path_consistency": {
+      "record_path_bucket_agrees": true,
+      "record_path_dicom_agrees": true,
+      "record_path_study_agrees": true,
+      "record_path_subject_agrees": true,
+      "record_path_wellformed": true,
+      "study_path_bucket_agrees": true,
+      "study_path_study_agrees": true,
+      "study_path_subject_agrees": true,
+      "study_path_wellformed": true
+    },
+    "patients_in_record_list": 65379,
+    "patients_in_study_list": 65379,
+    "records": 377110,
+    "studies_in_record_list": 227835,
+    "studies_in_study_list": 227835,
+    "studies_with_multiple_patients": 0,
+    "studies_without_records": 0
+  },
+  "provider_audit": {
+    "distinct_providers_any_role": 2893,
+    "distinct_studies_covered": 227835,
+    "duplicate_study_rows": 0,
+    "mapping_consistency": "one provider row per study; roles are per-study attributes",
+    "provider_rows_referencing_unknown_study": 0,
+    "roles": {
+      "attending_provider_id": {
+        "coverage_fraction": 1.0,
+        "distinct_providers": 55,
+        "identifier_format_conforms": true,
+        "rows_null": 0,
+        "rows_populated": 227835
+      },
+      "ordering_provider_id": {
+        "coverage_fraction": 0.998429,
+        "distinct_providers": 2755,
+        "identifier_format_conforms": true,
+        "rows_null": 358,
+        "rows_populated": 227477
+      },
+      "resident_provider_id": {
+        "coverage_fraction": 0.364496,
+        "distinct_providers": 115,
+        "identifier_format_conforms": true,
+        "rows_null": 144790,
+        "rows_populated": 83045
+      }
+    },
+    "rows": 227835,
+    "rows_with_all_roles_null": 0,
+    "studies_without_provider_row": 0
+  },
+  "record_audit": {
+    "dicom_references_non_dcm": 0,
+    "distinct_patients": 65379,
+    "distinct_records": 377110,
+    "distinct_studies": 227835,
+    "duplicate_dicom_paths": 0,
+    "duplicate_record_identifiers": 0,
+    "duplicate_rows": 0,
+    "missing_identifiers": 0,
+    "records_per_study": {
+      "histogram": {
+        "1": 102675,
+        "11": 1,
+        "2": 103481,
+        "3": 19442,
+        "4": 2097,
+        "5": 99,
+        "6": 33,
+        "7": 2,
+        "8": 4,
+        "9": 1
+      },
+      "max": 11,
+      "mean": 1.6552,
+      "median": 2.0,
+      "min": 1,
+      "p95": 3.0
+    },
+    "rows": 377110,
+    "unexpected_values": 0,
+    "view_position_audit_status": "NOT_AUDITABLE_IN_THIS_DOWNLOAD",
+    "view_position_column_present": false
+  },
+  "report_archive_audit": {
+    "archive_entries_total": 293234,
+    "bucket_distribution": {
+      "p10": 22197,
+      "p11": 23358,
+      "p12": 22428,
+      "p13": 22945,
+      "p14": 22589,
+      "p15": 23713,
+      "p16": 22151,
+      "p17": 22695,
+      "p18": 22929,
+      "p19": 22830
+    },
+    "compress_types": {
+      "8": 227835
+    },
+    "content_handling": "members decompressed in memory for CRC-32 and byte-decodability checks only; no tokenisation, parsing, sectioning, labelling, or export of report text",
+    "crc_mismatches": 0,
+    "directory_depth_histogram": {
+      "3": 227835
+    },
+    "directory_members": 65399,
+    "duplicate_member_names": 0,
+    "empty_patient_directories": 9,
+    "file_members": 227835,
+    "filename_convention": "files/pXX/pNNNNNNNN/sNNNNNNNN.txt",
+    "filenames_non_ascii": 0,
+    "filenames_utf8_flagged": 0,
+    "layout": "files/<2-char patient bucket>/<patient dir>/<study>.txt",
+    "member_size_bytes": {
+      "max": 3933,
+      "mean": 665.77,
+      "min": 46
+    },
+    "members_matching_convention": 227835,
+    "members_non_txt": 0,
+    "members_pure_ascii": 227831,
+    "members_undecodable": 0,
+    "members_utf8_non_ascii": 4,
+    "members_with_crlf": 0,
+    "patient_directories": 65388,
+    "patient_directories_absent_from_metadata": 9,
+    "patient_directories_with_reports": 65379,
+    "patient_identifier_encoding": "directory name, 'p' prefix + 8-digit subject_id; bucket = first 2 digits",
+    "read_errors": 0,
+    "reports_expected_from_study_list": 227835,
+    "reports_missing": 0,
+    "reports_present": 227835,
+    "reports_unexpected": 0,
+    "study_identifier_encoding": "file stem, 's' prefix + 8-digit study_id",
+    "uncompressed_bytes_total": 151686630,
+    "zero_length_members": 0
+  },
+  "schema_audit": {
+    "identifier_formats_conform": true,
+    "keys": {
+      "cxr-provider-list": {
+        "candidate_keys": [
+          [
+            "study_id"
+          ]
+        ],
+        "foreign_keys": [
+          {
+            "columns": [
+              "study_id"
+            ],
+            "references": "cxr-study-list"
+          }
+        ],
+        "primary_key": [
+          "study_id"
+        ],
+        "primary_key_valid": true
+      },
+      "cxr-record-list": {
+        "candidate_keys": [
+          [
+            "dicom_id"
+          ],
+          [
+            "path"
+          ]
+        ],
+        "foreign_keys": [
+          {
+            "columns": [
+              "subject_id",
+              "study_id"
+            ],
+            "references": "cxr-study-list"
+          }
+        ],
+        "primary_key": [
+          "dicom_id"
+        ],
+        "primary_key_valid": true
+      },
+      "cxr-study-list": {
+        "candidate_keys": [
+          [
+            "study_id"
+          ],
+          [
+            "path"
+          ],
+          [
+            "subject_id",
+            "study_id"
+          ]
+        ],
+        "foreign_keys": [],
+        "primary_key": [
+          "study_id"
+        ],
+        "primary_key_valid": true
+      }
+    },
+    "tables": {
+      "cxr-provider-list": {
+        "column_count": 4,
+        "columns": [
+          {
+            "blank_count": 0,
+            "column": "study_id",
+            "distinct_count": 227835,
+            "is_unique_not_null": true,
+            "null_count": 0,
+            "semantic_type": "identifier:int64-safe-8-digit-string",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 358,
+            "column": "ordering_provider_id",
+            "distinct_count": 2755,
+            "is_unique_not_null": false,
+            "null_count": 358,
+            "semantic_type": "identifier:deidentified-provider-code",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "attending_provider_id",
+            "distinct_count": 55,
+            "is_unique_not_null": false,
+            "null_count": 0,
+            "semantic_type": "identifier:deidentified-provider-code",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 144790,
+            "column": "resident_provider_id",
+            "distinct_count": 115,
+            "is_unique_not_null": false,
+            "null_count": 144790,
+            "semantic_type": "identifier:deidentified-provider-code",
+            "storage_dtype": "str"
+          }
+        ],
+        "columns_expected": [
+          "study_id",
+          "ordering_provider_id",
+          "attending_provider_id",
+          "resident_provider_id"
+        ],
+        "columns_observed": [
+          "study_id",
+          "ordering_provider_id",
+          "attending_provider_id",
+          "resident_provider_id"
+        ],
+        "duplicate_full_rows": 0,
+        "missing_columns": [],
+        "row_count": 227835,
+        "total_null_cells": 145148,
+        "unexpected_columns": []
+      },
+      "cxr-record-list": {
+        "column_count": 4,
+        "columns": [
+          {
+            "blank_count": 0,
+            "column": "subject_id",
+            "distinct_count": 65379,
+            "is_unique_not_null": false,
+            "null_count": 0,
+            "semantic_type": "identifier:int64-safe-8-digit-string",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "study_id",
+            "distinct_count": 227835,
+            "is_unique_not_null": false,
+            "null_count": 0,
+            "semantic_type": "identifier:int64-safe-8-digit-string",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "dicom_id",
+            "distinct_count": 377110,
+            "is_unique_not_null": true,
+            "null_count": 0,
+            "semantic_type": "identifier:hex-uuid5x8",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "path",
+            "distinct_count": 377110,
+            "is_unique_not_null": true,
+            "null_count": 0,
+            "semantic_type": "relative_posix_path",
+            "storage_dtype": "str"
+          }
+        ],
+        "columns_expected": [
+          "subject_id",
+          "study_id",
+          "dicom_id",
+          "path"
+        ],
+        "columns_observed": [
+          "subject_id",
+          "study_id",
+          "dicom_id",
+          "path"
+        ],
+        "duplicate_full_rows": 0,
+        "missing_columns": [],
+        "row_count": 377110,
+        "total_null_cells": 0,
+        "unexpected_columns": []
+      },
+      "cxr-study-list": {
+        "column_count": 3,
+        "columns": [
+          {
+            "blank_count": 0,
+            "column": "subject_id",
+            "distinct_count": 65379,
+            "is_unique_not_null": false,
+            "null_count": 0,
+            "semantic_type": "identifier:int64-safe-8-digit-string",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "study_id",
+            "distinct_count": 227835,
+            "is_unique_not_null": true,
+            "null_count": 0,
+            "semantic_type": "identifier:int64-safe-8-digit-string",
+            "storage_dtype": "str"
+          },
+          {
+            "blank_count": 0,
+            "column": "path",
+            "distinct_count": 227835,
+            "is_unique_not_null": true,
+            "null_count": 0,
+            "semantic_type": "relative_posix_path",
+            "storage_dtype": "str"
+          }
+        ],
+        "columns_expected": [
+          "subject_id",
+          "study_id",
+          "path"
+        ],
+        "columns_observed": [
+          "subject_id",
+          "study_id",
+          "path"
+        ],
+        "duplicate_full_rows": 0,
+        "missing_columns": [],
+        "row_count": 227835,
+        "total_null_cells": 0,
+        "unexpected_columns": []
+      }
+    }
+  },
+  "scope": "read-only structural audit of metadata tables, checksum manifest, and report container",
+  "stage": "C3-E6 Stage 3A",
+  "status": "PASS",
+  "status_meaning": "all blocking integrity, schema, hierarchy, join, and archive checks passed",
+  "study_audit": {
+    "distinct_patients": 65379,
+    "distinct_studies": 227835,
+    "duplicate_patient_study_pairs": 0,
+    "duplicate_report_paths": 0,
+    "duplicate_studies": 0,
+    "missing_identifiers": 0,
+    "rows": 227835,
+    "studies_per_patient": {
+      "max": 158,
+      "mean": 3.4848,
+      "median": 1.0,
+      "min": 1,
+      "p95": 13.0
+    }
+  },
+  "title": "MIMIC METADATA AND REPORT INTAKE AUDIT",
+  "unresolved_risks": [
+    "View position, study date/time, and image acquisition parameters live in mimic-cxr-2.0.0-metadata.csv.gz, which is absent from this download; any Stage 3B design that stratifies or filters on view cannot be validated yet.",
+    "No official train/validate/test split file (mimic-cxr-2.0.0-split.csv.gz) is present, so split integrity and patient-disjointness remain unverified.",
+    "No CheXpert-style auxiliary label file is present; the frozen primary label source (impression_fixed.json) has no counterpart in this download and remains unverified.",
+    "Report section structure (Findings vs Impression) was deliberately not inspected, so the availability of the frozen pre-diagnostic text fields is not yet established.",
+    "Provider role sparsity is a property of the source data, not a defect; if provider identity is used as a context feature, the missingness pattern must be modelled explicitly rather than imputed."
+  ],
+  "warnings": [
+    "REC-view-position: view_position is not part of cxr-record-list; it lives in mimic-cxr-2.0.0-metadata.csv.gz, which is not in this download",
+    "PRV-resident-coverage: structurally optional role; sparsity is expected and is not a defect",
+    "RPT-empty-dirs: empty patient directories carry no data and no metadata rows; they are packaging residue and are inert for Stage 3B joins"
+  ]
+}

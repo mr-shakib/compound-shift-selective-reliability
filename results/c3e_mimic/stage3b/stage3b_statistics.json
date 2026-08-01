@@ -1,0 +1,159 @@
+{
+  "aggregation_level": "cohort only; no report text, section content, or identifiers are emitted",
+  "contract_availability": {
+    "availability_combination_counts": {
+      "pre_diagnostic=0;impression=0;findings=0": 15,
+      "pre_diagnostic=0;impression=0;findings=1": 215,
+      "pre_diagnostic=0;impression=1;findings=0": 79,
+      "pre_diagnostic=0;impression=1;findings=1": 172,
+      "pre_diagnostic=1;impression=0;findings=0": 11281,
+      "pre_diagnostic=1;impression=0;findings=1": 26681,
+      "pre_diagnostic=1;impression=1;findings=0": 66523,
+      "pre_diagnostic=1;impression=1;findings=1": 122803
+    },
+    "reports_with_findings_label_source": 149871,
+    "reports_with_findings_label_source_fraction": 0.657805,
+    "reports_with_impression_label_source": 189577,
+    "reports_with_impression_label_source_fraction": 0.83208,
+    "reports_with_pre_diagnostic_context": 227288,
+    "reports_with_pre_diagnostic_context_fraction": 0.997599,
+    "usable_for_primary_analysis": 189326,
+    "usable_for_primary_analysis_fraction": 0.830979,
+    "usable_for_sensitivity_analysis": 149484,
+    "usable_for_sensitivity_analysis_fraction": 0.656106
+  },
+  "report_size": {
+    "chars": {
+      "max": 3933,
+      "mean": 665.77,
+      "median": 609,
+      "min": 46,
+      "n": 227835,
+      "p95": 1146
+    },
+    "whitespace_tokens": {
+      "max": 552,
+      "mean": 87.09,
+      "median": 79,
+      "min": 2,
+      "n": 227835,
+      "p95": 156
+    }
+  },
+  "reports_parsed": 227835,
+  "reports_without_recognised_section": 66,
+  "section_class_presence": {
+    "administrative": 158,
+    "label_source": 216473,
+    "post_diagnostic": 24161,
+    "pre_diagnostic": 227288
+  },
+  "section_coverage": [
+    {
+      "coverage_fraction": 0.000799,
+      "median_body_tokens": 24,
+      "reports": 182,
+      "section": "addendum",
+      "section_class": "post_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.000693,
+      "median_body_tokens": 1,
+      "reports": 158,
+      "section": "administrative",
+      "section_class": "administrative"
+    },
+    {
+      "coverage_fraction": 0.00086,
+      "median_body_tokens": 19,
+      "reports": 196,
+      "section": "comment",
+      "section_class": "post_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.719174,
+      "median_body_tokens": 2,
+      "reports": 163853,
+      "section": "comparison",
+      "section_class": "pre_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.449711,
+      "median_body_tokens": 3,
+      "reports": 102460,
+      "section": "examination",
+      "section_class": "pre_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.657221,
+      "median_body_tokens": 45,
+      "reports": 149738,
+      "section": "findings",
+      "section_class": "label_source"
+    },
+    {
+      "coverage_fraction": 0.000588,
+      "median_body_tokens": 43,
+      "reports": 134,
+      "section": "findings_impression_combined",
+      "section_class": "label_source"
+    },
+    {
+      "coverage_fraction": 0.250264,
+      "median_body_tokens": 6,
+      "reports": 57019,
+      "section": "history",
+      "section_class": "pre_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.831496,
+      "median_body_tokens": 17,
+      "reports": 189444,
+      "section": "impression",
+      "section_class": "label_source"
+    },
+    {
+      "coverage_fraction": 0.727992,
+      "median_body_tokens": 13,
+      "reports": 165862,
+      "section": "indication",
+      "section_class": "pre_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.02526,
+      "median_body_tokens": 24,
+      "reports": 5755,
+      "section": "notification",
+      "section_class": "post_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.000873,
+      "median_body_tokens": 17,
+      "reports": 199,
+      "section": "provisional_impression",
+      "section_class": "post_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.007944,
+      "median_body_tokens": 13,
+      "reports": 1810,
+      "section": "recommendation",
+      "section_class": "post_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.357122,
+      "median_body_tokens": 4,
+      "reports": 81365,
+      "section": "technique",
+      "section_class": "pre_diagnostic"
+    },
+    {
+      "coverage_fraction": 0.077034,
+      "median_body_tokens": 33,
+      "reports": 17551,
+      "section": "wet_read",
+      "section_class": "post_diagnostic"
+    }
+  ],
+  "stage": "C3-E6 Stage 3B"
+}

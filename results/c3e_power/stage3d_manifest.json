@@ -1,0 +1,68 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 457290,
+      "name": "stage3d_power_analysis.json",
+      "sha256": "95ec3c1a7dc883154ae359502f5442051bcc052e71473f3bf7347aa2e1ed1dd6"
+    },
+    {
+      "byte_size": 6880,
+      "name": "stage3d_power_analysis.md",
+      "sha256": "8c92bdbafcb42066dd303432a2d7ea87ea1478a52614684af24b4497609db1eb"
+    },
+    {
+      "byte_size": 129407,
+      "name": "stage3d_power_grid.csv",
+      "sha256": "0559f1da65fd57d6d4e1eb89c6a99cf01583d66b5199c8953cec6ce858b12f9d"
+    },
+    {
+      "byte_size": 7487,
+      "name": "stage3d_mde_summary.csv",
+      "sha256": "c23b8d85f72202a27e1ffb7347db26eb2c225ec1e873fa1b109ca0d3a72f5849"
+    },
+    {
+      "byte_size": 283,
+      "name": "stage3d_bootstrap_validation.csv",
+      "sha256": "2b908f1ec07d94ae6068331d409f0c3256954d5142e9bed9feac88be2a927cab"
+    }
+  ],
+  "compliance": {
+    "external_results_inspected": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "labels_created": false,
+    "model_run": false,
+    "observed_effect_used": false
+  },
+  "declarations": [
+    "STAGE 3D ONLY",
+    "DESIGN-STAGE POWER ANALYSIS",
+    "NO OBSERVED EFFECT USED",
+    "NO MEDICAL IMAGES OPENED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO EVALUATION ON REAL OUTCOMES",
+    "NO EXTERNAL DOWNLOADS"
+  ],
+  "environment": {
+    "numpy": "2.5.1",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "method": {
+    "approximation": "normal approximation for the grid, validated against the frozen bootstrap",
+    "assumptions_swept_not_fitted": true,
+    "bootstrap_replicates_frozen": 2000,
+    "bootstrap_seed": 20260718,
+    "cluster_adjustment": "design effect with unequal-cluster-size adjustment m_adj = sum(m^2)/sum(m)",
+    "decision_rule": "interval excludes zero AND estimate >= materiality",
+    "interval": "95_percent_percentile",
+    "materiality": 0.02,
+    "resampling_unit": "patient"
+  },
+  "output_dir": "results/c3e_power",
+  "stage": "C3-E6 Stage 3D",
+  "status": "PASS",
+  "title": "PRESPECIFIED POWER ANALYSIS FOR CONFIRMATORY HYPOTHESES"
+}

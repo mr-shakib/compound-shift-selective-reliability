@@ -1,5 +1,5 @@
 protocol_id: C3E6-STAGE2
-protocol_version: 0.1.0
+protocol_version: 0.3.0
 status: preflight_only
 created_for: C3E multimodal selective-reliability transport study
 authorization:
@@ -27,11 +27,32 @@ datasets:
     id: mimic_cxr_jpg
     version: 2.1.0
     role: development_and_internal_evaluation
-    official_splits_required: true
+    official_splits_required: false
     calibration_subset:
       parent_split: train
       unit: patient
       seed: 20260718
+      patients: 3000
+    # v0.3.0: the official test split yields only 282 patients in the Stage 3C
+    # cohort, which Stage 3D showed is materially power-limited for H1. A
+    # prespecified patient-disjoint partition is carved from train instead.
+    # Assignment uses patient identifiers and the frozen seed only; no label,
+    # outcome, image, or model output participates.
+    evaluation_partition:
+      role: primary_confirmatory_evaluation
+      parent_split: train
+      unit: patient
+      seed: 20260718
+      patients: 5000
+      disjoint_from:
+      - calibration_subset
+      - model_train
+      - official_validate
+      - official_test
+    official_splits_retained_as: secondary_confirmation
+    official_split_comparability_note: primary confirmatory estimates are not directly
+      comparable to published official-split baselines; official validate and test
+      results are reported alongside as secondary confirmation
   external:
     id: chexpert_plus
     role: locked_external_evaluation_only
@@ -58,13 +79,52 @@ text_policy:
   - section_clinical_history
   - section_history
   permitted_sections_source:
-  - PENDING_MIMIC_INTAKE_MAPPING
+  - indication
+  - history
   forbidden_sections:
   - findings
   - impression
   - report
   - summary
   prediction_time_requirement: pre_diagnostic_only
+  # Resolved 2026-07-28 through MIMIC intake (Stage 3A/3B/3B-2), as required by
+  # README.md "Intentionally pending". No external (CheXpert Plus) result was
+  # inspected; this mapping is prespecified, not post-hoc exploratory.
+  source_section_synonyms:
+    indication:
+    - INDICATION
+    - CLINICAL INDICATION
+    - REASON FOR EXAMINATION
+    - REASON FOR EXAM
+    history:
+    - HISTORY
+    - CLINICAL HISTORY
+    - PATIENT HISTORY
+    - CLINICAL INFORMATION
+  source_sections_excluded_as_post_diagnostic:
+  - WET READ
+  - PROVISIONAL FINDINGS IMPRESSION
+  - RECOMMENDATION
+  - NOTIFICATION
+  - ADDENDUM
+  - COMMENT
+  extraction_rule: header_driven_not_position_driven
+cohort_policy:
+  # Structural exclusions resolved through MIMIC intake, prespecified before any
+  # label generation, model run, or external-result inspection.
+  study_exclusions:
+  - id: X1
+    rule: report exposes no recognised section header
+    reason: cannot be separated into pre-diagnostic and diagnostic parts
+  - id: X2
+    rule: report merges findings and impression into a single section
+    reason: frozen primary/sensitivity label-source separation is not recoverable
+  section_exclusions_study_retained:
+  - id: X3
+    rule: drop WET READ and PROVISIONAL FINDINGS IMPRESSION sections
+    reason: preliminary interpretation is post-diagnostic; study remains eligible
+  ordering_note: pre-diagnostic sections occurring after a label section are retained
+    because extraction is header-driven
 models:
   core:
   - id: M1
@@ -135,6 +195,21 @@ failure_criteria:
   compound_shift_failure:
     ci_excludes_zero: true
     minimum_absolute_interaction: 0.02
+  # v0.3.0 clarification. The rule requires the point estimate itself to reach
+  # the materiality threshold. Evaluated at a true effect exactly equal to that
+  # threshold, the estimate exceeds it in only half of repetitions, so power is
+  # capped at 50% regardless of sample size (verified at implied n ~1e9 in
+  # Stage 3D). Materiality is therefore the smallest effect worth acting on,
+  # NOT the design effect. The study is powered against the minimum detectable
+  # effect reported in Stage 3D, and any hypothesis whose MDE exceeds the
+  # achievable range is reported as estimation with an interval rather than as
+  # a powered decision.
+  power_specification:
+    materiality_is_design_effect: false
+    powered_against: stage3d_minimum_detectable_effect
+    target_power: 0.80
+    underpowered_hypotheses_reported_as: estimation_with_interval
+    evidence: results/c3e_power/
 governance:
   external_dataset_prohibited_uses:
   - architecture_selection

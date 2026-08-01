@@ -1,0 +1,58 @@
+{
+  "checkpoint_source": "https://huggingface.co/StanfordAIMI/RRG_scorers (chexbert.pth)",
+  "checkpoint_source_note": "the upstream repository's Box link returns HTTP 404 (issues #9-#12); StanfordAIMI is the same lab and hosts the checkpoint on HuggingFace",
+  "fidelity_gate": {
+    "agreement_fraction": 1.0,
+    "cells_agreeing": 56,
+    "cells_compared": 56,
+    "exact_match": true,
+    "note": "reference cells come from the upstream repository's own labeled_reports.csv; these are public sample reports, not project data",
+    "reports_checked": 4
+  },
+  "label_encoding": {
+    "negative": 0.0,
+    "positive": 1.0,
+    "uncertain": -1.0,
+    "unmentioned": null
+  },
+  "labeler": {
+    "batch_size": 32,
+    "checkpoint_path": "chexbert.pth",
+    "checkpoint_sha256": "6550703c92d640e1e04d8105a7a185d76ece0f25fcbf033d292785bf22c0fde1",
+    "deterministic": true,
+    "device": "cuda:0",
+    "max_sequence_length": 512,
+    "python_version": "3.14.4",
+    "tokenizer_name": "bert-base-uncased",
+    "torch_version": "2.13.0+cu126",
+    "transformers_version": "5.14.1",
+    "upstream_commit": "6d22a96d73f18d0a7cf5b0dbebdac50cf8e4c1aa"
+  },
+  "missing_section_behavior": "study omitted from that endpoint; not imputed",
+  "port_deviations": [
+    "encoder built from explicit BertConfig rather than from_pretrained; upstream overwrites all pretrained weights from the checkpoint, so the download is redundant",
+    "nn.DataParallel not used; the checkpoint's 'module.' key prefix is stripped explicitly",
+    "tokenizer encode_plus (removed in transformers 5.x) replaced by explicit [CLS] + convert_tokens_to_ids + [SEP], which is what it did for pre-tokenized input"
+  ],
+  "row_level_location_note": "row-level labels contain patient and study identifiers and are confined to the gitignored data tree; only aggregates appear under results/",
+  "row_level_outputs": [
+    {
+      "endpoint": "impression",
+      "relative_path": "data/mimic/labels/mimic_impression_labels.csv",
+      "rows": 200,
+      "sha256": "36bb74c04c92754da21c150d583be115b161ffba415cfd8a4d68004d4dca1e70"
+    },
+    {
+      "endpoint": "findings",
+      "relative_path": "data/mimic/labels/mimic_findings_labels.csv",
+      "rows": 133,
+      "sha256": "2c03c020284b7d8a36b3923368c85bde207ceec20f10d820f547055129976d71"
+    }
+  ],
+  "section_extraction": "header-driven, frozen synonym map from experiment_registry text_policy",
+  "stage": "C3-E6 Stage 4",
+  "state_dict_load": {
+    "missing_keys": 0,
+    "unexpected_keys": 0
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "all_tiers_patient_disjoint": true,
+  "compliance": {
+    "chexbert_executed": false,
+    "identifiers_emitted_to_results": false,
+    "images_accessed": false,
+    "labels_used_in_partitioning": false,
+    "model_run": false,
+    "outcomes_used_in_partitioning": false
+  },
+  "declarations": [
+    "STAGE 3E ONLY",
+    "DESIGN-STAGE PARTITION CONSTRUCTION",
+    "PARTITION DEPENDS ONLY ON PATIENT IDENTIFIERS AND A FROZEN SEED",
+    "NO LABEL, OUTCOME, OR MODEL OUTPUT USED",
+    "NO MEDICAL IMAGES OPENED",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO IDENTIFIERS IN SAFE OUTPUTS"
+  ],
+  "download_manifests": [
+    {
+      "line_count": 162823,
+      "relative_path": "data/mimic/download_manifests/model_train_frontal_jpg_paths.txt",
+      "sha256": "2bc807936ddacdef8c5992ec79695cfa2726014ca6a924995f730a747e1b996f",
+      "tier": "model_train"
+    },
+    {
+      "line_count": 10264,
+      "relative_path": "data/mimic/download_manifests/threshold_calibration_frontal_jpg_paths.txt",
+      "sha256": "57badd2877a0ea98f8a3da0c74c0d298472add10217af19878fa082e7f39d7b9",
+      "tier": "threshold_calibration"
+    },
+    {
+      "line_count": 16456,
+      "relative_path": "data/mimic/download_manifests/prespecified_eval_frontal_jpg_paths.txt",
+      "sha256": "247a313d8ebcd14acc6c2841bade197fee600ec51fc81122c875322ac8450175",
+      "tier": "prespecified_eval"
+    },
+    {
+      "line_count": 1584,
+      "relative_path": "data/mimic/download_manifests/official_validate_frontal_jpg_paths.txt",
+      "sha256": "1630515275af0caf1c26d975072eb1f84e217cd7b38f772bbf61ff9d30b0708e",
+      "tier": "official_validate"
+    },
+    {
+      "line_count": 2155,
+      "relative_path": "data/mimic/download_manifests/official_test_frontal_jpg_paths.txt",
+      "sha256": "c97d2e9313b15606cebc04e61883cf3f7e37ae2cc15168ca3102b65cb6623c4e",
+      "tier": "official_test"
+    }
+  ],
+  "environment": {
+    "numpy": "2.5.1",
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "estimated_mb_per_image": 1.51,
+  "image_budget_options": [
+    {
+      "estimated_total_gb": 68.99,
+      "total_images_to_download": 46785,
+      "train_frontal_images": 16326,
+      "train_patient_budget": 5000,
+      "train_patients": 5000,
+      "train_studies": 14635
+    },
+    {
+      "estimated_total_gb": 92.81,
+      "total_images_to_download": 62940,
+      "train_frontal_images": 32481,
+      "train_patient_budget": 10000,
+      "train_patients": 10000,
+      "train_studies": 29164
+    },
+    {
+      "estimated_total_gb": 140.66,
+      "total_images_to_download": 95387,
+      "train_frontal_images": 64928,
+      "train_patient_budget": 20000,
+      "train_patients": 20000,
+      "train_studies": 58289
+    },
+    {
+      "estimated_total_gb": 236.85,
+      "total_images_to_download": 160620,
+      "train_frontal_images": 130161,
+      "train_patient_budget": 40000,
+      "train_patients": 40000,
+      "train_studies": 117015
+    },
+    {
+      "estimated_total_gb": 285.02,
+      "total_images_to_download": 193282,
+      "train_frontal_images": 162823,
+      "train_patient_budget": "all",
+      "train_patients": 49959,
+      "train_studies": 146253
+    }
+  ],
+  "key_findings": [
+    "The prespecified evaluation partition carries 5000 patients and 14766 studies, against 282 patients and 1929 studies in the official test split.",
+    "Standard errors scale as 1/sqrt(patients), so the partition shrinks the confirmatory standard error by approximately 4.2x relative to the official test split.",
+    "Assignment used only patient identifiers and the frozen seed. No label, outcome, image, or model output entered the partitioning, so this is a design construction rather than a data-dependent selection.",
+    "All 5 tiers are patient-disjoint.",
+    "Official validate and test splits are untouched and retained for secondary confirmation, so comparability with published MIMIC baselines is preserved as a reported secondary result."
+  ],
+  "manifest_location_note": "path manifests contain patient and study identifiers and are written to the gitignored restricted-data tree, never to results/",
+  "partition_policy": {
+    "calibration_patients_requested": 3000,
+    "depends_on": "patient identifiers and frozen seed only",
+    "eval_patients_requested": 5000,
+    "official_splits_retained_as": "secondary confirmation",
+    "seed": 20260718,
+    "source_split": "train",
+    "unit": "patient"
+  },
+  "patient_disjointness_violations": [],
+  "stage": "C3-E6 Stage 3E",
+  "status": "PASS",
+  "tiers": [
+    {
+      "estimated_download_gb": 240.1,
+      "frontal_images": 162823,
+      "patients": 49959,
+      "role": "model fitting",
+      "studies": 146253,
+      "tier": "model_train"
+    },
+    {
+      "estimated_download_gb": 15.14,
+      "frontal_images": 10264,
+      "patients": 3000,
+      "role": "frozen threshold selection",
+      "studies": 9233,
+      "tier": "threshold_calibration"
+    },
+    {
+      "estimated_download_gb": 24.27,
+      "frontal_images": 16456,
+      "patients": 5000,
+      "role": "primary confirmatory evaluation",
+      "studies": 14766,
+      "tier": "prespecified_eval"
+    },
+    {
+      "estimated_download_gb": 2.34,
+      "frontal_images": 1584,
+      "patients": 448,
+      "role": "secondary confirmation (official split)",
+      "studies": 1391,
+      "tier": "official_validate"
+    },
+    {
+      "estimated_download_gb": 3.18,
+      "frontal_images": 2155,
+      "patients": 282,
+      "role": "secondary confirmation (official split)",
+      "studies": 1929,
+      "tier": "official_test"
+    }
+  ],
+  "title": "PRESPECIFIED PATIENT-DISJOINT EVALUATION PARTITION",
+  "unresolved_risks": [
+    "Using a non-official evaluation partition amends `official_splits_required: true`. The official splits are retained as secondary confirmation, but the primary confirmatory estimate will not be directly comparable to published official-split baselines.",
+    "The image-size estimate of 1.51 MB per image is derived from the published release size divided by image count. Verify against a small sample before committing to a download budget.",
+    "A reduced training budget yields weaker models. The study measures whether selective reliability transports, not peak accuracy, so this is a stated limitation rather than a defect - but it must be prespecified, not chosen after seeing results.",
+    "Partition sizes were chosen for statistical adequacy and download tractability before any outcome existed. They must not be revised after any label or model output is generated."
+  ]
+}

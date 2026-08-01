@@ -1,0 +1,8 @@
+step,rule,studies_before,studies_removed,studies_after,fraction_remaining
+all_studies,every study in cxr-study-list,227835,0,227835,1.0
+recognised_structure,exclude reports with no recognised section header (approved exclusion rule),227835,66,227769,0.99971
+separable_label_sections,exclude reports merging findings and impression (approved exclusion rule),227769,133,227636,0.999127
+frontal_view_available,frozen eligible_view=frontal: study must have at least one PA/AP image,227636,9688,217948,0.956605
+official_split_assigned,frozen official_splits_required=true,217948,0,217948,0.956605
+context_informative_T3,approved informativeness rule: N1 requires >= 3 effective tokens across indication+history,217948,15001,202947,0.890763
+primary_label_source_present,study must carry an impression section to receive a primary label,202947,29375,173572,0.761832

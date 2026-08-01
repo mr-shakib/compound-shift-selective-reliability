@@ -1,0 +1,77 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 41554,
+      "name": "stage3b2_context_threshold_sweep.json",
+      "sha256": "6b458b1f0c21b22f0f108a4889f7e009333dd67feb7c7c60c6792484bba157aa"
+    },
+    {
+      "byte_size": 9786,
+      "name": "stage3b2_context_threshold_sweep.md",
+      "sha256": "7f4312b23f9ca9ba2b333db4592eed6018640afd416a3f16a689c4d92b4ab8c0"
+    },
+    {
+      "byte_size": 7871,
+      "name": "stage3b2_threshold_curve.csv",
+      "sha256": "f28c1b91cfbb5934de45abf9ee73af812d174271ad5f88a34b6d1da9b86396cf"
+    },
+    {
+      "byte_size": 919,
+      "name": "stage3b2_candidate_context_sets.csv",
+      "sha256": "53d1c439334205dba99749ca6c231781b90173fe00f493c01a623a08a0dfd404"
+    },
+    {
+      "byte_size": 1425,
+      "name": "stage3b2_c2_pairing_feasibility.md",
+      "sha256": "4c3d48768bc160330e915de6079abe3eefb6835c58da170ff94231c0719fc174"
+    }
+  ],
+  "compliance": {
+    "chexbert_executed": false,
+    "evaluation_performed": false,
+    "external_downloads": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "labels_created": false,
+    "model_inference": false,
+    "model_training": false,
+    "prediction_threshold_selected": false,
+    "previous_artifacts_modified": false,
+    "protocol_modified": false,
+    "report_text_exported": false
+  },
+  "declarations": [
+    "STAGE 3B-2 ONLY",
+    "CONTEXT AVAILABILITY MEASUREMENT",
+    "NO MEDICAL IMAGES OPENED",
+    "NO REPORT TEXT EXPORTED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO EXTERNAL DOWNLOADS",
+    "NO PROTOCOL MODIFICATION"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage3b2",
+  "reports_parsed": 227835,
+  "source_files_audited": [
+    {
+      "name": "mimic-cxr-reports.zip",
+      "relative_path": "data/mimic/reports/mimic-cxr-reports.zip",
+      "sha256": "8c654ccfa6d94a45a234ab54cce4ae404b8d0597ad09ea7242a83df46575fbeb"
+    },
+    {
+      "name": "cxr-study-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-study-list.csv.gz",
+      "sha256": "debed407e0182b27503f29f0d9b519242ae895572e50c963dc445c64d0d6fc46"
+    }
+  ],
+  "stage": "C3-E6 Stage 3B-2",
+  "status": "PASS",
+  "title": "CONTEXT SUBSTANTIVENESS THRESHOLD SWEEP"
+}

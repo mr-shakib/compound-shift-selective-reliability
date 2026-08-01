@@ -1,0 +1,111 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 17821,
+      "name": "stage3a_metadata_audit.json",
+      "sha256": "012bb7e9e56ed00649ea73b415ab247a1d65b0893727501ed4ee0988930b3080"
+    },
+    {
+      "byte_size": 7041,
+      "name": "stage3a_metadata_audit.md",
+      "sha256": "f2d32936392ec38bfe10aff84f5eb0a82c46052f6c5879c8c03217ebf6bbbb69"
+    },
+    {
+      "byte_size": 1160,
+      "name": "stage3a_schema_summary.csv",
+      "sha256": "15d8d389d009501536b7604df7f479ae6248b98e5dbe7ebef42c4aed2f4cf129"
+    },
+    {
+      "byte_size": 9461,
+      "name": "stage3a_integrity_report.csv",
+      "sha256": "a8c192f1b326b8ba936a030107a17ccdf40c4929097b78ab11cb58715b919988"
+    },
+    {
+      "byte_size": 2153,
+      "name": "stage3a_statistics.json",
+      "sha256": "b02050ebf89c7249c7d883f72b685e39fa2e6d4d3af8875e8665e1bd4bb77114"
+    },
+    {
+      "byte_size": 1715,
+      "name": "stage3a_statistics.md",
+      "sha256": "54e38feb8c42701bebd554d14733ab13af3fd6e490433342df6a19c14573b141"
+    },
+    {
+      "byte_size": 3773,
+      "name": "stage3a_protocol_checklist.md",
+      "sha256": "405f141e6751cb0181c50ce8a600fea75d231ed695f57d7cc280e609241ce175"
+    }
+  ],
+  "check_summary": {
+    "FAIL": 0,
+    "PASS": 70,
+    "WARN": 3,
+    "total": 73
+  },
+  "compliance": {
+    "chexbert_executed": false,
+    "dicom_opened": false,
+    "external_downloads": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "jpg_opened": false,
+    "labels_created": false,
+    "leakage_introduced": false,
+    "metrics_computed": false,
+    "model_inference": false,
+    "model_training": false,
+    "nlp_performed": false,
+    "previous_artifacts_modified": false,
+    "protocol_modified": false,
+    "threshold_tuning": false
+  },
+  "declarations": [
+    "STAGE 3A ONLY",
+    "METADATA AND REPORT-CONTAINER AUDIT",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM DECODED",
+    "NO REPORT TEXT PARSED OR EXPORTED",
+    "NO NLP OR LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO THRESHOLD TUNING",
+    "NO EXTERNAL DOWNLOADS",
+    "NO PROTOCOL MODIFICATION"
+  ],
+  "environment": {
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage3a",
+  "source_files_audited": [
+    {
+      "name": "cxr-record-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-record-list.csv.gz",
+      "sha256": "161cb75e043a405db856634851b39a276acf1b0b28676addec560f6c29caac9a"
+    },
+    {
+      "name": "cxr-study-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-study-list.csv.gz",
+      "sha256": "debed407e0182b27503f29f0d9b519242ae895572e50c963dc445c64d0d6fc46"
+    },
+    {
+      "name": "cxr-provider-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-provider-list.csv.gz",
+      "sha256": "c83a21b602e1dc4e3c9c21e3583a5be2ab0ae5610dcb3809df563fd85cd0493c"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "relative_path": "data/mimic/metadata/SHA256SUMS.txt",
+      "sha256": "fbc5e6326bdff194b4eb35ce35b3aed5d0c2ccee81732a57e0eee386169c450a"
+    },
+    {
+      "name": "mimic-cxr-reports.zip",
+      "relative_path": "data/mimic/reports/mimic-cxr-reports.zip",
+      "sha256": "8c654ccfa6d94a45a234ab54cce4ae404b8d0597ad09ea7242a83df46575fbeb"
+    }
+  ],
+  "stage": "C3-E6 Stage 3A",
+  "status": "PASS",
+  "title": "MIMIC METADATA AND REPORT INTAKE AUDIT"
+}

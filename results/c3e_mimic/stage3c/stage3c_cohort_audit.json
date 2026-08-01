@@ -1,0 +1,272 @@
+{
+  "applied_policy": {
+    "eligible_view": "frontal (PA, AP)",
+    "informativeness_threshold_primary": 3,
+    "informativeness_threshold_sensitivity": [
+      5,
+      10
+    ],
+    "official_splits_required": true,
+    "permitted_context_sections": [
+      "indication",
+      "history"
+    ],
+    "policy_source": "docs/C3E6_SOURCE_TEXT_MAPPING_AND_INFORMATIVENESS_RULE.md (approved)",
+    "primary_label_section": "impression",
+    "sensitivity_label_section": "findings"
+  },
+  "cohort_by_split": [
+    {
+      "frontal_images": 189543,
+      "patients": 57959,
+      "patients_at_T10": 34814,
+      "patients_at_T5": 54001,
+      "split": "train",
+      "studies": 170252,
+      "studies_at_T10": 95186,
+      "studies_at_T5": 156915,
+      "with_findings_sensitivity_label": 108622
+    },
+    {
+      "frontal_images": 1584,
+      "patients": 448,
+      "patients_at_T10": 268,
+      "patients_at_T5": 423,
+      "split": "validate",
+      "studies": 1391,
+      "studies_at_T10": 801,
+      "studies_at_T5": 1291,
+      "with_findings_sensitivity_label": 844
+    },
+    {
+      "frontal_images": 2155,
+      "patients": 282,
+      "patients_at_T10": 230,
+      "patients_at_T5": 277,
+      "split": "test",
+      "studies": 1929,
+      "studies_at_T10": 998,
+      "studies_at_T5": 1732,
+      "with_findings_sensitivity_label": 1256
+    }
+  ],
+  "cohort_overall": {
+    "frontal_images": 193282,
+    "patients": 58689,
+    "studies": 173572
+  },
+  "compliance": {
+    "chexbert_executed": false,
+    "dataset_file_written": false,
+    "dicom_opened": false,
+    "evaluation_performed": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "labels_created": false,
+    "model_inference": false,
+    "model_training": false,
+    "report_text_exported": false
+  },
+  "declarations": [
+    "STAGE 3C ONLY",
+    "COHORT COUNTING AND ELIGIBILITY AUDIT",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM OR JPG DECODED",
+    "NO REPORT TEXT EXPORTED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO DATASET FILE WRITTEN",
+    "NO EXTERNAL DOWNLOADS"
+  ],
+  "environment": {
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "exclusion_waterfall": [
+    {
+      "fraction_remaining": 1.0,
+      "rule": "every study in cxr-study-list",
+      "step": "all_studies",
+      "studies_after": 227835,
+      "studies_before": 227835,
+      "studies_removed": 0
+    },
+    {
+      "fraction_remaining": 0.99971,
+      "rule": "exclude reports with no recognised section header (approved exclusion rule)",
+      "step": "recognised_structure",
+      "studies_after": 227769,
+      "studies_before": 227835,
+      "studies_removed": 66
+    },
+    {
+      "fraction_remaining": 0.999127,
+      "rule": "exclude reports merging findings and impression (approved exclusion rule)",
+      "step": "separable_label_sections",
+      "studies_after": 227636,
+      "studies_before": 227769,
+      "studies_removed": 133
+    },
+    {
+      "fraction_remaining": 0.956605,
+      "rule": "frozen eligible_view=frontal: study must have at least one PA/AP image",
+      "step": "frontal_view_available",
+      "studies_after": 217948,
+      "studies_before": 227636,
+      "studies_removed": 9688
+    },
+    {
+      "fraction_remaining": 0.956605,
+      "rule": "frozen official_splits_required=true",
+      "step": "official_split_assigned",
+      "studies_after": 217948,
+      "studies_before": 217948,
+      "studies_removed": 0
+    },
+    {
+      "fraction_remaining": 0.890763,
+      "rule": "approved informativeness rule: N1 requires >= 3 effective tokens across indication+history",
+      "step": "context_informative_T3",
+      "studies_after": 202947,
+      "studies_before": 217948,
+      "studies_removed": 15001
+    },
+    {
+      "fraction_remaining": 0.761832,
+      "rule": "study must carry an impression section to receive a primary label",
+      "step": "primary_label_source_present",
+      "studies_after": 173572,
+      "studies_before": 202947,
+      "studies_removed": 29375
+    }
+  ],
+  "frontal_images": 243334,
+  "images_missing_view": 15769,
+  "input_integrity": {
+    "image_metadata_rows": 377110,
+    "metadata_dicom_set_matches_record_list": true,
+    "metadata_duplicate_dicom": 0,
+    "metadata_identifiers_agree": true,
+    "official_checksum_manifest_available": false,
+    "record_rows": 377110,
+    "split_dicom_set_matches_record_list": true,
+    "split_duplicate_dicom": 0,
+    "split_identifiers_agree": true,
+    "split_rows": 377110
+  },
+  "split_integrity": {
+    "no_patient_overlap_across_source_splits": true,
+    "patients_spanning_splits": 0,
+    "split_image_counts": {
+      "test": 5159,
+      "train": 368960,
+      "validate": 2991
+    },
+    "studies_spanning_splits": 0
+  },
+  "stage": "C3-E6 Stage 3C",
+  "status": "PASS",
+  "title": "SOURCE-SITE COHORT CONSTRUCTION AUDIT",
+  "unresolved_risks": [
+    "The official test split yields 1929 studies from 282 patients. The frozen statistical_cluster_unit is patient and failure_criteria require a CI excluding zero at a minimum absolute risk increase of 0.02; with 282 clusters this is a materially power-limited confirmatory test.",
+    "The validate split yields 1391 studies from 448 patients, which constrains calibration and any coverage-stratified diagnostic performed off the training split.",
+    "The MIMIC-CXR-JPG SHA256SUMS manifest was not downloaded, so the two new files could not be checksum-verified against the official source. They were instead cross-validated against the checksum-verified cxr-record-list; identifier sets and per-row identifiers agree exactly.",
+    "15769 images carry no ViewPosition and are therefore treated as non-frontal. This is a conservative reading of the frozen eligible_view rule; studies whose only images lack a view label are excluded rather than assumed frontal."
+  ],
+  "view_distribution": [
+    {
+      "fraction": 0.390265,
+      "images": 147173,
+      "is_frontal": true,
+      "view_position": "AP"
+    },
+    {
+      "fraction": 0.254995,
+      "images": 96161,
+      "is_frontal": true,
+      "view_position": "PA"
+    },
+    {
+      "fraction": 0.219705,
+      "images": 82853,
+      "is_frontal": false,
+      "view_position": "LATERAL"
+    },
+    {
+      "fraction": 0.093164,
+      "images": 35133,
+      "is_frontal": false,
+      "view_position": "LL"
+    },
+    {
+      "fraction": 0.041815,
+      "images": 15769,
+      "is_frontal": false,
+      "view_position": "<missing>"
+    },
+    {
+      "fraction": 1.1e-05,
+      "images": 4,
+      "is_frontal": false,
+      "view_position": "PA LLD"
+    },
+    {
+      "fraction": 8e-06,
+      "images": 3,
+      "is_frontal": false,
+      "view_position": "LAO"
+    },
+    {
+      "fraction": 8e-06,
+      "images": 3,
+      "is_frontal": false,
+      "view_position": "RAO"
+    },
+    {
+      "fraction": 5e-06,
+      "images": 2,
+      "is_frontal": false,
+      "view_position": "AP AXIAL"
+    },
+    {
+      "fraction": 5e-06,
+      "images": 2,
+      "is_frontal": false,
+      "view_position": "AP LLD"
+    },
+    {
+      "fraction": 5e-06,
+      "images": 2,
+      "is_frontal": false,
+      "view_position": "XTABLE LATERAL"
+    },
+    {
+      "fraction": 5e-06,
+      "images": 2,
+      "is_frontal": false,
+      "view_position": "AP RLD"
+    },
+    {
+      "fraction": 3e-06,
+      "images": 1,
+      "is_frontal": false,
+      "view_position": "SWIMMERS"
+    },
+    {
+      "fraction": 3e-06,
+      "images": 1,
+      "is_frontal": false,
+      "view_position": "PA RLD"
+    },
+    {
+      "fraction": 3e-06,
+      "images": 1,
+      "is_frontal": false,
+      "view_position": "LPO"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 20645,
+      "name": "stage3b_report_structure_audit.json",
+      "sha256": "9f0b487b7841619241c658d1eee9f385b63fb1fa9abf983651789501f6e12f6c"
+    },
+    {
+      "byte_size": 5822,
+      "name": "stage3b_report_structure_audit.md",
+      "sha256": "08dff4adf2857cfd8f17c7df90b818b45fd78b9cea7dd311935f4689f0fe1d01"
+    },
+    {
+      "byte_size": 2926,
+      "name": "stage3b_section_vocabulary.csv",
+      "sha256": "14937c11dc3d5f3d24fd9fcbd161edf819f073773a5b59fae4d607ae156a5449"
+    },
+    {
+      "byte_size": 1541,
+      "name": "stage3b_section_statistics.csv",
+      "sha256": "c30b41617e92433049d9246e5a8813071c63c3c101980567ba2dd175f23f6f98"
+    },
+    {
+      "byte_size": 4422,
+      "name": "stage3b_statistics.json",
+      "sha256": "e89725f4f6ca9195b0856f0d19b359d34bf33f8b682b9f11a8bc8bbe7eb6caf2"
+    },
+    {
+      "byte_size": 1649,
+      "name": "stage3b_statistics.md",
+      "sha256": "a43b0f7d1eadf56e503f4e06d51fecd1886c9c749a7391c9e1b0de3989dc5322"
+    },
+    {
+      "byte_size": 3171,
+      "name": "stage3b_context_availability.md",
+      "sha256": "5f4cdaf783056674a9d55c51b681b93bf01e219c635bab3e77d2671e798aa905"
+    },
+    {
+      "byte_size": 3619,
+      "name": "stage3b_protocol_checklist.md",
+      "sha256": "570bdf44736ec717e2e8b5c8eb264882946be1080d5180dd6f231f87fee01007"
+    }
+  ],
+  "compliance": {
+    "chexbert_executed": false,
+    "dicom_opened": false,
+    "evaluation_performed": false,
+    "external_downloads": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "jpg_opened": false,
+    "labels_created": false,
+    "model_inference": false,
+    "model_training": false,
+    "previous_artifacts_modified": false,
+    "protocol_modified": false,
+    "report_text_exported": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 3B ONLY",
+    "REPORT STRUCTURE AND SECTION STATISTICS",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM OR JPG DECODED",
+    "NO REPORT TEXT EXPORTED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO EXTERNAL DOWNLOADS",
+    "NO PROTOCOL MODIFICATION"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage3b",
+  "reports_parsed": 227835,
+  "source_files_audited": [
+    {
+      "name": "mimic-cxr-reports.zip",
+      "relative_path": "data/mimic/reports/mimic-cxr-reports.zip",
+      "sha256": "8c654ccfa6d94a45a234ab54cce4ae404b8d0597ad09ea7242a83df46575fbeb"
+    },
+    {
+      "name": "cxr-study-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-study-list.csv.gz",
+      "sha256": "debed407e0182b27503f29f0d9b519242ae895572e50c963dc445c64d0d6fc46"
+    }
+  ],
+  "stage": "C3-E6 Stage 3B",
+  "status": "PASS",
+  "title": "MIMIC REPORT STRUCTURE AND SECTION AVAILABILITY AUDIT"
+}

@@ -1,0 +1,169 @@
+{
+  "cohort_studies": 200,
+  "compliance": {
+    "evaluation_performed": false,
+    "external_site_labels_generated": false,
+    "identifiers_emitted_to_results": false,
+    "images_accessed": false,
+    "model_training": false,
+    "report_text_exported": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 4 ONLY",
+    "LABEL GENERATION AT THE SOURCE SITE",
+    "NO MEDICAL IMAGES OPENED",
+    "NO MODEL TRAINING",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO EXTERNAL SITE LABELS GENERATED IN THIS RUN",
+    "ROW-LEVEL LABELS CONFINED TO THE PROTECTED DATA TREE",
+    "NO REPORT TEXT EXPORTED"
+  ],
+  "endpoints": [
+    {
+      "coverage_fraction": 1.0,
+      "elapsed_seconds": 2.8,
+      "endpoint": "impression",
+      "studies_in_cohort": 200,
+      "studies_with_scope_text": 200
+    },
+    {
+      "coverage_fraction": 0.665,
+      "elapsed_seconds": 2.6,
+      "endpoint": "findings",
+      "studies_in_cohort": 200,
+      "studies_with_scope_text": 133
+    }
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "fidelity_gate_passed": true,
+  "prevalence": [
+    {
+      "endpoint": "impression",
+      "negative": 15,
+      "pathology": "Cardiomegaly",
+      "positive": 31,
+      "positive_fraction": 0.155,
+      "studies": 200,
+      "uncertain": 7,
+      "uncertain_fraction": 0.035,
+      "unmentioned": 147,
+      "unmentioned_fraction": 0.735
+    },
+    {
+      "endpoint": "impression",
+      "negative": 18,
+      "pathology": "Edema",
+      "positive": 26,
+      "positive_fraction": 0.13,
+      "studies": 200,
+      "uncertain": 12,
+      "uncertain_fraction": 0.06,
+      "unmentioned": 144,
+      "unmentioned_fraction": 0.72
+    },
+    {
+      "endpoint": "impression",
+      "negative": 11,
+      "pathology": "Consolidation",
+      "positive": 7,
+      "positive_fraction": 0.035,
+      "studies": 200,
+      "uncertain": 3,
+      "uncertain_fraction": 0.015,
+      "unmentioned": 179,
+      "unmentioned_fraction": 0.895
+    },
+    {
+      "endpoint": "impression",
+      "negative": 1,
+      "pathology": "Atelectasis",
+      "positive": 26,
+      "positive_fraction": 0.13,
+      "studies": 200,
+      "uncertain": 5,
+      "uncertain_fraction": 0.025,
+      "unmentioned": 168,
+      "unmentioned_fraction": 0.84
+    },
+    {
+      "endpoint": "impression",
+      "negative": 12,
+      "pathology": "Pleural Effusion",
+      "positive": 55,
+      "positive_fraction": 0.275,
+      "studies": 200,
+      "uncertain": 4,
+      "uncertain_fraction": 0.02,
+      "unmentioned": 129,
+      "unmentioned_fraction": 0.645
+    },
+    {
+      "endpoint": "findings",
+      "negative": 49,
+      "pathology": "Cardiomegaly",
+      "positive": 33,
+      "positive_fraction": 0.24812,
+      "studies": 133,
+      "uncertain": 4,
+      "uncertain_fraction": 0.030075,
+      "unmentioned": 47,
+      "unmentioned_fraction": 0.353383
+    },
+    {
+      "endpoint": "findings",
+      "negative": 29,
+      "pathology": "Edema",
+      "positive": 11,
+      "positive_fraction": 0.082707,
+      "studies": 133,
+      "uncertain": 7,
+      "uncertain_fraction": 0.052632,
+      "unmentioned": 86,
+      "unmentioned_fraction": 0.646617
+    },
+    {
+      "endpoint": "findings",
+      "negative": 59,
+      "pathology": "Consolidation",
+      "positive": 3,
+      "positive_fraction": 0.022556,
+      "studies": 133,
+      "uncertain": 3,
+      "uncertain_fraction": 0.022556,
+      "unmentioned": 68,
+      "unmentioned_fraction": 0.511278
+    },
+    {
+      "endpoint": "findings",
+      "negative": 0,
+      "pathology": "Atelectasis",
+      "positive": 29,
+      "positive_fraction": 0.218045,
+      "studies": 133,
+      "uncertain": 4,
+      "uncertain_fraction": 0.030075,
+      "unmentioned": 100,
+      "unmentioned_fraction": 0.75188
+    },
+    {
+      "endpoint": "findings",
+      "negative": 82,
+      "pathology": "Pleural Effusion",
+      "positive": 32,
+      "positive_fraction": 0.240602,
+      "studies": 133,
+      "uncertain": 5,
+      "uncertain_fraction": 0.037594,
+      "unmentioned": 14,
+      "unmentioned_fraction": 0.105263
+    }
+  ],
+  "stage": "C3-E6 Stage 4",
+  "status": "PASS",
+  "title": "SOURCE-SITE LABEL GENERATION (CHEXBERT)"
+}

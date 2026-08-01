@@ -26,6 +26,10 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
+Stage status: C3-E6 Stages 3A through 3E are complete. Stage 4 has passed its
+labeller fidelity gate and a 200-study pilot run. Full-cohort source-site label
+generation is open.
+
 Authorized:
 
 - protocol validation;
@@ -34,18 +38,39 @@ Authorized:
 - unit and integration testing;
 - documentation;
 - synthetic metric dry-runs;
-- safe report generation.
+- safe report generation;
+- MIMIC metadata inspection;
+- MIMIC report parsing;
+- report structure analysis;
+- report section statistics;
+- CheXbert execution on report text at the source site;
+- source-site label generation for the impression and findings scopes.
 
 Not authorized:
 
 - loading medical images;
-- downloading medical datasets;
+- opening DICOM or JPG content;
+- downloading medical image datasets;
 - model training;
-- MIMIC-CXR processing;
+- image-model inference;
+- external-site label regeneration;
 - CheXpert model evaluation;
+- threshold selection or tuning;
+- evaluation or metric computation on real data;
 - cross-site scientific claims;
 - external-site tuning;
 - implementation of post-hoc mitigation methods.
+
+Report parsing is authorized for structural analysis and for labelling through
+the pinned CheXbert port. It does not authorize model input construction or
+export of report text. Section content may be measured and summarised in
+aggregate; it may not be written into any artifact under `results/`.
+
+Row-level labels are restricted data. They are written only into the gitignored
+`data/` tree; only aggregate prevalence and provenance may reach `results/`.
+
+The external site uses the CheXbert labels shipped with CheXpert Plus, per
+`docs/LABEL_HARMONIZATION_PLAN.md`. Regenerating them is not authorized.
 
 ## Frozen scientific decisions
 
@@ -77,3 +102,4 @@ Before protocol-dependent work, run:
 
 ```bash
 python protocols/C3E6_stage2/scripts/validate_protocol.py
+```

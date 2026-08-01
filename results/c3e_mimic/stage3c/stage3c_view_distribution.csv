@@ -1,0 +1,16 @@
+view_position,images,fraction,is_frontal
+AP,147173,0.390265,True
+PA,96161,0.254995,True
+LATERAL,82853,0.219705,False
+LL,35133,0.093164,False
+<missing>,15769,0.041815,False
+PA LLD,4,1.1e-05,False
+LAO,3,8e-06,False
+RAO,3,8e-06,False
+AP AXIAL,2,5e-06,False
+AP LLD,2,5e-06,False
+XTABLE LATERAL,2,5e-06,False
+AP RLD,2,5e-06,False
+SWIMMERS,1,3e-06,False
+PA RLD,1,3e-06,False
+LPO,1,3e-06,False

@@ -1,0 +1,65 @@
+stage: C3-E6 Stage 3A
+data_root: data/mimic
+output_dir: results/c3e_mimic/intake
+
+required_categories:
+  - report_resource
+  - image_metadata
+  - official_split_definition
+  - checksum_or_manifest
+
+# Patterns are release-tolerant and resolved only against relative names visible
+# in the credentialed local data tree. They do not authorize downloads.
+resource_patterns:
+  official_split_definition:
+    - "**/*split*.csv"
+    - "**/*split*.csv.gz"
+    - "*split*.csv"
+    - "*split*.csv.gz"
+  official_auxiliary_labels:
+    - "**/*chexpert*.csv"
+    - "**/*chexpert*.csv.gz"
+    - "*chexpert*.csv"
+    - "*chexpert*.csv.gz"
+  checksum_or_manifest:
+    - "**/*checksum*"
+    - "**/*manifest*"
+    - "*.sha256"
+    - "*.md5"
+  study_metadata:
+    - "**/*study*metadata*.csv"
+    - "**/*study*metadata*.csv.gz"
+  image_metadata:
+    - "**/*metadata*.csv"
+    - "**/*metadata*.csv.gz"
+    - "*metadata*.csv"
+    - "*metadata*.csv.gz"
+  report_resource:
+    - "**/*report*.zip"
+    - "*report*.zip"
+    - "reports/**/*.txt"
+    - "reports/*.txt"
+
+image_extensions:
+  - .dcm
+  - .dicom
+  - .jpg
+  - .jpeg
+  - .png
+  - .webp
+
+archive_extensions:
+  - .zip
+  - .tar
+  - .tar.gz
+  - .tgz
+  - .gz
+  - .bz2
+  - .xz
+  - .zst
+  - .7z
+  - .rar
+
+max_scan_depth: 4
+max_entries: 100000
+hash_chunk_size: 1048576

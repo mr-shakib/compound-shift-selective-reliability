@@ -1,0 +1,104 @@
+{
+  "aggregation_level": "cohort only; no patient-level, study-level, or row-level values are emitted",
+  "counts": {
+    "distinct_providers_any_role": 2893,
+    "patients": 65379,
+    "provider_rows": 227835,
+    "records": 377110,
+    "reports_available": 227835,
+    "reports_missing": 0,
+    "reports_unexpected": 0,
+    "studies": 227835
+  },
+  "distributions": {
+    "records_per_patient": {
+      "max": 174,
+      "mean": 5.7681,
+      "median": 3.0,
+      "min": 1,
+      "p25": 2.0,
+      "p75": 6.0,
+      "p95": 20.0,
+      "p99": 41.0
+    },
+    "records_per_study": {
+      "max": 11,
+      "mean": 1.6552,
+      "median": 2.0,
+      "min": 1,
+      "p25": 1.0,
+      "p75": 2.0,
+      "p95": 3.0,
+      "p99": 3.0
+    },
+    "records_per_study_histogram": {
+      "1": 102675,
+      "11": 1,
+      "2": 103481,
+      "3": 19442,
+      "4": 2097,
+      "5": 99,
+      "6": 33,
+      "7": 2,
+      "8": 4,
+      "9": 1
+    },
+    "studies_per_patient": {
+      "max": 158,
+      "mean": 3.4848,
+      "median": 1.0,
+      "min": 1,
+      "p25": 1.0,
+      "p75": 3.0,
+      "p95": 13.0,
+      "p99": 28.0
+    }
+  },
+  "provider_coverage": {
+    "attending_provider_id": {
+      "coverage_fraction": 1.0,
+      "distinct_providers": 55,
+      "rows_null": 0
+    },
+    "ordering_provider_id": {
+      "coverage_fraction": 0.998429,
+      "distinct_providers": 2755,
+      "rows_null": 358
+    },
+    "resident_provider_id": {
+      "coverage_fraction": 0.364496,
+      "distinct_providers": 115,
+      "rows_null": 144790
+    }
+  },
+  "report_archive": {
+    "member_size_bytes": {
+      "max": 3933,
+      "mean": 665.77,
+      "min": 46
+    },
+    "members": 227835,
+    "patient_bucket_distribution": {
+      "p10": 22197,
+      "p11": 23358,
+      "p12": 22428,
+      "p13": 22945,
+      "p14": 22589,
+      "p15": 23713,
+      "p16": 22151,
+      "p17": 22695,
+      "p18": 22929,
+      "p19": 22830
+    },
+    "uncompressed_bytes_total": 151686630
+  },
+  "report_coverage_fraction": 1.0,
+  "stage": "C3-E6 Stage 3A",
+  "study_list_summary": {
+    "max": 158,
+    "mean": 3.4848,
+    "median": 1.0,
+    "min": 1,
+    "p95": 13.0
+  }
+}

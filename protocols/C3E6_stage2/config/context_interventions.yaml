@@ -1,17 +1,35 @@
 registry_id: C3E6-CONTEXT-001
-version: 0.1.0
+version: 0.2.0
+# Informativeness rules referenced by N1. Defined 2026-07-28 on the SOURCE site
+# (MIMIC) through Stage 3B-2 measurement. Defining these on the external site
+# would violate governance.external_dataset_prohibited_uses.context_state_rule_revision.
+informativeness_rule:
+  effective_token_definition: whitespace-delimited token containing at least one
+    alphanumeric character, counted after de-identification placeholder runs are removed
+  deidentification_placeholder_pattern: _{2,}
+  measured_over: permitted_sections_source
+  threshold_primary: 3
+  threshold_sensitivity:
+  - 5
+  - 10
+  applied_to_external_site: frozen_transfer_without_refitting
+  measurement_limitation: detects emptiness and brevity, not vagueness or clinical
+    insufficiency
 natural_context_states:
 - id: N1
   name: informative
   definition: Permitted context exists and passes the frozen informativeness rules.
+  rule: effective tokens across permitted_sections_source >= threshold_primary
   causal_interpretation_allowed: false
 - id: N2
   name: low_information
   definition: Context is present but primarily boilerplate, vague, or clinically insufficient.
+  rule: 0 < effective tokens < threshold_primary
   causal_interpretation_allowed: false
 - id: N3
   name: absent
   definition: Neither permitted section contains usable text.
+  rule: effective tokens == 0
   causal_interpretation_allowed: false
 controlled_interventions:
 - id: C0

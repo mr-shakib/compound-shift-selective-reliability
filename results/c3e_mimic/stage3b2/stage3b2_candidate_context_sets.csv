@@ -1,0 +1,7 @@
+candidate_set,sections,note,n3_absent,n3_absent_fraction,context_present,context_present_fraction,median_effective_tokens,max_effective_tokens
+indication_only,indication,single-section baseline,61984,0.272057,165851,0.727943,8,258
+history_only,history,single-section baseline,170830,0.749797,57005,0.250203,0,256
+indication_history,indication|history,two-section set consistent with the registry's 'neither permitted section' wording,5096,0.022367,222739,0.977633,10,258
+indication_history_examination,indication|history|examination,adds examination type,4858,0.021322,222977,0.978678,12,262
+indication_history_comparison,indication|history|comparison,adds prior-study reference; comparison may quote prior conclusions,1715,0.007527,226120,0.992473,12,261
+all_pre_diagnostic,indication|history|examination|technique|comparison,widest pre-diagnostic set; upper bound on availability,1124,0.004933,226711,0.995067,16,262

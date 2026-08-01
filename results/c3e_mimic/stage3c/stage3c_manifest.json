@@ -1,0 +1,107 @@
+{
+  "applied_policy": {
+    "eligible_view": "frontal (PA, AP)",
+    "informativeness_threshold_primary": 3,
+    "informativeness_threshold_sensitivity": [
+      5,
+      10
+    ],
+    "official_splits_required": true,
+    "permitted_context_sections": [
+      "indication",
+      "history"
+    ],
+    "policy_source": "docs/C3E6_SOURCE_TEXT_MAPPING_AND_INFORMATIVENESS_RULE.md (approved)",
+    "primary_label_section": "impression",
+    "sensitivity_label_section": "findings"
+  },
+  "artifacts": [
+    {
+      "byte_size": 7803,
+      "name": "stage3c_cohort_audit.json",
+      "sha256": "ce08adc5b164f1586ff11650a7a196222c9288ecd959ddfdda2c8eb63289ace6"
+    },
+    {
+      "byte_size": 4447,
+      "name": "stage3c_cohort_audit.md",
+      "sha256": "6d0b8128855f05966548769e6f178c11d180561d99e747e9752233c841530e35"
+    },
+    {
+      "byte_size": 859,
+      "name": "stage3c_exclusion_waterfall.csv",
+      "sha256": "ea117c1a7959475abedb00c746ac6f2986dbdb9ce8e109521823a30917f7ae08"
+    },
+    {
+      "byte_size": 273,
+      "name": "stage3c_split_summary.csv",
+      "sha256": "19c43947859207c4277bf6ec49feafdd54ad03ae1c4f81904aa6d57b98fca476"
+    },
+    {
+      "byte_size": 387,
+      "name": "stage3c_view_distribution.csv",
+      "sha256": "22a0c06385ff832d9bb4deefdd66c79b20f42c0663e3b50271c9cc7fc983de21"
+    }
+  ],
+  "compliance": {
+    "chexbert_executed": false,
+    "dataset_file_written": false,
+    "dicom_opened": false,
+    "evaluation_performed": false,
+    "identifiers_emitted": false,
+    "images_accessed": false,
+    "labels_created": false,
+    "model_inference": false,
+    "model_training": false,
+    "report_text_exported": false
+  },
+  "declarations": [
+    "STAGE 3C ONLY",
+    "COHORT COUNTING AND ELIGIBILITY AUDIT",
+    "NO MEDICAL IMAGES OPENED",
+    "NO DICOM OR JPG DECODED",
+    "NO REPORT TEXT EXPORTED",
+    "NO LABEL EXTRACTION",
+    "NO CHEXBERT EXECUTION",
+    "NO MODEL TRAINING OR INFERENCE",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO DATASET FILE WRITTEN",
+    "NO EXTERNAL DOWNLOADS"
+  ],
+  "environment": {
+    "pandas": "3.0.3",
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage3c",
+  "source_files_audited": [
+    {
+      "name": "cxr-study-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-study-list.csv.gz",
+      "sha256": "debed407e0182b27503f29f0d9b519242ae895572e50c963dc445c64d0d6fc46"
+    },
+    {
+      "name": "cxr-record-list.csv.gz",
+      "relative_path": "data/mimic/metadata/cxr-record-list.csv.gz",
+      "sha256": "161cb75e043a405db856634851b39a276acf1b0b28676addec560f6c29caac9a"
+    },
+    {
+      "name": "mimic-cxr-2.0.0-metadata.csv.gz",
+      "relative_path": "data/mimic/metadata/mimic-cxr-2.0.0-metadata.csv.gz",
+      "sha256": "6a3748ce77724c0dfe7d2def8f47643e989e3bbf0795bc13b89c1578e1649d6b"
+    },
+    {
+      "name": "mimic-cxr-2.0.0-split.csv.gz",
+      "relative_path": "data/mimic/metadata/mimic-cxr-2.0.0-split.csv.gz",
+      "sha256": "515997bd6649045d7443d60c59a4ce9f6cca6c478871b8f2fb13454462bedb2f"
+    },
+    {
+      "name": "mimic-cxr-reports.zip",
+      "relative_path": "data/mimic/reports/mimic-cxr-reports.zip",
+      "sha256": "8c654ccfa6d94a45a234ab54cce4ae404b8d0597ad09ea7242a83df46575fbeb"
+    }
+  ],
+  "stage": "C3-E6 Stage 3C",
+  "status": "PASS",
+  "title": "SOURCE-SITE COHORT CONSTRUCTION AUDIT"
+}

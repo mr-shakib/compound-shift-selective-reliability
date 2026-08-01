@@ -1,0 +1,18 @@
+{
+  "category_counts": {},
+  "declarations": [
+    "STAGE 3A ONLY",
+    "METADATA AND ACCESS INVENTORY",
+    "NO MEDICAL IMAGES OPENED",
+    "NO REPORT TEXT EXPORTED",
+    "NO MODEL TRAINING",
+    "NO CHEXBERT EXECUTION",
+    "NO EXTERNAL DATA ACCESSED",
+    "NO TARGET-SITE TUNING"
+  ],
+  "entries_examined": 0,
+  "records": [],
+  "scan_truncated": false,
+  "scope": "metadata and access inventory only",
+  "stage": "C3-E6 Stage 3A"
+}

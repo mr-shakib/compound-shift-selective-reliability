@@ -1,0 +1,16 @@
+section,section_class,reports_with_section,coverage_fraction,total_occurrences,reports_with_repeated_section,empty_body_occurrences,reports_with_deidentified_span,reports_body_deidentified_only,body_tokens_median,body_tokens_mean,body_tokens_p95,body_tokens_max,body_chars_median,body_chars_max
+addendum,post_diagnostic,182,0.000799,184,2,3,178,0,24,30.6,68,178,273,1201
+administrative,administrative,158,0.000693,159,1,0,159,108,1,1.38,2,5,4,134
+comment,post_diagnostic,196,0.00086,197,1,0,190,0,19,19.59,36,74,99,509
+comparison,pre_diagnostic,163853,0.719174,163903,46,73,130799,57005,2,4.14,11,249,13,1518
+examination,pre_diagnostic,102460,0.449711,102612,152,24,2380,5,3,3.66,5,132,19,876
+findings,label_source,149738,0.657221,149820,77,109,25163,4,45,49.24,91,351,316,2501
+findings_impression_combined,label_source,134,0.000588,134,0,1,14,0,43,50.08,96,141,298,869
+history,pre_diagnostic,57019,0.250264,57040,19,6,20613,8,6,8.68,17,258,46,1674
+impression,label_source,189444,0.831496,189584,134,30,40753,4,17,25.41,72,244,125,1618
+indication,pre_diagnostic,165862,0.727992,165893,28,4,132546,6,13,17.09,51,262,79,1885
+notification,post_diagnostic,5755,0.02526,5755,0,26,5521,1,24,22.87,31,105,132,619
+provisional_impression,post_diagnostic,199,0.000873,238,37,0,238,0,17,19.92,48,74,217,594
+recommendation,post_diagnostic,1810,0.007944,1811,1,7,197,1,13,16.12,39,105,90,694
+technique,pre_diagnostic,81365,0.357122,81386,16,7,1217,13,4,5.4,8,134,28,905
+wet_read,post_diagnostic,17551,0.077034,17551,0,1,17550,0,33,41.02,102,387,323,2649
