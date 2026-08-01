@@ -26,9 +26,8 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
-Stage status: C3-E6 Stages 3A through 3E are complete. Stage 4 has passed its
-labeller fidelity gate and a 200-study pilot run. Full-cohort source-site label
-generation is open.
+Stage status: C3-E6 Stages 3A through 4 are complete. Full-cohort source-site
+labels exist for both endpoints. Stage 5, frontal image acquisition, is open.
 
 Authorized:
 
@@ -44,13 +43,14 @@ Authorized:
 - report structure analysis;
 - report section statistics;
 - CheXbert execution on report text at the source site;
-- source-site label generation for the impression and findings scopes.
+- source-site label generation for the impression and findings scopes;
+- downloading MIMIC-CXR-JPG frontal images listed in the Stage 3E manifests.
 
 Not authorized:
 
-- loading medical images;
-- opening DICOM or JPG content;
-- downloading medical image datasets;
+- loading or decoding medical image content;
+- downloading images outside the Stage 3E manifests;
+- downloading any DICOM dataset;
 - model training;
 - image-model inference;
 - external-site label regeneration;
@@ -71,6 +71,13 @@ Row-level labels are restricted data. They are written only into the gitignored
 
 The external site uses the CheXbert labels shipped with CheXpert Plus, per
 `docs/LABEL_HARMONIZATION_PLAN.md`. Regenerating them is not authorized.
+
+Image acquisition is bounded by the five Stage 3E manifests under
+`data/mimic/download_manifests/` — 193,282 frontal JPGs. Acquisition means
+transfer to the gitignored `data/mimic/images/` tree only. Decoding image
+content, inspecting pixels, and model training remain unauthorized until a
+separate stage opens them. Credentials are supplied through `~/.netrc` and are
+never written into a script, a command line, a log, or any tracked file.
 
 ## Frozen scientific decisions
 
