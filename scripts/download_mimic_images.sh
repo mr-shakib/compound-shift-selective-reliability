@@ -114,7 +114,7 @@ fi
 # --- transfer ----------------------------------------------------------------
 
 started=$(date +%s)
-CHUNK=$((JOBS * 25))
+CHUNK=$((JOBS * 8))
 chunk_file=$(mktemp)
 fetched=0
 bytes=0
