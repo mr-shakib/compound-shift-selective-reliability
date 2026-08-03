@@ -26,8 +26,11 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
-Stage status: C3-E6 Stages 3A through 4 are complete. Full-cohort source-site
-labels exist for both endpoints. Stage 5, frontal image acquisition, is open.
+Stage status: C3-E6 Stages 3A through 5 are complete. Full-cohort source-site
+labels exist for both endpoints, and all 193,282 frontal images are acquired
+and checksum-verified. Stage 6, model training, is not yet open: the image and
+text backbones remain unresolved in the protocol and must be fixed by amendment
+before any model runs.
 
 Authorized:
 

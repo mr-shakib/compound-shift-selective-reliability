@@ -1,0 +1,47 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 2821,
+      "name": "stage5_acquisition_audit.json",
+      "sha256": "650261a96ed658693d53fb60b5251424b0ad75b55450180862f82d6cf5ad98dc"
+    },
+    {
+      "byte_size": 2018,
+      "name": "stage5_acquisition_audit.md",
+      "sha256": "dd27a8043d622b27c544161f768f61e891c788f53fc95d4504f26f8bbdd40310"
+    },
+    {
+      "byte_size": 315,
+      "name": "stage5_tier_summary.csv",
+      "sha256": "c154977c9a0936fb916eb93e9a3ba066fa6d7a67377d68390b55cb56ed845c00"
+    }
+  ],
+  "compliance": {
+    "evaluation_performed": false,
+    "identifiers_emitted_to_results": false,
+    "image_content_decoded": false,
+    "images_outside_manifest_downloaded": false,
+    "labels_generated": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 5 ONLY",
+    "FRONTAL IMAGE ACQUISITION",
+    "NO IMAGE CONTENT DECODED",
+    "NO MODEL TRAINING",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO LABELS GENERATED IN THIS RUN",
+    "IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage5_images",
+  "stage": "C3-E6 Stage 5",
+  "status": "PASS",
+  "title": "FRONTAL IMAGE ACQUISITION"
+}

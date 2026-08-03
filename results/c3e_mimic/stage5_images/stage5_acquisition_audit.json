@@ -1,0 +1,97 @@
+{
+  "acquisition": {
+    "all_tiers_complete": true,
+    "bytes": 341954991284,
+    "gigabytes": 318.47,
+    "images_expected": 193282,
+    "images_present": 193282,
+    "mean_image_bytes": 1769202,
+    "tiers": [
+      {
+        "bytes": 29117137209,
+        "complete": true,
+        "gigabytes": 27.12,
+        "images_expected": 16456,
+        "images_present": 16456,
+        "tier": "prespecified_eval"
+      },
+      {
+        "bytes": 18103601178,
+        "complete": true,
+        "gigabytes": 16.86,
+        "images_expected": 10264,
+        "images_present": 10264,
+        "tier": "threshold_calibration"
+      },
+      {
+        "bytes": 2818553093,
+        "complete": true,
+        "gigabytes": 2.62,
+        "images_expected": 1584,
+        "images_present": 1584,
+        "tier": "official_validate"
+      },
+      {
+        "bytes": 3831594796,
+        "complete": true,
+        "gigabytes": 3.57,
+        "images_expected": 2155,
+        "images_present": 2155,
+        "tier": "official_test"
+      },
+      {
+        "bytes": 288084105008,
+        "complete": true,
+        "gigabytes": 268.3,
+        "images_expected": 162823,
+        "images_present": 162823,
+        "tier": "model_train"
+      }
+    ]
+  },
+  "compliance": {
+    "evaluation_performed": false,
+    "identifiers_emitted_to_results": false,
+    "image_content_decoded": false,
+    "images_outside_manifest_downloaded": false,
+    "labels_generated": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 5 ONLY",
+    "FRONTAL IMAGE ACQUISITION",
+    "NO IMAGE CONTENT DECODED",
+    "NO MODEL TRAINING",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "NO LABELS GENERATED IN THIS RUN",
+    "IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "integrity": {
+    "entries_checked": 193282,
+    "entries_matching": 193282,
+    "method": "SHA-256 against the publisher manifest SHA256SUMS.txt",
+    "mismatch_cause": "partial object written by an interrupted transfer; the resume check tested for a non-empty file rather than a correct one",
+    "mismatch_disposition": "one truncated transfer was re-fetched and re-verified OK",
+    "mismatches_on_first_pass": 1,
+    "publisher_manifest_entries": 377118,
+    "publisher_manifest_jpg_entries": 377110,
+    "unresolved_mismatches": 0
+  },
+  "source": {
+    "dataset": "MIMIC-CXR-JPG",
+    "note": "access granted per AWS account through the PhysioNet cloud verification flow",
+    "provider": "PhysioNet via AWS S3 access point",
+    "region": "us-east-1",
+    "version": "2.1.0"
+  },
+  "stage": "C3-E6 Stage 5",
+  "status": "PASS",
+  "title": "FRONTAL IMAGE ACQUISITION"
+}

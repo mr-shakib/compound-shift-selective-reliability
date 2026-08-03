@@ -1,0 +1,6 @@
+tier,images_expected,images_present,bytes,gigabytes,complete
+prespecified_eval,16456,16456,29117137209,27.12,True
+threshold_calibration,10264,10264,18103601178,16.86,True
+official_validate,1584,1584,2818553093,2.62,True
+official_test,2155,2155,3831594796,3.57,True
+model_train,162823,162823,288084105008,268.3,True
