@@ -55,7 +55,9 @@ C3-E3 — Protocol Lock and MIMIC Readiness
 - No raw medical data may be uploaded to external services.
 - No large image download is authorized.
 - No model development is authorized.
-- Novelty is not yet confirmed.
+- ~~Novelty is not yet confirmed.~~ **Partially addressed 2026-08-03**; see the
+  session update below. Three closest-work rows are verified and none anticipates
+  the crossed design; five candidates remain unverified.
 
 ## Next action
 
@@ -108,3 +110,42 @@ unauthorized.
   percentile intervals before model results.
 - Added provenance/versioning and CheXbert artifact-pinning policies. No raw data, MIMIC processing,
   image download, model training, CheXbert download/execution, external API, or upload occurred.
+
+## Session update — 2026-08-03 (Stages 4 and 5 complete; protocol v0.4.0; novelty check opened)
+
+- **Stage 4 full-cohort labels.** CheXbert generated labels for 173,572 impression studies
+  (100% of cohort) and 110,740 findings studies (63.80%), 48m38s on one consumer GPU. The port
+  passed its fidelity gate 56/56 against upstream reference labels before any project label was
+  written. The prespecified label-source sensitivity reproduced at scale: Cardiomegaly shows the
+  largest impression-versus-findings gap of the five targets (15.43% vs 22.74%), the pattern the
+  C3-E2 audit flagged when findings-derived labels were made a mandatory sensitivity analysis.
+  A labeller property worth carrying into Methods: CheXbert almost never assigns explicit
+  *negative* to Atelectasis (590 negatives against 31,974 positives), and the same holds at the
+  external site, so it is a labeller artefact rather than a MIMIC one.
+- **Stage 5 image acquisition.** All 193,282 frontal JPGs acquired, 318.5 GB, every tier complete.
+  The PhysioNet HTTP endpoint proved unusable for bulk transfer (0.15 MB/s against a 27 MB/s link,
+  then a 403 block after an hour); the cause is structural, a single origin at 331 ms round trip
+  serving ~1.8 MB objects that finish before TCP slow-start opens the window. Transfer moved to
+  the PhysioNet S3 access point.
+- **Integrity.** Every image was hashed against the publisher's `SHA256SUMS.txt`: 193,282 of
+  193,282 match, zero unresolved mismatches. One file failed the first pass as a truncated object
+  left by an interrupted transfer; the resume check had tested non-emptiness rather than
+  completeness, so a retry skipped rather than repaired it. Re-fetched and re-verified. A checksum
+  pass after any resumed transfer is therefore mandatory, not optional.
+- **Protocol v0.4.0.** `models.exact_backbones` resolved from `PENDING_HARDWARE_GATE`:
+  DenseNet-121 / ImageNet / 224px image arm, BERT-base-uncased / 128 tokens text arm, probability
+  averaging for M3, pooled-feature concatenation for M4, with optimisation and early-stopping
+  settings fixed alongside. The gate is a single 6 GB consumer GPU. Recorded as prespecified: no
+  model trained, no metric computed, no external result inspected. Nothing remains pending in the
+  protocol. Validator passes 30/30.
+- **Novelty check opened.** `closest_work.csv` had never been populated. Three rows are now
+  verified against full text or the official page. CW01 (selective classification under
+  distribution shift) is the closest methodological neighbour but uses no clinical data and no
+  cross-hospital transfer. CW02 (Yang, Wan and Pan, 2025) establishes that clinical history helps
+  CXR classification but is single-institution with held-out splits only, and has no abstention,
+  no leakage audit and no calibration transfer — it is a premise paper, not a competitor. Five
+  candidates remain `unverified` and must be inspected before results are written up.
+- Nothing observed so far anticipates the crossed institution-by-context design, the frozen
+  source-to-external threshold transfer, or the report-structure hazards recorded in Stage 3B.
+- No model was trained, no threshold selected, no metric computed, and no external-site result
+  inspected in this session.
