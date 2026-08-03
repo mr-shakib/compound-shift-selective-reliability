@@ -27,10 +27,9 @@ New Stage 2B implementation code belongs inside the existing
 ## Current authorization
 
 Stage status: C3-E6 Stages 3A through 5 are complete. Full-cohort source-site
-labels exist for both endpoints, and all 193,282 frontal images are acquired
-and checksum-verified. Stage 6, model training, is not yet open: the image and
-text backbones remain unresolved in the protocol and must be fixed by amendment
-before any model runs.
+labels exist for both endpoints, all 193,282 frontal images are acquired and
+checksum-verified, and protocol v0.4.0 fixes the backbones. Stage 6, source-site
+model training, is open.
 
 Authorized:
 
@@ -47,19 +46,21 @@ Authorized:
 - report section statistics;
 - CheXbert execution on report text at the source site;
 - source-site label generation for the impression and findings scopes;
-- downloading MIMIC-CXR-JPG frontal images listed in the Stage 3E manifests.
+- downloading MIMIC-CXR-JPG frontal images listed in the Stage 3E manifests;
+- decoding and resizing those images for model input;
+- training M1 through M4 at the source site on the model-train tier only.
 
 Not authorized:
 
-- loading or decoding medical image content;
 - downloading images outside the Stage 3E manifests;
 - downloading any DICOM dataset;
-- model training;
-- image-model inference;
+- training on any tier other than model train;
+- any read of the prespecified-eval tier;
 - external-site label regeneration;
+- external-site inference or evaluation;
 - CheXpert model evaluation;
 - threshold selection or tuning;
-- evaluation or metric computation on real data;
+- evaluation or metric computation on the confirmatory tiers;
 - cross-site scientific claims;
 - external-site tuning;
 - implementation of post-hoc mitigation methods.
@@ -76,11 +77,20 @@ The external site uses the CheXbert labels shipped with CheXpert Plus, per
 `docs/LABEL_HARMONIZATION_PLAN.md`. Regenerating them is not authorized.
 
 Image acquisition is bounded by the five Stage 3E manifests under
-`data/mimic/download_manifests/` — 193,282 frontal JPGs. Acquisition means
-transfer to the gitignored `data/mimic/images/` tree only. Decoding image
-content, inspecting pixels, and model training remain unauthorized until a
-separate stage opens them. Credentials are supplied through `~/.netrc` and are
-never written into a script, a command line, a log, or any tracked file.
+`data/mimic/download_manifests/` — 193,282 frontal JPGs, all acquired and
+verified against the publisher's SHA-256 manifest. Credentials are supplied
+through the AWS CLI configuration or `~/.netrc` and are never written into a
+script, a command line, a log, or any tracked file.
+
+Stage 6 trains on the **model train tier only**. The threshold-calibration tier
+is reserved for Stage 7 and the prespecified-eval tier for the confirmatory
+analysis; neither may be read during training, and neither may influence
+architecture, early stopping, or any hyperparameter. Internal validation for
+early stopping is carved from the model-train tier itself.
+
+Model checkpoints and preprocessed image tensors are restricted data. They live
+in the gitignored `data/` tree; only aggregate training curves, provenance, and
+manifests may reach `results/`.
 
 ## Frozen scientific decisions
 

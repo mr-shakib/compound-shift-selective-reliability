@@ -140,3 +140,7 @@ Thumbs.db
 /docs/assets/
 /docs/proposals/
 *.docx
+
+# Stage 6 preprocessed image tensors and checkpoints (restricted)
+data/mimic/images_224/
+data/models/c3e/
