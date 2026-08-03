@@ -1,5 +1,5 @@
 protocol_id: C3E6-STAGE2
-protocol_version: 0.3.0
+protocol_version: 0.4.0
 status: preflight_only
 created_for: C3E multimodal selective-reliability transport study
 authorization:
@@ -153,7 +153,45 @@ models:
   - id: M5
     name: missing_context_aware_mitigation
     authorization: requires_prespecified_amendment_after_baseline_failure
-  exact_backbones: PENDING_HARDWARE_GATE
+  exact_backbones:
+    status: RESOLVED
+    resolved_in_protocol_version: 0.4.0
+    image:
+      architecture: densenet121
+      pretraining: imagenet
+      input_resolution: 224
+      input_channels: 3
+      grayscale_handling: replicate_to_three_channels
+      classifier_head: five_independent_sigmoid_outputs
+    text:
+      architecture: bert_base_uncased
+      pretraining: bert-base-uncased
+      max_sequence_length: 128
+      pooling: cls_token
+      frozen_encoder: false
+    fusion:
+      m3: probability_average_of_m1_and_m2
+      m4: concatenate_pooled_features_then_two_layer_mlp
+    optimization:
+      batch_size: 32
+      mixed_precision: true
+      max_epochs: 15
+      early_stopping_metric: validation_auroc_macro
+      early_stopping_dataset: mimic_train_internal_validation
+      early_stopping_patience: 3
+    hardware_gate:
+      device: single_consumer_gpu
+      vram_gb: 6
+      constraint_note: >-
+        The 6 GB budget excludes large-resolution or high-parameter backbones at
+        a usable batch size. DenseNet-121 at 224 with mixed precision fits with
+        headroom and is the established CheXNet and CheXpert baseline, so
+        architecture is not a competing explanation for any transport effect.
+    selection_basis: >-
+      Fixed on hardware feasibility and published precedent alone. No label,
+      model output, metric, or external result was inspected. The study does not
+      claim architectural novelty, so the backbone is a control to be held
+      constant, not a variable to be optimised.
   architecture_selection_must_precede_external_results: true
 classification_policy:
   threshold_scope: per_pathology

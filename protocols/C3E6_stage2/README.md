@@ -39,6 +39,8 @@ Any change after external-result inspection must receive a new protocol version,
   through MIMIC intake; see `AMENDMENT_LOG.md` and
   `docs/C3E6_SOURCE_TEXT_MAPPING_AND_INFORMATIVENESS_RULE.md`. No CheXpert result was
   inspected.
-- Exact image and text backbones after the hardware gate.
+- ~~Exact image and text backbones after the hardware gate.~~ **Resolved in v0.4.0
+  (2026-08-03)** through the compute preflight; see `AMENDMENT_LOG.md`. The gate is a
+  single 6 GB consumer GPU. No CheXpert result was inspected.
 
-These may be resolved only through the MIMIC intake and compute preflight, never by inspecting CheXpert results.
+Nothing remains pending. These were resolved only through the MIMIC intake and compute preflight, never by inspecting CheXpert results.
