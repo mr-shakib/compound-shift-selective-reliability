@@ -1,5 +1,5 @@
 protocol_id: C3E6-STAGE2
-protocol_version: 0.4.0
+protocol_version: 0.4.1
 status: preflight_only
 created_for: C3E multimodal selective-reliability transport study
 authorization:
@@ -174,7 +174,11 @@ models:
       m4: concatenate_pooled_features_then_two_layer_mlp
     optimization:
       batch_size: 32
-      mixed_precision: true
+      # v0.4.1: measured, not assumed. On this Turing TU116 card mixed precision
+      # runs at 31 img/s against 117 img/s for fp32, because the part has fp16
+      # capability but no tensor cores, so autocast overhead is not repaid.
+      mixed_precision: false
+      cudnn_benchmark: true
       max_epochs: 15
       early_stopping_metric: validation_auroc_macro
       early_stopping_dataset: mimic_train_internal_validation
@@ -184,9 +188,10 @@ models:
       vram_gb: 6
       constraint_note: >-
         The 6 GB budget excludes large-resolution or high-parameter backbones at
-        a usable batch size. DenseNet-121 at 224 with mixed precision fits with
-        headroom and is the established CheXNet and CheXpert baseline, so
-        architecture is not a competing explanation for any transport effect.
+        a usable batch size. DenseNet-121 at 224 fits with headroom, measured at
+        4.60 GB peak in fp32, and is the established CheXNet and CheXpert
+        baseline, so architecture is not a competing explanation for any
+        transport effect.
     selection_basis: >-
       Fixed on hardware feasibility and published precedent alone. No label,
       model output, metric, or external result was inspected. The study does not

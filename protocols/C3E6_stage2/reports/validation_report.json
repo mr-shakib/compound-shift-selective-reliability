@@ -1,6 +1,6 @@
 {
   "protocol_id": "C3E6-STAGE2",
-  "protocol_version": "0.4.0",
+  "protocol_version": "0.4.1",
   "status": "PASS",
   "checks_passed": 30,
   "checks_failed": 0,

@@ -127,6 +127,9 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
     needs_text = model_id in ("M2", "M4")
 
     _seed_everything(SEED)
+    # Frozen in v0.4.1. Input shapes are constant, so cuDNN's autotuner pays for
+    # itself once per shape rather than per step.
+    torch.backends.cudnn.benchmark = bool(opt_cfg.get("cudnn_benchmark", False))
 
     print(f"[{model_id}] building index (model_train tier only) ...", file=sys.stderr, flush=True)
     index = build_index(root, tier="model_train")
