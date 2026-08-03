@@ -83,9 +83,20 @@ def _seed_everything(seed: int) -> None:
 
 
 def _macro_auroc(scores: np.ndarray, targets: np.ndarray, mask: np.ndarray) -> float:
-    """Macro AUROC over supervised cells; pathologies without both classes are skipped."""
+    """Macro AUROC over supervised cells; pathologies without both classes are skipped.
+
+    Non-finite scores are treated as a failed epoch rather than silently dropped.
+    A NaN reaching this point means the forward pass diverged, and scoring the
+    survivors would report a metric on a subset chosen by numerical accident.
+    """
     from sklearn.metrics import roc_auc_score
 
+    if not np.isfinite(scores).all():
+        bad = int((~np.isfinite(scores)).sum())
+        raise ValueError(
+            f"{bad} non-finite score(s) from the forward pass; refusing to compute "
+            "AUROC on a numerically invalid epoch"
+        )
     aucs = []
     for j in range(targets.shape[1]):
         sel = mask[:, j] > 0
@@ -97,8 +108,14 @@ def _macro_auroc(scores: np.ndarray, targets: np.ndarray, mask: np.ndarray) -> f
 
 
 @torch.no_grad()
-def evaluate(model, loader, device, needs_text: bool) -> tuple[float, float]:
+def evaluate(model, loader, device, needs_text: bool, *, amp: bool) -> tuple[float, float]:
+    """Evaluate under the same numerical precision the model was trained in.
+
+    Precision must match training. Evaluating an fp32-trained DenseNet under
+    fp16 autocast overflows in the dense blocks and yields NaN scores.
+    """
     model.eval()
+    torch.cuda.empty_cache()
     losses, S, T, M = [], [], [], []
     for batch in loader:
         image = batch["image"].to(device, non_blocking=True)
@@ -108,13 +125,15 @@ def evaluate(model, loader, device, needs_text: bool) -> tuple[float, float]:
         if needs_text:
             kw["input_ids"] = batch["input_ids"].to(device, non_blocking=True)
             kw["attention_mask"] = batch["attention_mask"].to(device, non_blocking=True)
-        with torch.autocast("cuda", dtype=torch.float16, enabled=device.type == "cuda"):
+        with torch.autocast("cuda", dtype=torch.float16,
+                            enabled=amp and device.type == "cuda"):
             logits = model(image=image, **kw)
             loss = masked_bce_with_logits(logits.float(), target, mask)
         losses.append(loss.item())
         S.append(torch.sigmoid(logits.float()).cpu().numpy())
         T.append(target.cpu().numpy())
         M.append(mask.cpu().numpy())
+    torch.cuda.empty_cache()
     return float(np.mean(losses)), _macro_auroc(np.concatenate(S), np.concatenate(T),
                                                 np.concatenate(M))
 
@@ -206,7 +225,14 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
                       f"eta {int(eta // 60)}m{int(eta % 60):02d}s    ",
                       end="", file=sys.stderr, flush=True)
 
-        val_loss, val_auroc = evaluate(model, dl_va, device, needs_text)
+        # Release the last step's activations and gradients before evaluating.
+        # cuDNN autotuning reserves workspace of its own, and on a 6 GB card the
+        # two together are enough to OOM at the epoch boundary.
+        optimizer.zero_grad(set_to_none=True)
+        del image, target, mask, logits, loss, kw
+
+        val_loss, val_auroc = evaluate(model, dl_va, device, needs_text,
+                                       amp=opt_cfg["mixed_precision"])
         epoch_time = time.time() - t0
         improved = val_auroc > best
         print(f"\r  [{model_id}] epoch {epoch}: train_loss {running / max(seen, 1):.4f}  "
