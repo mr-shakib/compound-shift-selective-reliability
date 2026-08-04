@@ -43,13 +43,21 @@ class TierAccessError(RuntimeError):
 
 
 def extract_permitted_context(text: str) -> str:
-    """Header-driven extraction of the permitted pre-diagnostic sections."""
+    """Header-driven extraction of the permitted pre-diagnostic sections.
+
+    SECTION_MAP values are (canonical_name, class) pairs, so the name has to be
+    unpacked before comparison. Comparing the pair directly against a name
+    silently matches nothing and yields empty context for every report.
+    """
     matches = list(HEADER_RE.finditer(text))
     if not matches:
         return ""
     parts: list[str] = []
     for i, m in enumerate(matches):
-        canonical = SECTION_MAP.get(m.group(1).strip().upper())
+        mapped = SECTION_MAP.get(m.group(1).strip().upper())
+        if mapped is None:
+            continue
+        canonical = mapped[0] if isinstance(mapped, tuple) else mapped
         if canonical not in PERMITTED_SECTIONS:
             continue
         end = matches[i + 1].start() if i + 1 < len(matches) else len(text)

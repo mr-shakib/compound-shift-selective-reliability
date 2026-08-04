@@ -26,11 +26,18 @@ TEXT_FEATURE_DIM = 768    # bert-base-uncased hidden size
 FUSION_HIDDEN = 512
 
 
-def _image_backbone() -> tuple[nn.Module, int]:
-    """DenseNet-121, ImageNet-initialised, classifier stripped to features."""
+def _image_backbone(memory_efficient: bool = False) -> tuple[nn.Module, int]:
+    """DenseNet-121, ImageNet-initialised, classifier stripped to features.
+
+    `memory_efficient` switches torchvision's dense layers to checkpointed
+    concatenation. It recomputes intermediate activations in the backward pass
+    rather than storing them, which changes speed and memory but not the
+    function computed or the weights loaded.
+    """
     from torchvision.models import DenseNet121_Weights, densenet121
 
-    net = densenet121(weights=DenseNet121_Weights.IMAGENET1K_V1)
+    net = densenet121(weights=DenseNet121_Weights.IMAGENET1K_V1,
+                      memory_efficient=memory_efficient)
     net.classifier = nn.Identity()
     return net, IMAGE_FEATURE_DIM
 
@@ -99,12 +106,24 @@ class M3LateFusion(nn.Module):
 
 
 class M4FeatureFusion(nn.Module):
-    """Concatenated pooled features into a two-layer MLP, trained jointly."""
+    """Concatenated pooled features into a two-layer MLP, trained jointly.
 
-    def __init__(self) -> None:
+    Gradient checkpointing is enabled on the text encoder. M4 holds DenseNet-121
+    and BERT-base resident at once, which exceeds the 6 GB hardware gate at the
+    frozen batch size of 32. Checkpointing recomputes BERT activations during the
+    backward pass instead of storing them: it costs time, not accuracy, and
+    leaves the model, the batch size, and the optimisation settings exactly as
+    the protocol fixes them. Reducing the batch size instead would have altered a
+    preregistered value.
+    """
+
+    def __init__(self, gradient_checkpointing: bool = True) -> None:
         super().__init__()
-        self.image_backbone, img_dim = _image_backbone()
+        self.image_backbone, img_dim = _image_backbone(
+            memory_efficient=gradient_checkpointing)
         self.text_backbone, txt_dim = _text_backbone()
+        if gradient_checkpointing:
+            self.text_backbone.gradient_checkpointing_enable()
         self.head = nn.Sequential(
             nn.Linear(img_dim + txt_dim, FUSION_HIDDEN),
             nn.ReLU(inplace=True),

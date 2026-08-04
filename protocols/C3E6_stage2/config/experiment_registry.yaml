@@ -1,5 +1,5 @@
 protocol_id: C3E6-STAGE2
-protocol_version: 0.4.1
+protocol_version: 0.4.2
 status: preflight_only
 created_for: C3E multimodal selective-reliability transport study
 authorization:
@@ -179,6 +179,18 @@ models:
       # capability but no tensor cores, so autocast overhead is not repaid.
       mixed_precision: false
       cudnn_benchmark: true
+      # v0.4.2: learning rates were left implicit in v0.4.0 and defaulted to a
+      # single value for every parameter. 1e-4 suits a convolutional backbone but
+      # is an order of magnitude above the usual range for a pretrained
+      # transformer, so the text arm gets its own rate.
+      learning_rate_image: 1.0e-4
+      learning_rate_text: 2.0e-5
+      weight_decay: 1.0e-4
+      optimizer: adamw
+      # M4 holds both backbones resident and exceeds the 6 GB gate at batch 32.
+      # Checkpointing recomputes activations rather than storing them, which
+      # preserves the frozen batch size instead of shrinking it.
+      gradient_checkpointing_m4: true
       max_epochs: 15
       early_stopping_metric: validation_auroc_macro
       early_stopping_dataset: mimic_train_internal_validation

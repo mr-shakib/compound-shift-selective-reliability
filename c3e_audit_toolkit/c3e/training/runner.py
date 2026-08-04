@@ -21,11 +21,16 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import sys
 import time
 from typing import Any
+
+# Must precede the first CUDA allocation. M4 keeps two backbones resident on a
+# 6 GB card, where fragmentation alone is enough to fail an allocation.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 import numpy as np
 import torch
@@ -175,7 +180,20 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
                        pin_memory=True, persistent_workers=num_workers > 0)
 
     model = MODEL_REGISTRY[model_id]().to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=1e-4)
+
+    # Separate rates for the two backbones, per v0.4.2. A pretrained transformer
+    # fine-tuned at the convolutional rate does not converge usefully.
+    lr_img = float(opt_cfg["learning_rate_image"])
+    lr_txt = float(opt_cfg["learning_rate_text"])
+    text_params, other_params = [], []
+    for name, param in model.named_parameters():
+        (text_params if "text_backbone" in name or model_id == "M2"
+         else other_params).append(param)
+    groups = [g for g in ({"params": other_params, "lr": lr_img},
+                          {"params": text_params, "lr": lr_txt}) if g["params"]]
+    optimizer = torch.optim.AdamW(groups, weight_decay=float(opt_cfg["weight_decay"]))
+    print(f"  [{model_id}] lr image {lr_img:g} ({len(other_params)} tensors)  "
+          f"lr text {lr_txt:g} ({len(text_params)} tensors)", file=sys.stderr, flush=True)
     scaler = torch.amp.GradScaler("cuda", enabled=opt_cfg["mixed_precision"]
                                   and device.type == "cuda")
 
