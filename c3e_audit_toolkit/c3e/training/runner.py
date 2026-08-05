@@ -79,6 +79,17 @@ def load_frozen_settings(root: Path) -> dict[str, Any]:
     }
 
 
+def _available_ram_gb() -> float:
+    """Available RAM in GB, from MemAvailable rather than free memory."""
+    try:
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) / 1048576
+    except OSError:
+        pass
+    return float("inf")
+
+
 def _seed_everything(seed: int) -> None:
     import random
     random.seed(seed)
@@ -170,14 +181,34 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
 
     max_len = settings["text"]["max_sequence_length"]
     image_root = root / IMAGE_DIR
+
+    # Every worker inherits a copy of the index, and refcounting alone is enough
+    # to defeat copy-on-write for Python objects. Carry only the columns the
+    # dataset reads, and drop the context strings entirely for image-only models.
+    keep = ["image_path", "subject_id", *TARGETS] + (["context"] if needs_text else [])
+    train_idx = train_idx[keep]
+    val_idx = val_idx[keep]
+
     ds_tr = C3EStudyImageDataset(train_idx, image_root, tokenizer, max_len, train=True)
     ds_va = C3EStudyImageDataset(val_idx, image_root, tokenizer, max_len, train=False)
 
+    # Pinned memory is page-locked and cannot be swapped. On a memory-constrained
+    # host that turns pressure into a freeze rather than a slowdown, so it is
+    # enabled only when there is real headroom.
+    avail_gb = _available_ram_gb()
+    pin = avail_gb >= 6.0
+    if not pin:
+        print(f"  [{model_id}] {avail_gb:.1f} GB RAM available; disabling pinned memory",
+              file=sys.stderr, flush=True)
+
     bs = opt_cfg["batch_size"]
     dl_tr = DataLoader(ds_tr, batch_size=bs, shuffle=True, num_workers=num_workers,
-                       pin_memory=True, drop_last=True, persistent_workers=num_workers > 0)
+                       pin_memory=pin, drop_last=True,
+                       persistent_workers=num_workers > 0,
+                       prefetch_factor=2 if num_workers > 0 else None)
     dl_va = DataLoader(ds_va, batch_size=bs, shuffle=False, num_workers=num_workers,
-                       pin_memory=True, persistent_workers=num_workers > 0)
+                       pin_memory=pin, persistent_workers=num_workers > 0,
+                       prefetch_factor=2 if num_workers > 0 else None)
 
     model = MODEL_REGISTRY[model_id]().to(device)
 
@@ -295,7 +326,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Run C3-E6 Stage 6 source-site training")
     ap.add_argument("--project-root", type=Path, default=default_root)
     ap.add_argument("--models", default="M1,M2,M4")
-    ap.add_argument("--num-workers", type=int, default=6)
+    # Conservative by default. Each worker is a full Python and torch runtime,
+    # and this host has been observed swapping before training even starts.
+    ap.add_argument("--num-workers", type=int, default=3)
     ap.add_argument("--limit", type=int, default=None)
     args = ap.parse_args(argv)
 
