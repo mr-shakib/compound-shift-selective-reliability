@@ -40,7 +40,7 @@ From authorized local downloads:
 - `mimic-cxr-2.0.0-metadata.csv.gz`
 - `mimic-cxr-2.0.0-split.csv.gz`
 
-MIMIC report files are expected to be named like `s50414267.txt`. The parser extracts the numeric study ID.
+MIMIC report files are expected to be named like `sNNNNNNNN.txt`. The parser extracts the numeric study ID.
 
 ## Required CheXpert Plus files
 
