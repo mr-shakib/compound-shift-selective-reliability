@@ -102,3 +102,20 @@ def test_evaluation_tier_is_unreachable_from_training_and_calibration():
     assert "prespecified_eval" not in PURPOSE_ALLOWED_TIERS["training"]
     assert "prespecified_eval" not in PURPOSE_ALLOWED_TIERS["calibration"]
     assert "prespecified_eval" in PURPOSE_ALLOWED_TIERS["confirmatory_evaluation"]
+
+
+def test_c2_works_with_either_sites_path_column():
+    """The two sites name the path column differently; C2 must stay
+    deterministic at both rather than depending on one site's schema."""
+    f = _frame()
+    ext = f.rename(columns={"image_path": "path_to_image"})
+    a = apply_c2(ext)["context"].tolist()
+    b = apply_c2(ext)["context"].tolist()
+    assert a == b
+    assert sorted(a) == sorted(ext["context"])
+
+
+def test_c2_reports_a_missing_tiebreak_rather_than_guessing():
+    f = _frame().drop(columns=["image_path", "study_id"])
+    with pytest.raises(KeyError, match="tiebreak"):
+        apply_c2(f)

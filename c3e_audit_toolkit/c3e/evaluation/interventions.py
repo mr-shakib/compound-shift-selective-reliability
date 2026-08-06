@@ -61,6 +61,22 @@ def apply_c1(frame: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def _tiebreak_column(frame: pd.DataFrame) -> str:
+    """A deterministic secondary sort key that exists at either site.
+
+    The two sites name their path column differently. Ordering must still be
+    reproducible, because the C2 rotation is defined as deterministic and a
+    seed alone does not fix an ordering.
+    """
+    for candidate in ("image_path", "path_to_image", "study_id", "file_name"):
+        if candidate in frame.columns:
+            return candidate
+    raise KeyError(
+        "no deterministic tiebreak column found; C2 requires a reproducible "
+        f"ordering and none of image_path/path_to_image/study_id is present in "
+        f"{list(frame.columns)}")
+
+
 def apply_c2(frame: pd.DataFrame, *, seed: int = C2_SEED) -> pd.DataFrame:
     """Deterministic permutation of context under the frozen constraints.
 
@@ -71,6 +87,7 @@ def apply_c2(frame: pd.DataFrame, *, seed: int = C2_SEED) -> pd.DataFrame:
     """
     out = frame.copy()
     out["_bin"] = out["context"].map(length_bin)
+    tiebreak = _tiebreak_column(out)
     split_col = "split" if "split" in out.columns else None
     new_context = out["context"].to_numpy(dtype=object).copy()
 
@@ -83,7 +100,7 @@ def apply_c2(frame: pd.DataFrame, *, seed: int = C2_SEED) -> pd.DataFrame:
             continue  # cannot satisfy different-patient; left as-is and reported
         # Order by patient so the rotation crosses patient boundaries, then
         # rotate by a stratum-specific non-zero offset.
-        order = out.loc[rows].sort_values(["subject_id", "image_path"]).index.to_numpy()
+        order = out.loc[rows].sort_values(["subject_id", tiebreak]).index.to_numpy()
         patients = out.loc[order, "subject_id"].to_numpy()
         n = len(order)
         offset = int(rng.integers(1, n)) if n > 1 else 0
