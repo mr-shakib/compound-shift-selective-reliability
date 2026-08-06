@@ -26,9 +26,10 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
-Stage status: C3-E6 Stages 3A through 6 are complete. M1 through M4 are trained
-and audited at the source site. Stage 7, threshold selection on the calibration
-tier, is open.
+Stage status: C3-E6 Stages 3A through 7 are complete. M1 through M4 are trained,
+and per-pathology thresholds plus abstention cutoffs are selected and frozen.
+Stage 8, controlled context interventions on the source-site confirmatory tier,
+is open.
 
 Authorized:
 
@@ -48,7 +49,9 @@ Authorized:
 - downloading MIMIC-CXR-JPG frontal images listed in the Stage 3E manifests;
 - decoding and resizing those images for model input;
 - training M1 through M4 at the source site on the model-train tier only;
-- reading the threshold-calibration tier for Stage 7 threshold selection.
+- reading the threshold-calibration tier for Stage 7 threshold selection;
+- reading the prespecified-eval tier for Stage 8 confirmatory evaluation;
+- applying the frozen Stage 7 thresholds unchanged.
 
 Not authorized:
 
@@ -88,9 +91,14 @@ early stopping carved from that same tier. Stage 7 additionally reads the
 **threshold-calibration tier**, and nothing else.
 
 The **prespecified-eval tier is readable by no stage that can influence a model,
-a threshold, or a policy.** It opens only for the confirmatory analysis. This is
-enforced in code: `build_index` takes a `purpose` and refuses any tier outside
-that stage's allowance.
+a threshold, or a policy.** It opens only under `purpose="confirmatory_evaluation"`.
+This is enforced in code: `build_index` takes a `purpose` and refuses any tier
+outside that stage's allowance, so training cannot reach calibration and neither
+can reach evaluation.
+
+Stage 8 consumes Stage 7 thresholds and must never re-derive them. A threshold
+refitted against the confirmatory tier converts a frozen transfer into a refit
+and answers a different question than the one preregistered.
 
 Thresholds selected in Stage 7 are **frozen**. They transfer to the external
 site unchanged. Revising them after inspecting external results would answer a

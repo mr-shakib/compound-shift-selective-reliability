@@ -83,6 +83,10 @@ def load_context(data_root: Path, wanted_paths: set[str]) -> dict[str, str]:
 PURPOSE_ALLOWED_TIERS = {
     "training": ("model_train",),
     "calibration": ("model_train", "threshold_calibration"),
+    # Opened only by the confirmatory analysis. No stage that can influence a
+    # model, a threshold, or a policy names this purpose.
+    "confirmatory_evaluation": ("prespecified_eval", "official_validate",
+                                "official_test"),
 }
 
 
