@@ -30,7 +30,9 @@
   \par\medskip\noindent\fcolorbox{red!60}{red!5}{%
     \parbox{0.97\linewidth}{\small\textbf{PENDING:} #1}}\par\medskip}
 
-\sisetup{detect-weight=true, group-minimum-digits=4}
+% Comma thousands separators. siunitx defaults to a thin space, which is the
+% physics convention; clinical journals use commas almost universally.
+\sisetup{detect-weight=true, group-minimum-digits=4, group-separator={,}}
 
 \title{Does multimodal selective reliability transport across hospitals when
 pre-diagnostic clinical context changes?\\
