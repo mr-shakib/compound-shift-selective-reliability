@@ -26,10 +26,9 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
-Stage status: C3-E6 Stages 3A through 7 are complete. M1 through M4 are trained,
-and per-pathology thresholds plus abstention cutoffs are selected and frozen.
-Stage 8, controlled context interventions on the source-site confirmatory tier,
-is open.
+Stage status: C3-E6 Stages 3A through 8 are complete, and the external images
+are acquired. Stage 9b, external-site evaluation under the frozen policy, is
+open.
 
 Authorized:
 
@@ -51,7 +50,8 @@ Authorized:
 - training M1 through M4 at the source site on the model-train tier only;
 - reading the threshold-calibration tier for Stage 7 threshold selection;
 - reading the prespecified-eval tier for Stage 8 confirmatory evaluation;
-- applying the frozen Stage 7 thresholds unchanged.
+- applying the frozen Stage 7 thresholds unchanged;
+- external-site inference under the frozen policy.
 
 Not authorized:
 
@@ -61,7 +61,6 @@ Not authorized:
 - any read of the prespecified-eval tier;
 - revising a frozen threshold after any external result is inspected;
 - external-site label regeneration;
-- external-site inference or evaluation;
 - CheXpert model evaluation;
 - threshold selection or tuning;
 - evaluation or metric computation on the confirmatory tiers;
