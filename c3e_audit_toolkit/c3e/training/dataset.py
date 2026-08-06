@@ -77,15 +77,37 @@ def load_context(data_root: Path, wanted_paths: set[str]) -> dict[str, str]:
     return out
 
 
-def build_index(project_root: Path, tier: str = "model_train") -> pd.DataFrame:
-    """Build the image-level training index for one tier.
+#: Which tiers each stage may read. The evaluation tier appears nowhere: it is
+#: opened only by the confirmatory analysis, and never by code that could
+#: influence a model, a threshold, or a policy.
+PURPOSE_ALLOWED_TIERS = {
+    "training": ("model_train",),
+    "calibration": ("model_train", "threshold_calibration"),
+}
+
+
+def build_index(project_root: Path, tier: str = "model_train", *,
+                purpose: str = "training") -> pd.DataFrame:
+    """Build the image-level index for one tier.
 
     Returns one row per frontal image with its study's label vector and context.
+
+    `purpose` names the stage doing the reading and determines which tiers are
+    legible. Threshold selection needs the calibration tier that training must
+    never see, so the boundary is per-stage rather than global.
     """
-    if tier in FORBIDDEN_TIERS:
+    if purpose not in PURPOSE_ALLOWED_TIERS:
         raise TierAccessError(
-            f"tier '{tier}' is reserved for a later stage and must not be read "
-            "during training. Internal validation is carved from model_train."
+            f"unknown purpose '{purpose}'; expected one of "
+            f"{sorted(PURPOSE_ALLOWED_TIERS)}"
+        )
+    allowed = PURPOSE_ALLOWED_TIERS[purpose]
+    if tier not in allowed:
+        raise TierAccessError(
+            f"tier '{tier}' is not readable for purpose '{purpose}'; "
+            f"allowed: {list(allowed)}. The prespecified-eval tier is reserved "
+            "for the confirmatory analysis and is readable by no stage that can "
+            "influence a model, a threshold, or a policy."
         )
 
     root = Path(project_root).resolve()

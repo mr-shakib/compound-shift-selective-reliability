@@ -26,10 +26,9 @@ New Stage 2B implementation code belongs inside the existing
 
 ## Current authorization
 
-Stage status: C3-E6 Stages 3A through 5 are complete. Full-cohort source-site
-labels exist for both endpoints, all 193,282 frontal images are acquired and
-checksum-verified, and protocol v0.4.0 fixes the backbones. Stage 6, source-site
-model training, is open.
+Stage status: C3-E6 Stages 3A through 6 are complete. M1 through M4 are trained
+and audited at the source site. Stage 7, threshold selection on the calibration
+tier, is open.
 
 Authorized:
 
@@ -48,7 +47,8 @@ Authorized:
 - source-site label generation for the impression and findings scopes;
 - downloading MIMIC-CXR-JPG frontal images listed in the Stage 3E manifests;
 - decoding and resizing those images for model input;
-- training M1 through M4 at the source site on the model-train tier only.
+- training M1 through M4 at the source site on the model-train tier only;
+- reading the threshold-calibration tier for Stage 7 threshold selection.
 
 Not authorized:
 
@@ -56,6 +56,7 @@ Not authorized:
 - downloading any DICOM dataset;
 - training on any tier other than model train;
 - any read of the prespecified-eval tier;
+- revising a frozen threshold after any external result is inspected;
 - external-site label regeneration;
 - external-site inference or evaluation;
 - CheXpert model evaluation;
@@ -82,11 +83,18 @@ verified against the publisher's SHA-256 manifest. Credentials are supplied
 through the AWS CLI configuration or `~/.netrc` and are never written into a
 script, a command line, a log, or any tracked file.
 
-Stage 6 trains on the **model train tier only**. The threshold-calibration tier
-is reserved for Stage 7 and the prespecified-eval tier for the confirmatory
-analysis; neither may be read during training, and neither may influence
-architecture, early stopping, or any hyperparameter. Internal validation for
-early stopping is carved from the model-train tier itself.
+Stage 6 trains on the **model train tier only**, with internal validation for
+early stopping carved from that same tier. Stage 7 additionally reads the
+**threshold-calibration tier**, and nothing else.
+
+The **prespecified-eval tier is readable by no stage that can influence a model,
+a threshold, or a policy.** It opens only for the confirmatory analysis. This is
+enforced in code: `build_index` takes a `purpose` and refuses any tier outside
+that stage's allowance.
+
+Thresholds selected in Stage 7 are **frozen**. They transfer to the external
+site unchanged. Revising them after inspecting external results would answer a
+different question than the one preregistered, and is prohibited.
 
 Model checkpoints and preprocessed image tensors are restricted data. They live
 in the gitignored `data/` tree; only aggregate training curves, provenance, and
