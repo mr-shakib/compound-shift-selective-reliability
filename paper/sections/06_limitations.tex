@@ -1,0 +1,50 @@
+\section{Limitations}
+\label{sec:limitations}
+
+Several limitations are known independently of the confirmatory result and are
+stated here rather than deferred.
+
+\paragraph{Effective token count measures brevity, not vagueness.}
+The informativeness rule that separates informative from low-information context
+counts tokens carrying alphanumeric content after de-identification placeholders
+are removed. It therefore detects emptiness and brevity. A genuinely vague but
+lengthy indication --- ``evaluate'' followed by boilerplate --- scores as
+informative. This is a measurement limitation of the state assignment, not of
+the controlled interventions, which do not depend on it beyond eligibility.
+
+\paragraph{The primary evaluation partition is not an official split.}
+The official test split of the source dataset yields too few patients within the
+study cohort to support the primary comparison, so a patient-disjoint partition
+was carved from the training split using patient identifiers and a frozen seed
+alone. Primary estimates are consequently not directly comparable to published
+official-split baselines. The official validation and test splits are retained
+and reported as secondary confirmation.
+
+\paragraph{A single training seed.}
+Each model was trained once. The bootstrap quantifies uncertainty in
+\emph{evaluation}, not variability across training runs, so small differences
+between models are not established against seed-to-seed variation. Differences
+smaller than the materiality threshold should be read with that in mind.
+
+\paragraph{Source images are lossy, external images are lossless.}
+The source dataset publishes JPEG images and the external dataset publishes PNG.
+Both were reduced to the model input resolution by a single identical bilinear
+step, so no additional resampling asymmetry was introduced, but the compression
+history of the two sites differs at origin. This difference tracks the site
+variable and cannot be removed by preprocessing choices.
+
+\paragraph{One external image is unusable at source.}
+One frontal image in the external dataset matches the publisher's recorded
+checksum yet fails to decode: its PNG header parses while an IDAT chunk fails
+its cyclic redundancy check. The damage is upstream and no retransfer repairs
+it. That study is excluded, and the exclusion is reported rather than absorbed.
+
+\paragraph{Studies whose only images lack a view label are excluded.}
+Images carrying no view label are treated as non-frontal, which is the
+conservative reading, since assuming them frontal would admit views the protocol
+excludes. Such exclusions may not be missing at random.
+
+\paragraph{Section boundaries derive from a curated header vocabulary.}
+Reports whose headers fall outside that vocabulary are excluded rather than
+parsed heuristically, which trades coverage for the guarantee that no
+post-diagnostic text enters a pre-diagnostic field.

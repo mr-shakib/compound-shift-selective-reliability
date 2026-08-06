@@ -1,0 +1,72 @@
+\section{Introduction}
+\label{sec:introduction}
+
+A chest-radiograph classifier that knows when to defer is more useful in a
+hospital than one that is merely accurate. Selective prediction formalises
+this: the model returns a decision only when its confidence clears a threshold,
+and refers the remainder to a human reader. The threshold fixes an operating
+point --- a coverage --- and with it the workload the system imposes on
+radiology.
+
+That operating point is chosen once, on data from the hospital where the system
+was developed. It is then deployed somewhere else. Whether it survives the move
+is an empirical question that is rarely asked, and the way it is usually asked
+answers something narrower than intended: models are re-evaluated at a second
+site, but the abstention threshold is re-fitted there too. A re-fitted threshold
+tests whether a \emph{method} transfers. It cannot test whether a \emph{deployed
+policy} transfers, because the policy that would actually ship is the frozen
+one.
+
+A second shift travels with the first and is usually left implicit. Multimodal
+chest-radiograph models increasingly consume clinical context alongside the
+image --- the indication, the referring history, the reason the study was
+ordered. This text is not a stable input. Its availability is a property of how
+a particular hospital documents care, and it varies across institutions in ways
+that have nothing to do with the patient. A model that learned to lean on the
+indication field at one site may find it thin, absent, or differently written at
+the next.
+
+Institution and context therefore shift together. Studies that vary one hold the
+other fixed: cross-institution work is typically image-only, and multimodal
+context work is typically single-institution. Holding one fixed cannot reveal
+whether they interact, and interaction is precisely what determines deployment
+risk. If a multimodal model is more accurate at the source site \emph{because}
+of context, and context is scarcer at the target site, then the measured benefit
+and the unmeasured fragility are the same phenomenon observed from two sides.
+
+This paper contributes an evaluation protocol that crosses the two shifts
+deliberately, so their interaction can be estimated rather than assumed away:
+
+\begin{itemize}
+  \item \textbf{Two sites.} A source hospital, where models are developed and
+    the selective policy is calibrated, and an external hospital used only for
+    evaluation.
+  \item \textbf{Three controlled context states at each site.} Context left
+    intact, context removed, and context replaced with another patient's ---
+    the last separating \emph{absence} of information from \emph{wrong}
+    information.
+  \item \textbf{A frozen policy.} Per-pathology thresholds and abstention
+    cutoffs are selected once at the source site and transferred unchanged, so
+    what is evaluated is the policy that would actually ship.
+  \item \textbf{Preregistration} in a machine-readable, hash-manifested
+    protocol, with every amendment dated and its confirmatory status recorded,
+    so the boundary between prespecified and post-hoc is auditable rather than
+    asserted.
+\end{itemize}
+
+The contribution is the protocol and what it measures. We propose no new
+architecture and no new uncertainty algorithm; the backbones are deliberately
+conventional, held constant so that architecture cannot serve as a competing
+explanation for any effect observed. This is not a prospective clinical study or
+a regulatory validation.
+
+Two further contributions emerged from building the protocol and are reported
+because they generalise beyond it. First, a structural hazard in deriving
+pre-diagnostic context from radiology reports: a substantial minority of reports
+embed a preliminary interpretation inside the report body, so any pipeline that
+takes ``everything before the findings section'' as context silently ingests
+post-diagnostic text (\cref{sec:report-structure}). Second, a property of the
+decision rule this literature commonly uses --- requiring both that a confidence
+interval exclude zero and that the point estimate reach a materiality threshold
+--- which caps statistical power at \SI{50}{\percent} when the true effect
+equals that threshold, regardless of sample size (\cref{sec:power}).

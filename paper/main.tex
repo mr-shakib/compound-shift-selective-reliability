@@ -1,0 +1,87 @@
+% C3E — compound-shift evaluation of multimodal selective reliability.
+%
+% Deliberately venue-neutral. The target journal is not yet chosen, and it
+% should follow the finding rather than precede it, so this uses plain article
+% class with a conventional section order that converts to most templates.
+% Swap the documentclass and preamble once a venue is fixed; the section files
+% under sections/ should need no edits.
+%
+% Build:  latexmk -pdf main.tex
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{authblk}
+
+% Marks a section that must not be drafted before the confirmatory analysis
+% exists. Drafted expectations survive into final text after the data disagrees,
+% which is the failure this macro exists to make visible.
+\newcommand{\pending}[1]{%
+  \par\medskip\noindent\fcolorbox{red!60}{red!5}{%
+    \parbox{0.97\linewidth}{\small\textbf{PENDING:} #1}}\par\medskip}
+
+\sisetup{detect-weight=true, group-minimum-digits=4}
+
+\title{Does multimodal selective reliability transport across hospitals when
+pre-diagnostic clinical context changes?\\
+\large A compound-shift evaluation protocol}
+
+\author[1]{Shakib Howlader}
+\affil[1]{Daffodil International University}
+
+\date{Draft --- \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\pending{The abstract is written last. It must report what the confirmatory
+analysis found, and cannot be drafted before Stage~10 produces intervals
+without risking a framing that survives into the final text after the data
+disagrees.}
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_limitations}
+
+\section*{Data and code availability}
+
+MIMIC-CXR-JPG v2.1.0 and CheXpert Plus are available to credentialed
+researchers from PhysioNet and Stanford AIMI respectively. Neither dataset is
+redistributed here. The evaluation protocol is versioned and hash-manifested;
+the analysis code, the machine-readable protocol registry, and every aggregate
+artifact reported in this paper are released, while row-level labels, model
+checkpoints and images remain within the protected data environment required by
+the data use agreements.
+
+\section*{Preregistration}
+
+The protocol was frozen in a machine-readable registry before any label, model
+output, or metric existed, and validated by an automated checker. Every
+amendment is dated in an amendment log together with its rationale and its
+confirmatory status. At the time of writing all amendments are recorded as
+prespecified: none was made after an external result had been inspected.
+Changes made after external-result inspection are labelled post-hoc exploratory
+by protocol rule.
+
+% plain rather than plainnat: the draft uses \cite throughout and loading natbib
+% would be a dependency with no current purpose. Revisit when the venue fixes a
+% citation style.
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
