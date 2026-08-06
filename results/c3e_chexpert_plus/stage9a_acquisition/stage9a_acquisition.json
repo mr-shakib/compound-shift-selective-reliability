@@ -1,0 +1,61 @@
+{
+  "acquisition": {
+    "corrupt_at_source": 1,
+    "elapsed_seconds": 10.4,
+    "errors": 0,
+    "images_already_present": 191070,
+    "images_expected": 191071,
+    "images_written": 0,
+    "md5_mismatches": 0,
+    "output_bytes": 3025527908,
+    "transferred_bytes": 661430593262,
+    "usable_images": 191070
+  },
+  "compliance": {
+    "cross_site_claim": false,
+    "external_site_inference": false,
+    "external_site_tuning": false,
+    "identifiers_emitted_to_results": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 9a ONLY",
+    "EXTERNAL-SITE IMAGE ACQUISITION AND RESIZE",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO EXTERNAL-SITE TUNING",
+    "NO THRESHOLD SELECTION",
+    "NO CROSS-SITE CLAIM",
+    "PREPROCESSING IDENTICAL TO THE SOURCE SITE",
+    "IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "integrity": {
+    "checked": 191071,
+    "corrupt_at_source": 1,
+    "corruption_note": "these files match the publisher md5 but their pixel data does not decode, so the damage is upstream and no retry can repair it; they are excluded from the external cohort and the exclusion is reported",
+    "method": "md5 against the publisher file index, then a full decode",
+    "unresolved_mismatches": 0
+  },
+  "preprocessing": {
+    "identical_to_source_site": true,
+    "jpeg_quality": 95,
+    "resample_filter": "bilinear",
+    "resolution": 224,
+    "steps": "single resize from full resolution"
+  },
+  "source": {
+    "dataset": "aimi.chexpert_plus:5yyj:v1_0",
+    "index_tables": [
+      "aimi.chexpert_plus:5yyj:v1_0.png_train",
+      "aimi.chexpert_plus:5yyj:v1_0.png_valid"
+    ],
+    "provider": "Stanford Redivis"
+  },
+  "stage": "C3-E9a",
+  "status": "PASS",
+  "title": "EXTERNAL-SITE IMAGE ACQUISITION"
+}

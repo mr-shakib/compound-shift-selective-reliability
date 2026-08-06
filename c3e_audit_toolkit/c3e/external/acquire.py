@@ -155,10 +155,18 @@ def _fetch_one(args: tuple[str, str, str, Path, Path]) -> tuple[str, int, str]:
         if got != md5_expected:
             return (str(out_path), 0, "md5_mismatch")
 
-        with Image.open(io.BytesIO(blob)) as im:
-            im = im.convert("L").resize((RESOLUTION, RESOLUTION), Image.BILINEAR)
-            out_path.parent.mkdir(parents=True, exist_ok=True)
-            im.save(out_path, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+        try:
+            with Image.open(io.BytesIO(blob)) as im:
+                im = im.convert("L").resize((RESOLUTION, RESOLUTION), Image.BILINEAR)
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                im.save(out_path, format="JPEG", quality=JPEG_QUALITY, optimize=True)
+        except OSError:
+            # The bytes match the publisher's md5 but the pixel data will not
+            # decode, so the file is damaged upstream and no retry can repair
+            # it. Recorded as an exclusion rather than a transfer error: the
+            # distinction matters, because one is our problem and the other is
+            # a property of the published dataset.
+            return (str(out_path), 0, "corrupt_at_source")
         return (str(out_path), out_path.stat().st_size, "ok")
     except Exception as exc:  # noqa: BLE001
         if out_path.exists():
@@ -195,6 +203,7 @@ def run(*, project_root: str | Path, workers: int = 8,
     started = time.time()
     done = ok = present = 0
     mismatched: list[str] = []
+    corrupt: list[str] = []
     errors: list[str] = []
     out_bytes = 0
     last = 0.0
@@ -210,6 +219,8 @@ def run(*, project_root: str | Path, workers: int = 8,
                 out_bytes += size
             elif status == "md5_mismatch":
                 mismatched.append(path)
+            elif status == "corrupt_at_source":
+                corrupt.append(path)
             else:
                 errors.append(f"{status}")
             now = time.time()
@@ -220,11 +231,14 @@ def run(*, project_root: str | Path, workers: int = 8,
                 eta = (len(jobs) - done) / rate if rate else 0.0
                 print(f"\r  {done:,}/{len(jobs):,} ({done / len(jobs):6.1%})  "
                       f"{rate:5.1f} img/s  {out_bytes / 1048576:6.0f} MB out  "
-                      f"bad {len(mismatched)}  err {len(errors)}  "
+                      f"bad {len(mismatched)}  corrupt {len(corrupt)}  err {len(errors)}  "
                       f"eta {int(eta // 3600)}:{int(eta % 3600 // 60):02d}:{int(eta % 60):02d}   ",
                       end="" if done < len(jobs) else "\n", file=sys.stderr, flush=True)
 
-    status = "PASS" if not mismatched and not errors and (ok + present) == len(jobs) else "FAIL"
+    # Upstream corruption is a property of the published dataset, not a failure
+    # of this transfer, so it is excluded and reported rather than retried.
+    accounted = ok + present + len(corrupt)
+    status = "PASS" if not mismatched and not errors and accounted == len(jobs) else "FAIL"
     return {
         "stage": STAGE, "title": TITLE, "status": status,
         "declarations": list(DECLARATIONS),
@@ -237,11 +251,21 @@ def run(*, project_root: str | Path, workers: int = 8,
             "images_expected": len(jobs),
             "images_written": ok, "images_already_present": present,
             "md5_mismatches": len(mismatched), "errors": len(errors),
+            "corrupt_at_source": len(corrupt),
+            "usable_images": ok + present,
             "transferred_bytes": total_bytes, "output_bytes": out_bytes,
             "elapsed_seconds": round(time.time() - started, 1),
         },
-        "integrity": {"method": "md5 against the publisher file index",
-                      "checked": len(jobs), "unresolved_mismatches": len(mismatched)},
+        "integrity": {
+            "method": "md5 against the publisher file index, then a full decode",
+            "checked": len(jobs), "unresolved_mismatches": len(mismatched),
+            "corrupt_at_source": len(corrupt),
+            "corruption_note": (
+                "these files match the publisher md5 but their pixel data does "
+                "not decode, so the damage is upstream and no retry can repair "
+                "it; they are excluded from the external cohort and the "
+                "exclusion is reported"),
+        },
         "compliance": {"external_site_inference": False, "external_site_tuning": False,
                        "threshold_selection": False, "cross_site_claim": False,
                        "identifiers_emitted_to_results": False},
@@ -264,6 +288,8 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
            f"| images written | {a['images_written']:,} |",
            f"| already present | {a['images_already_present']:,} |",
            f"| md5 mismatches | {a['md5_mismatches']} |",
+           f"| corrupt at source (excluded) | {a['corrupt_at_source']} |",
+           f"| usable images | {a['usable_images']:,} |",
            f"| errors | {a['errors']} |",
            f"| transferred | {a['transferred_bytes'] / 1073741824:.0f} GB |",
            f"| stored at 224px | {a['output_bytes'] / 1073741824:.2f} GB |",

@@ -1,0 +1,40 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 1874,
+      "name": "stage9a_acquisition.json",
+      "sha256": "ef53621b85e5a8262db1b22b3b0d6bdf81404b780240b3ce18e0cdf47fdc3aa1"
+    },
+    {
+      "byte_size": 1014,
+      "name": "stage9a_acquisition.md",
+      "sha256": "8f98a34b32168b98fd79a6a738a0f3d5312c933cae5233cca9a4edc060aacbda"
+    }
+  ],
+  "compliance": {
+    "cross_site_claim": false,
+    "external_site_inference": false,
+    "external_site_tuning": false,
+    "identifiers_emitted_to_results": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 9a ONLY",
+    "EXTERNAL-SITE IMAGE ACQUISITION AND RESIZE",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO EXTERNAL-SITE TUNING",
+    "NO THRESHOLD SELECTION",
+    "NO CROSS-SITE CLAIM",
+    "PREPROCESSING IDENTICAL TO THE SOURCE SITE",
+    "IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_chexpert_plus/stage9a_acquisition",
+  "stage": "C3-E9a",
+  "status": "PASS",
+  "title": "EXTERNAL-SITE IMAGE ACQUISITION"
+}
