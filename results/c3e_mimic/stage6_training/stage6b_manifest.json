@@ -1,0 +1,49 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 5010,
+      "name": "stage6b_audit.json",
+      "sha256": "ede68e2c15f326292c1fb1524ccad7dd2b9edf15fb0a22170f2db4e870ee2910"
+    },
+    {
+      "byte_size": 2349,
+      "name": "stage6b_audit.md",
+      "sha256": "baf960bef724a852562342ec6d339cbb25a68036f59e866114c48e61e3c22fbc"
+    },
+    {
+      "byte_size": 111,
+      "name": "stage6b_scores.csv",
+      "sha256": "76e74489675bbffdee09c708ada64c0d64089411609998151d3d3c9c1c294e68"
+    }
+  ],
+  "compliance": {
+    "calibration_tier_read": false,
+    "cross_site_claim": false,
+    "evaluation_tier_read": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 6b ONLY",
+    "M3 ASSEMBLED FROM TRAINED M1 AND M2, NOT TRAINED",
+    "SCORED ON INTERNAL VALIDATION CARVED FROM MODEL TRAIN",
+    "NO CALIBRATION-TIER READ",
+    "NO PRESPECIFIED-EVAL-TIER READ",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "DEVELOPMENT NUMBERS, NOT CONFIRMATORY RESULTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "output_dir": "results/c3e_mimic/stage6_training",
+  "stage": "C3-E6 Stage 6b",
+  "status": "PASS",
+  "title": "M3 ASSEMBLY AND STAGE 6 AUDIT"
+}

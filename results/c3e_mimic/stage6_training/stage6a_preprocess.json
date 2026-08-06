@@ -1,0 +1,39 @@
+{
+  "channel_handling": "stored single-channel; replicated to three at load time",
+  "compliance": {
+    "evaluation_performed": false,
+    "identifiers_emitted_to_results": false,
+    "labels_read": false,
+    "model_training": false,
+    "originals_modified": false,
+    "threshold_selection": false
+  },
+  "compression_ratio": 131.3,
+  "declarations": [
+    "STAGE 6a ONLY",
+    "IMAGE DECODE AND RESIZE",
+    "NO MODEL TRAINING IN THIS RUN",
+    "NO LABELS READ",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "ORIGINALS LEFT UNMODIFIED",
+    "PREPROCESSED IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "elapsed_seconds": 828.6,
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "images_expected": 193282,
+  "images_failed": 0,
+  "images_written": 193282,
+  "input_resolution": 224,
+  "jpeg_quality": 95,
+  "output_bytes": 2604029416,
+  "resample_filter": "bilinear",
+  "source_bytes": 341954991284,
+  "stage": "C3-E6 Stage 6a",
+  "status": "PASS",
+  "title": "IMAGE PREPROCESSING TO FROZEN INPUT RESOLUTION"
+}

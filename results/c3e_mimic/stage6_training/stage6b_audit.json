@@ -1,0 +1,209 @@
+{
+  "checkpoints": [
+    {
+      "byte_size": 28450961,
+      "model_id": "M1",
+      "relative_path": "data/models/c3e/m1_best.pt",
+      "selected_epoch": 3,
+      "selection_val_auroc_macro": 0.8773572817008303,
+      "sha256": "d7e267d2d545f23284586b8425a2844a2f1ca95928280d560ec6dc43ee665e90"
+    },
+    {
+      "byte_size": 438027565,
+      "model_id": "M2",
+      "relative_path": "data/models/c3e/m2_best.pt",
+      "selected_epoch": 3,
+      "selection_val_auroc_macro": 0.7628796831668234,
+      "sha256": "2481adc633dd45431052c30161cee18ef200a31c340036d3e7edc64e9488cf17"
+    },
+    {
+      "byte_size": 470134207,
+      "model_id": "M4",
+      "relative_path": "data/models/c3e/m4_best.pt",
+      "selected_epoch": 4,
+      "selection_val_auroc_macro": 0.8884975666971103,
+      "sha256": "ebc5fabee6dc89e8076f744455eec7294ad0c342e7fdb66431db5963ca4bcfeb"
+    }
+  ],
+  "compliance": {
+    "calibration_tier_read": false,
+    "cross_site_claim": false,
+    "evaluation_tier_read": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 6b ONLY",
+    "M3 ASSEMBLED FROM TRAINED M1 AND M2, NOT TRAINED",
+    "SCORED ON INTERNAL VALIDATION CARVED FROM MODEL TRAIN",
+    "NO CALIBRATION-TIER READ",
+    "NO PRESPECIFIED-EVAL-TIER READ",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "DEVELOPMENT NUMBERS, NOT CONFIRMATORY RESULTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "internal_validation": {
+    "images": 7919,
+    "note": "patient-disjoint split carved from model train; the calibration and evaluation tiers were not read",
+    "patients": 2498,
+    "source_tier": "model_train"
+  },
+  "m3": {
+    "construction": "probability average of M1 and M2",
+    "trainable_parameters": 0,
+    "trained": false
+  },
+  "protocol_version": "0.4.2",
+  "scores": {
+    "M1": {
+      "val_auroc_macro": 0.877357,
+      "val_loss": 0.30618
+    },
+    "M2": {
+      "val_auroc_macro": 0.76288,
+      "val_loss": 0.47579
+    },
+    "M3": {
+      "val_auroc_macro": 0.876272,
+      "val_loss": 0.32946
+    },
+    "M4": {
+      "val_auroc_macro": 0.888498,
+      "val_loss": 0.303388
+    }
+  },
+  "stage": "C3-E6 Stage 6b",
+  "status": "PASS",
+  "title": "M3 ASSEMBLY AND STAGE 6 AUDIT",
+  "training_curves": {
+    "M1": [
+      {
+        "epoch": 1,
+        "train_loss": 0.3302,
+        "val_auroc_macro": 0.8683,
+        "val_loss": 0.3108
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.2958,
+        "val_auroc_macro": 0.8772,
+        "val_loss": 0.3104
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.276,
+        "val_auroc_macro": 0.8774,
+        "val_loss": 0.3062
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.2512,
+        "val_auroc_macro": 0.8642,
+        "val_loss": 0.3205
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.2218,
+        "val_auroc_macro": 0.8644,
+        "val_loss": 0.344
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.1833,
+        "val_auroc_macro": 0.8501,
+        "val_loss": 0.3797
+      }
+    ],
+    "M2": [
+      {
+        "epoch": 1,
+        "train_loss": 0.5407,
+        "val_auroc_macro": 0.5001,
+        "val_loss": 0.5603
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.5416,
+        "val_auroc_macro": 0.4999,
+        "val_loss": 0.5626
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.5389,
+        "val_auroc_macro": 0.5,
+        "val_loss": 0.559
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.5382,
+        "val_auroc_macro": 0.5,
+        "val_loss": 0.5608
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.2948,
+        "val_auroc_macro": 0.7287,
+        "val_loss": 0.5618
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.2486,
+        "val_auroc_macro": 0.73,
+        "val_loss": 0.6286
+      }
+    ],
+    "M4": [
+      {
+        "epoch": 1,
+        "train_loss": 0.3214,
+        "val_auroc_macro": 0.884,
+        "val_loss": 0.3017
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.2824,
+        "val_auroc_macro": 0.8881,
+        "val_loss": 0.3049
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.258,
+        "val_auroc_macro": 0.8862,
+        "val_loss": 0.2809
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.2293,
+        "val_auroc_macro": 0.8885,
+        "val_loss": 0.3034
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.1935,
+        "val_auroc_macro": 0.8701,
+        "val_loss": 0.3272
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.1568,
+        "val_auroc_macro": 0.8739,
+        "val_loss": 0.375
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.1233,
+        "val_auroc_macro": 0.8516,
+        "val_loss": 0.4128
+      }
+    ]
+  }
+}

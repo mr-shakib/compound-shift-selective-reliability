@@ -1,0 +1,41 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 1134,
+      "name": "stage6a_preprocess.json",
+      "sha256": "fde1df76b2b2026379dd7e0a0ec9faf59778eef5e847c356ecccdc91f02cccf0"
+    },
+    {
+      "byte_size": 802,
+      "name": "stage6a_preprocess.md",
+      "sha256": "bc05227165b4f6e199034f078e630e78a882941cf92bfbab6eec73c834f8a409"
+    }
+  ],
+  "compliance": {
+    "evaluation_performed": false,
+    "identifiers_emitted_to_results": false,
+    "labels_read": false,
+    "model_training": false,
+    "originals_modified": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 6a ONLY",
+    "IMAGE DECODE AND RESIZE",
+    "NO MODEL TRAINING IN THIS RUN",
+    "NO LABELS READ",
+    "NO PREDICTION THRESHOLD SELECTION",
+    "NO EVALUATION OR METRIC COMPUTATION",
+    "ORIGINALS LEFT UNMODIFIED",
+    "PREPROCESSED IMAGES CONFINED TO THE PROTECTED DATA TREE",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_mimic/stage6_training",
+  "stage": "C3-E6 Stage 6a",
+  "status": "PASS",
+  "title": "IMAGE PREPROCESSING TO FROZEN INPUT RESOLUTION"
+}
