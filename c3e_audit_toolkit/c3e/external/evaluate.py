@@ -40,6 +40,7 @@ from ..evaluation.interventions import apply_c1, apply_c2, check_invariants
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
 from ..training.runner import (CKPT_DIR, SEED, _available_ram_gb,
                                _seed_everything, load_frozen_settings)
+from ..analysis.cache import checkpoint_digest, load as cache_load, save as cache_save
 from .dataset import IMAGE_DIR, CheXpertPlusDataset, build_external_index
 
 STAGE = "C3-E9b"
@@ -139,6 +140,10 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     pin = _available_ram_gb() >= 6.0
 
     ckpt = root / CKPT_DIR
+    shas = {mid: checkpoint_digest(ckpt / f"{mid.lower()}_best.pt")
+            for mid in ("M1", "M2", "M4")}
+    # M3 has no weights of its own; its identity is that of its two components.
+    shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
     m1 = _load(M1ImageOnly(), ckpt / "m1_best.pt", device)
     m2 = _load(M2TextOnly(), ckpt / "m2_best.pt", device)
     m3 = M3LateFusion(m1, m2).to(device)
@@ -154,11 +159,22 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         loader = DataLoader(ds, batch_size=bs, shuffle=False, num_workers=num_workers,
                             pin_memory=pin, persistent_workers=num_workers > 0)
         for mid, model, needs_text in specs:
-            print(f"  {cond} · {mid} ...", file=sys.stderr, flush=True)
-            probs, labels, masks = predict(model, loader, device, needs_text)
-            if mid == "M1":
-                m1_probs[cond] = probs
-            sp, sy, sm, _ = _aggregate(f, probs, labels, masks)
+            hit = cache_load(root, "external", mid, cond,
+                             checkpoint_sha=shas[mid], label_source=label_source)
+            if hit is not None:
+                print(f"  {cond} · {mid} (cached)", file=sys.stderr, flush=True)
+                sp, sy, sm = hit["probabilities"], hit["labels"], hit["mask"]
+                if mid == "M1":
+                    m1_probs[cond] = sp
+            else:
+                print(f"  {cond} · {mid} ...", file=sys.stderr, flush=True)
+                probs, labels, masks = predict(model, loader, device, needs_text)
+                sp, sy, sm, pats = _aggregate(f, probs, labels, masks)
+                cache_save(root, "external", mid, cond, probabilities=sp,
+                           labels=sy, mask=sm, patients=pats,
+                           checkpoint_sha=shas[mid], label_source=label_source)
+                if mid == "M1":
+                    m1_probs[cond] = sp
 
             thr = np.array([stage7["models"][mid]["classification_thresholds"][t]
                             for t in TARGETS])

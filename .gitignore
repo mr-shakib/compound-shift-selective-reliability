@@ -148,3 +148,6 @@ data/models/c3e/
 # Stage 9 external-site images (restricted)
 data/chexpert_plus/images_224/
 data/chexpert_plus/_staging/
+
+# Cached per-study predictions (restricted: patient identifiers)
+data/predictions/
