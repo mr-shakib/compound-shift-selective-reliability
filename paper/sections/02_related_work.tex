@@ -1,9 +1,8 @@
 \section{Related work}
 \label{sec:related-work}
 
-Every work cited here was verified against its official publication page. One
-candidate on the acquisition-parameter robustness axis could not be retrieved
-and is therefore not cited.
+Every work cited here was verified against its official publication page or
+full text.
 
 \subsection{Selective prediction under distribution shift}
 
@@ -75,11 +74,26 @@ performance, calibration and cross-center generalisation gaps, and concludes
 that detecting rare findings under multi-center shift remains
 challenging~\cite{cxrlt2026}.
 
-This line is image-only. It varies institution while holding input availability
-fixed --- the mirror image of \cref{sec:rw-context} --- and does not evaluate
-abstention. That the most recent multi-center benchmark still names calibration
-and cross-center generalisation as open problems supports treating the crossed
-question as unresolved rather than answered piecemeal.
+A related strand examines robustness to technical acquisition parameters rather
+than to institution. Comparing four architectures for the sensitivity gap
+between anteroposterior and posteroanterior views, model rankings reverse
+completely on a second dataset: a chest-radiograph-specific vision-language
+model with the smallest internal gap (\SI{14.3}{\percent}) shows the largest
+external one (\SI{48.9}{\percent}), while a self-supervised model stays near
+its internal value~\cite{farquhar2026acquisition}. That the second dataset
+shares an institution with the first, differing principally in labelling
+convention, makes the reversal more striking rather than less: internal ranking
+failed to predict external ranking without a change of hospital at all.
+
+This line is image-only. It varies institution, acquisition, or labelling while
+holding input availability fixed --- the mirror image of
+\cref{sec:rw-context} --- and none of it evaluates abstention or transfers a
+threshold frozen. Thresholds are re-fitted per dataset, typically by Youden's
+statistic, so what is measured is whether a method can be re-tuned rather than
+whether a policy survives the move. That the most recent multi-center benchmark
+still names calibration and cross-center generalisation as open problems
+supports treating the crossed question as unresolved rather than answered
+piecemeal.
 
 \subsection{The gap}
 
@@ -87,8 +101,9 @@ Each axis has been studied in isolation: selective prediction under shift
 outside medicine~\cite{selective_shift_2025}; clinical context helping within a
 single hospital~\cite{yang2025mcxnet,sloan2025clinically}; missing modalities
 handled architecturally within a single
-source~\cite{wang2025missing,wang2025moehealth}; institutional shift
-characterised for image-only models~\cite{cohen2020limits,cxrlt2026}.
+source~\cite{wang2025missing,wang2025moehealth}; institutional, acquisition and
+labelling shift characterised for image-only
+models~\cite{cohen2020limits,cxrlt2026,farquhar2026acquisition}.
 
 Absent is the crossing: an evaluation in which institution and pre-diagnostic
 context availability vary together, under a selective policy frozen at the
