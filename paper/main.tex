@@ -47,10 +47,39 @@ pre-diagnostic clinical context changes?\\
 \maketitle
 
 \begin{abstract}
-\pending{The abstract is written last. It must report what the confirmatory
-analysis found, and cannot be drafted before Stage~10 produces intervals
-without risking a framing that survives into the final text after the data
-disagrees.}
+\noindent
+Selective prediction lets a chest-radiograph model defer uncertain cases to a
+human reader, and the abstention threshold that fixes its operating point is
+chosen once, at the hospital where the model was built. Whether that frozen
+policy survives deployment elsewhere is rarely tested, because thresholds are
+usually re-fitted at the second site --- which measures whether a method
+transfers, not whether the shipped artifact does. A second shift travels with
+the first and is usually left implicit: the pre-diagnostic clinical context such
+models consume varies across institutions for reasons unrelated to the patient.
+
+We report a preregistered evaluation that crosses these two shifts. Models were
+developed and a selective policy calibrated on MIMIC-CXR-JPG, then evaluated on
+CheXpert Plus with per-pathology thresholds and abstention cutoffs transferred
+unchanged. At each site, context was left intact, removed, or replaced with
+another patient's. Four models were compared: image-only and text-only controls,
+probability late fusion, and jointly trained feature fusion.
+
+The policy did not transport. With context intact, selective five-label Hamming
+error at \SI{80}{\percent} coverage rose by \num{0.047} (\SI{95}{\percent} CI
+\numrange{0.041}{0.053}) for late fusion and \num{0.038}
+(\numrange{0.034}{0.043}) for feature fusion, each several times the
+prespecified materiality threshold. Contrary to our hypothesis, both multimodal
+models transported \emph{better} than the image-only control, by \num{0.027} and
+\num{0.035} respectively, with intervals excluding zero. Coverage held under
+institutional transfer --- feature fusion stayed within \num{0.005} of target at
+the unseen hospital --- but broke under context intervention, including a
+degenerate case reaching \SI{100}{\percent} coverage.
+
+Selective reliability failed to transport across hospitals, and the failure was
+driven by institution rather than by context fragility. Adding clinical context
+did not increase transfer risk. Coverage monitoring alone would not have
+detected the degradation, and re-calibrating at the target site would have
+concealed it.
 \end{abstract}
 
 \input{sections/01_introduction}
