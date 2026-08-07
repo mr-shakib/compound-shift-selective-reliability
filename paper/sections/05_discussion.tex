@@ -1,7 +1,187 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\pending{Not drafted, and deliberately so. A discussion written before the
-confirmatory intervals exist would be an expectation rather than an
-interpretation, and expectations have a way of surviving into final text after
-the data disagrees with them. Draft only once \cref{sec:results} is populated.}
+\subsection{Principal findings}
+
+A selective prediction policy calibrated at one hospital did not transport. At
+the external site, with clinical context fully intact, selective error rose by
+\num{0.047} for probability late fusion and \num{0.038} for feature fusion,
+each several times the materiality threshold and each with an interval
+comfortably excluding zero. Nothing had to be manipulated to produce this: the
+degradation is a property of moving between institutions.
+
+Two of the three remaining hypotheses came back contrary to prediction, and one
+of those reversals is decisive. We set out expecting multimodal models to carry
+greater exposure, on the reasoning that a model which gains from context has
+more to lose when context degrades. The opposite held. Both multimodal models
+carried \emph{smaller} transfer gaps than the image-only control
+(\cref{tab:h3}), with intervals lying entirely below zero and magnitudes above
+materiality. The compound interaction was likewise not super-additive: context
+degradation cost less at the external site than at the source, not more.
+
+We report these as they came out. The protocol was frozen, hash-manifested and
+validated before any model existed, and the analysis code was written and tested
+before these numbers were computed. The value of that discipline is precisely
+that it makes a contradicted prediction reportable rather than negotiable.
+
+\subsection{The policy fails before the models do}
+
+The pattern across \cref{tab:selective-risk} and the coverage results is
+consistent: institutional transfer degrades selective risk substantially, while
+the abstention mechanism holds its operating point --- until context is
+manipulated, at which point coverage moves sharply.
+
+Under intact context, no model breached the prespecified coverage-drift
+criterion at either site, and feature fusion sat within \num{0.005} of its
+\SI{80}{\percent} target at a hospital it had never seen. All four breaches
+arose under intervention. The clearest is mechanical rather than subtle: with
+every context replaced by one placeholder, the text-only model emits a constant
+prediction, every study clears the confidence cutoff at once, and coverage goes
+to \SI{100}{\percent}. A system that abstains on nothing has stopped being a
+selective classifier while continuing to report a confidence.
+
+This distinction has practical weight. A deployment that monitored coverage
+alone would have seen an operating point that looked correct at the new site
+while error rose by a third to two thirds. A deployment that monitored accuracy
+alone would have missed the condition under which the abstention mechanism
+degenerates. Neither signal is sufficient by itself.
+
+\subsection{Why the multimodal reversal is worth taking seriously}
+
+The reversal is not a small effect near a threshold. Both intervals exclude zero
+on the side opposite the prediction, and the advantage of feature fusion over
+the image-only control \emph{widens} across sites, from \num{0.034} to
+\num{0.069}.
+
+It is also not explained by the text arm being independently robust. The
+text-only model had the \emph{largest} transfer gap of the four
+(\num{+0.076}). Both unimodal models transported worse than both multimodal
+ones. Whatever is happening, it is not that one modality is site-invariant and
+carries the other.
+
+We offer two candidate explanations and label them as conjecture, since the
+design was not built to separate them. The first is that jointly trained fusion
+constrains the image pathway from relying on acquisition characteristics
+specific to the source institution, in the way an auxiliary signal can act as a
+regulariser. The second is that the two modalities fail on partially disjoint
+subsets of studies, so a fused confidence ranks errors more stably under shift
+than either alone even when both are individually degraded. Distinguishing these
+would require ablations the present protocol does not contain, and we do not
+claim to have done so.
+
+What can be said without conjecture is narrower and still useful: on this pair
+of hospitals, with these labels and this policy, adding pre-diagnostic context
+did not increase the cost of institutional transfer, and the burden of proof for
+the opposite claim now sits with anyone asserting it.
+
+\subsection{Sub-additive rather than compounding shift}
+
+The interaction estimates were near zero or negative, so removing or corrupting
+context cost less at the external site than at the source. One explanation is
+available from the design itself and belongs in the interpretation rather than
+being left implicit.
+
+The informativeness rule that admits a study to the intervention counts
+effective tokens. As \cref{sec:limitations} states, it detects emptiness and
+brevity, not vagueness. Studies at the two sites that both qualify as
+informative need not carry equal diagnostic signal, and if external context is
+on average thinner in content while passing the same token threshold, then
+removing it necessarily costs less. That is a limitation of the state
+assignment, not evidence about compound shift, and it is the reading we favour
+over any claim that compound shift is benign.
+
+Misaligned context remained worse than absent context in three of four
+instances (\cref{tab:h4}), which is the direction predicted. Wrong information
+is not equivalent to no information, and a system that treats a populated
+context field as evidence of a usable one will pay for that.
+
+\subsection{Relation to prior work}
+
+Our source-site results are consistent with the finding that clinical history
+improves chest-radiograph classification~\cite{yang2025mcxnet}: feature fusion
+attained the lowest selective error under every condition at both sites. Where
+we depart is in what that improvement implies. That work observes naturally
+context-free images within one institution; we intervene on context under a
+frozen rule and evaluate across institutions, and find that the benefit does not
+convert into transfer fragility.
+
+The dominance of institutional over contextual degradation is consonant with
+the argument that cross-domain failure in chest radiography is driven by label
+shift rather than image shift~\cite{cohen2020limits}, and with the observation
+that calibration and cross-center generalisation remain open after multi-center
+benchmarking~\cite{cxrlt2026}. Our contribution to that line is to show the
+failure persists when the quantity being transferred is an explicit abstention
+policy rather than a classifier alone, and to quantify it at a fixed operating
+burden.
+
+The missing-modality literature treats absent inputs as an obstacle to engineer
+around~\cite{wang2025missing,wang2025moehealth}. Our results suggest a
+reordering of priorities for deployment: on this evidence, the modality
+robustness problem was less costly than the institutional transfer problem, and
+architectural effort spent on the former would not have addressed the latter.
+
+\subsection{Methodological observations}
+
+Two findings arose from constructing the protocol and generalise past it.
+
+A substantial minority of source reports embed a preliminary radiologist
+interpretation inside the report body. Any pipeline that takes text preceding
+the findings section as pre-diagnostic context ingests post-diagnostic text for
+those studies. This is a silent contamination: it inflates apparent context
+value without producing any visible failure, and it affects any study using this
+corpus in this way, not only ours.
+
+Separately, the decision rule this literature commonly adopts --- requiring both
+that an interval exclude zero and that the point estimate reach a materiality
+threshold --- caps power at \SI{50}{\percent} when the true effect equals that
+threshold, for any sample size. Studies adopting such a rule should power
+against a minimum detectable effect and state materiality as the smallest effect
+worth acting on, not as the effect they are powered to detect.
+
+\subsection{Implications for deployment}
+
+A frozen abstention threshold should not be assumed to transport. On this
+evidence it does not, and the failure is invisible to coverage monitoring under
+normal operation, because coverage was well behaved at the external site
+precisely where error was not.
+
+Re-calibrating at the target site would have concealed this. A study that
+re-fitted thresholds externally would have reported an operating point restored
+and a policy that transports, when what had actually been demonstrated is that
+the method can be re-tuned. Whether the shipped artifact survives the move is a
+different question, and answering it requires freezing the artifact.
+
+\subsection{Limitations bearing on interpretation}
+
+\cref{sec:limitations} states the full set; three bear directly on how these
+conclusions should be read.
+
+Each model was trained once. The bootstrap quantifies evaluation uncertainty,
+not variation across training runs, so between-model differences of the order of
+materiality are not established against seed variability. This applies to the
+H3 reversal, whose magnitude (\numrange{0.027}{0.035}) is not far above it,
+though the consistency of direction across two independently constructed fusion
+models and the widening of the gap across sites both argue against a seed
+artefact.
+
+The two sites differ in more than institution. Their images have different
+compression histories at origin, their permitted context arrives through
+different mechanisms, and their label prevalences differ. The design isolates
+context by intervention within each site, but the institutional contrast remains
+a comparison of two hospitals rather than of institution alone.
+
+Finally, this is one pair of hospitals. Nothing here establishes how large a
+transfer gap to expect elsewhere, only that a frozen policy failed to transport
+between these two by a margin that would matter clinically.
+
+\subsection{Future work}
+
+The most informative next step is not a better model but a third site. Two sites
+give a difference; three begin to give a distribution, and would show whether
+the multimodal transfer advantage observed here is a property of these
+institutions or of multimodal fusion.
+
+Separately, the sub-additivity result motivates an informativeness rule that
+measures content rather than length. A rule that admitted studies on the
+strength of what their context says, rather than how much of it there is, would
+make the interaction estimate interpretable in a way the present one is not.
