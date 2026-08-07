@@ -1,22 +1,183 @@
 \section{Results}
 \label{sec:results}
 
-\pending{Not drafted. The confirmatory analysis (patient-clustered bootstrap,
-\num{2000} replicates, seed \num{20260718}) has not yet produced intervals, and
-drafting a results narrative against point estimates alone would fix a framing
-that is likely to survive into the final text after the intervals disagree with
-it. Populate from the Stage~10 artifact only.}
+All estimates are selective five-label Hamming error at the frozen
+\SI{80}{\percent} coverage cutoff, with \SI{95}{\percent} percentile intervals
+from a patient-clustered bootstrap of \num{2000} replicates. Thresholds and
+abstention cutoffs are the source-site values applied unchanged at both sites.
+This section reports what was estimated; interpretation is deferred to
+\cref{sec:discussion}.
 
-\subsection{Source-site behaviour}
-\pending{H3, H4 and coverage drift at the source site.}
+\subsection{Cohorts}
 
-\subsection{External-site behaviour under the frozen policy}
-\pending{H1: whether the selective policy holds its operating point after
-institutional transfer.}
+The source confirmatory tier comprises \num{16456} images from \num{14766}
+studies and \num{5000} patients. Every study is informative (N1) by
+construction, since cohort selection already required context above the frozen
+threshold.
 
-\subsection{Compound shift}
-\pending{H2: the interaction between institutional and context shift, which is
-the estimand the crossed design exists to recover.}
+The external cohort comprises \num{191070} usable images from \num{187673}
+studies and \num{64709} patients, one image having been excluded as corrupt in
+the published dataset. Here the natural-state distribution is informative:
+\num{132923} studies (\SI{70.8}{\percent}) are N1, \num{14129}
+(\SI{7.5}{\percent}) are N2, and \num{40622} (\SI{21.6}{\percent}) are N3.
+Interventions therefore apply to \num{132923} external studies against
+\num{14766} source studies.
 
-\subsection{Label-source sensitivity}
-\pending{S1: the findings-derived label replication.}
+Invariants held at both sites. Image-only predictions were identical across all
+three context conditions (maximum drift \num{0}), and studies retaining their
+own context under C2 numbered \num{6} of \num{14766} at the source site and
+\num{34} of \num{132923} at the external site.
+
+\subsection{Selective risk at both sites}
+
+\begin{table}[htbp]
+\centering
+\caption{Selective Hamming error at the frozen \SI{80}{\percent} cutoff. M1 is
+image-only, M2 text-only, M3 probability late fusion, M4 feature-concatenation
+fusion. M1 is invariant to the context intervention by construction.}
+\label{tab:selective-risk}
+\begin{tabular}{lccc c ccc}
+\toprule
+& \multicolumn{3}{c}{Source site} & & \multicolumn{3}{c}{External site} \\
+\cmidrule{2-4}\cmidrule{6-8}
+Model & C0 & C1 & C2 & & C0 & C1 & C2 \\
+\midrule
+M1 & 0.1084 & 0.1084 & 0.1084 & & 0.1818 & 0.1818 & 0.1818 \\
+M2 & 0.1575 & 0.2411 & 0.2415 & & 0.2338 & 0.2605 & 0.2667 \\
+M3 & 0.1102 & 0.0951 & 0.1426 & & 0.1570 & 0.1444 & 0.1676 \\
+M4 & \textbf{0.0744} & 0.0720 & 0.0893 & & \textbf{0.1128} & 0.1200 & 0.1140 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+M4 attains the lowest selective error under every site-by-condition
+combination.
+
+\subsection{H1: transport of the selective policy}
+
+\begin{table}[htbp]
+\centering
+\caption{H1, external minus source selective error under intact context (C0).
+M3 and M4 are the confirmatory models; M1 and M2 are reported for context.}
+\label{tab:h1}
+\begin{tabular}{lccl}
+\toprule
+Model & Estimate & \SI{95}{\percent} CI & Verdict \\
+\midrule
+M3 & $+0.0469$ & $(+0.0408,\ +0.0531)$ & \textbf{confirmed} \\
+M4 & $+0.0384$ & $(+0.0336,\ +0.0430)$ & \textbf{confirmed} \\
+\midrule
+M1 & $+0.0734$ & $(+0.0668,\ +0.0802)$ & confirmed \\
+M2 & $+0.0763$ & $(+0.0687,\ +0.0838)$ & confirmed \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H1 is confirmed for both confirmatory models. Every interval excludes zero in
+the hypothesised direction and every point estimate exceeds the materiality
+threshold of \num{0.02}, by factors of \numrange{1.9}{3.8}. These estimates are
+taken under C0, with context intact at both sites.
+
+\subsection{H2: compound interaction}
+
+\begin{table}[htbp]
+\centering
+\caption{H2, the interaction between institutional and context shift, computed
+as the context effect at the external site minus the same effect at the source
+site. A positive value would indicate super-additivity.}
+\label{tab:h2}
+\begin{tabular}{llcl}
+\toprule
+Model & Condition & Estimate & \SI{95}{\percent} CI \\
+\midrule
+M3 & C1 & $+0.0024$ & $(-0.0027,\ +0.0076)$ \\
+M3 & C2 & $-0.0219$ & $(-0.0279,\ -0.0160)$ \\
+M4 & C1 & $+0.0096$ & $(+0.0048,\ +0.0144)$ \\
+M4 & C2 & $-0.0137$ & $(-0.0185,\ -0.0087)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H2 is not confirmed in any of its four instances. One estimate is
+indistinguishable from zero (M3 under C1). Two exclude zero in the direction
+opposite to the hypothesis (M3 and M4 under C2), and for M3 the magnitude
+reaches materiality, so the effect is reversed rather than absent. The
+remaining estimate excludes zero in the hypothesised direction but falls below
+materiality (M4 under C1, $+0.0096$).
+
+\subsection{H3: multimodal versus image-only exposure}
+
+\begin{table}[htbp]
+\centering
+\caption{H3, the transfer gap of each multimodal model minus the transfer gap of
+the image-only control. A positive value would indicate greater multimodal
+exposure.}
+\label{tab:h3}
+\begin{tabular}{lccl}
+\toprule
+Contrast & Estimate & \SI{95}{\percent} CI & Verdict \\
+\midrule
+M3 $-$ M1 & $-0.0265$ & $(-0.0321,\ -0.0212)$ & reversed at materiality \\
+M4 $-$ M1 & $-0.0350$ & $(-0.0408,\ -0.0292)$ & reversed at materiality \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H3 is not confirmed, and the direction is reversed for both models. Each
+interval lies entirely below zero, and each magnitude exceeds materiality.
+Both multimodal models carry smaller transfer gaps than the image-only control.
+The advantage of M4 over M1 in absolute selective error also widens across
+sites, from \num{0.034} at the source site to \num{0.069} at the external site.
+
+\subsection{H4: conflicting versus absent context}
+
+\begin{table}[htbp]
+\centering
+\caption{H4, C2 minus C1 within site. A non-negative value indicates that
+misaligned context is no better than absent context.}
+\label{tab:h4}
+\begin{tabular}{llccl}
+\toprule
+Site & Model & Estimate & \SI{95}{\percent} CI & Verdict \\
+\midrule
+Source   & M3 & $+0.0475$ & $(+0.0422,\ +0.0524)$ & confirmed \\
+Source   & M4 & $+0.0173$ & $(+0.0125,\ +0.0217)$ & confirmed \\
+External & M3 & $+0.0231$ & $(+0.0211,\ +0.0250)$ & confirmed \\
+External & M4 & $-0.0060$ & $(-0.0080,\ -0.0041)$ & not confirmed \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+H4 holds in three of four instances. The exception is M4 at the external site,
+where the estimate is negative and its interval excludes zero, but the
+magnitude is below materiality.
+
+\subsection{Coverage under the frozen cutoff}
+
+A coverage drift of \num{0.05} from the \SI{80}{\percent} target was
+prespecified as material. Under intact context, no model breaches it at either
+site; the largest external departure is M2 at $+0.0469$ and the smallest is M4
+at $-0.0051$.
+
+Four breaches occur, all under context intervention and all at both sites
+alike:
+
+\begin{itemize}
+  \item M2 under C1 reaches \SI{100}{\percent} coverage at both sites
+    (drift $+0.20$). Replacing every context with a single placeholder makes the
+    text-only model's output constant, so all studies clear the confidence
+    cutoff simultaneously.
+  \item M3 under C2 falls to \SI{72.8}{\percent} at the source site
+    (drift $-0.0718$) and \SI{74.6}{\percent} at the external site
+    (drift $-0.0537$).
+\end{itemize}
+
+M4's coverage remains within \num{0.036} of target under every site-by-condition
+combination.
+
+\subsection{Reproducibility}
+
+The source-site evaluation was executed three times, including once after an
+unplanned machine restart, and reproduced its artifacts byte for byte on each
+occasion. Every acquired image at both sites was verified against publisher
+checksums before use.
