@@ -41,6 +41,7 @@ from ..training.dataset import C3EStudyImageDataset, build_index
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
 from ..training.runner import (CKPT_DIR, IMAGE_DIR, SEED, _available_ram_gb,
                                _seed_everything, load_frozen_settings)
+from ..analysis.cache import checkpoint_digest, load as cache_load, save as cache_save
 from .interventions import apply_c1, apply_c2, check_invariants, natural_state
 
 STAGE = "C3-E6 Stage 8"
@@ -122,6 +123,10 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     pin = _available_ram_gb() >= 6.0
 
     ckpt = root / CKPT_DIR
+    shas = {mid: checkpoint_digest(ckpt / f"{mid.lower()}_best.pt")
+            for mid in ("M1", "M2", "M4")}
+    # M3 has no weights of its own; its identity is that of its two components.
+    shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
     m1 = _load(M1ImageOnly(), ckpt / "m1_best.pt", device)
     m2 = _load(M2TextOnly(), ckpt / "m2_best.pt", device)
     m3 = M3LateFusion(m1, m2).to(device)
@@ -136,22 +141,33 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         loader = DataLoader(ds, batch_size=bs, shuffle=False, num_workers=num_workers,
                             pin_memory=pin, persistent_workers=num_workers > 0)
         for mid, model, needs_text in specs:
-            print(f"  {cond} · {mid} ...", file=sys.stderr, flush=True)
-            probs, labels, masks = predict(model, loader, device, needs_text)
-            if mid == "M1":
-                image_only_check[cond] = probs
+            hit = cache_load(root, "source", mid, cond, checkpoint_sha=shas[mid])
+            if hit is not None:
+                print(f"  {cond} · {mid} (cached)", file=sys.stderr, flush=True)
+                sp, sy, sm = hit["probabilities"], hit["labels"], hit["mask"]
+                if mid == "M1":
+                    image_only_check[cond] = sp
+            else:
+                print(f"  {cond} · {mid} ...", file=sys.stderr, flush=True)
+                probs, labels, masks = predict(model, loader, device, needs_text)
 
-            agg = pd.DataFrame({"subject_id": frame["subject_id"].to_numpy(),
-                                "study_id": frame["study_id"].to_numpy()})
-            for j, t in enumerate(TARGETS):
-                agg[t] = probs[:, j]
-                agg[t + "__label"] = np.where(masks[:, j] > 0, labels[:, j], np.nan)
-            studies = aggregate_images_to_studies(agg)
+                agg = pd.DataFrame({"subject_id": frame["subject_id"].to_numpy(),
+                                    "study_id": frame["study_id"].to_numpy()})
+                for j, t in enumerate(TARGETS):
+                    agg[t] = probs[:, j]
+                    agg[t + "__label"] = np.where(masks[:, j] > 0, labels[:, j], np.nan)
+                studies = aggregate_images_to_studies(agg)
 
-            sp = studies[TARGETS].to_numpy()
-            sy = studies[[t + "__label" for t in TARGETS]].to_numpy()
-            sm = (~np.isnan(sy)).astype(float)
-            sy = np.nan_to_num(sy)
+                sp = studies[TARGETS].to_numpy()
+                sy = studies[[t + "__label" for t in TARGETS]].to_numpy()
+                sm = (~np.isnan(sy)).astype(float)
+                sy = np.nan_to_num(sy)
+
+                cache_save(root, "source", mid, cond, probabilities=sp, labels=sy,
+                           mask=sm, patients=studies["subject_id"].to_numpy(),
+                           checkpoint_sha=shas[mid])
+                if mid == "M1":
+                    image_only_check[cond] = sp
 
             thr = np.array([stage7["models"][mid]["classification_thresholds"][t]
                             for t in TARGETS])
