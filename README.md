@@ -74,4 +74,9 @@ python -m pytest tests/ -q
 
 ## Licence
 
-To be determined before public release.
+Code is MIT licensed (`LICENSE`). Documentation, the protocol registry and the
+aggregate artifacts under `results/` are released under CC BY 4.0.
+
+This licence covers only what is in this repository. It grants no rights over
+MIMIC-CXR-JPG or CheXpert Plus, which remain governed by their own data use
+agreements and are not redistributed here.

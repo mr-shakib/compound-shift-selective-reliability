@@ -38,10 +38,17 @@ which is what allows an effect to be attributed to the manipulation rather than
 to whatever else distinguishes patients whose indication field happens to be
 empty.
 
-Related multimodal work reports clinically grounded alignment on MIMIC-CXR and
-CXR-LT~\cite{sloan2025clinically}; whether it examines context ablation or
-cross-institution transfer is not determinable from its abstract, and we make no
-claim either way.
+A second study reaches the same conclusion by a different route, fusing
+multi-view radiographs with clinical indications and vital signs and reporting
+an ablation in which each added modality
+contributes~\cite{sloan2025clinically}. That ablation is additive: it measures
+what each modality contributes as the model is built. Ours is interventional: it
+measures what a fixed, already-trained model loses when context degrades at
+deployment. The distinction is not pedantic, since a component that improves a
+model during development need not be one whose absence degrades it
+proportionally afterwards, and only the second quantity bears on deployment
+risk. That work also evaluates on benchmark splits of a single source, with no
+second institution, no abstention, and no threshold transfer.
 
 \subsection{Missing modalities as an architectural problem}
 
