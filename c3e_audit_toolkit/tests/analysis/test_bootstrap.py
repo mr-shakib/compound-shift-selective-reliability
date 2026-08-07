@@ -118,3 +118,30 @@ def test_coverage_drift_flags_the_stage8_observations():
     assert coverage_drift(1.0, 0.8)["material"] is True     # M2 under C1
     assert coverage_drift(0.728, 0.8)["material"] is True   # M3 under C2
     assert coverage_drift(0.805, 0.8)["material"] is False  # M4 under C1
+
+
+def test_interval_below_zero_is_reported_as_excluding_zero():
+    """A reversed effect must not be reported as an absent one.
+
+    An interval lying entirely below zero does exclude zero. Reporting
+    otherwise, because the hypothesis predicted the other sign, would state
+    something false about the interval and would turn a reversal into a null.
+    """
+    d = decide(-0.035, -0.041, -0.029, direction="greater_than_zero")
+    assert d["ci_excludes_zero"] is True
+    assert d["ci_supports_direction"] is False
+    assert d["confirmed"] is False
+    assert d["reversed_at_materiality"] is True
+
+
+def test_small_reversal_is_not_flagged_as_material():
+    d = decide(-0.005, -0.008, -0.002, direction="greater_than_zero")
+    assert d["ci_excludes_zero"] is True
+    assert d["reversed_at_materiality"] is False
+
+
+def test_straddling_zero_is_neither_confirmed_nor_reversed():
+    d = decide(0.03, -0.01, 0.07, direction="greater_than_zero")
+    assert d["ci_excludes_zero"] is False
+    assert d["confirmed"] is False
+    assert d["reversed_at_materiality"] is False

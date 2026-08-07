@@ -1,0 +1,15 @@
+hypothesis,model,site,contrast,point_estimate,ci_low,ci_high,ci_excludes_zero,ci_supports_direction,reaches_materiality,confirmed,reversed_at_materiality,confirmatory
+H1,M3,,external C0 - source C0,0.046879,0.040778,0.053073,True,True,True,True,False,True
+H1,M4,,external C0 - source C0,0.03839,0.033563,0.043042,True,True,True,True,False,True
+H1,M1,,external C0 - source C0,0.073419,0.066757,0.080188,True,True,True,True,False,False
+H1,M2,,external C0 - source C0,0.076316,0.068725,0.08378,True,True,True,True,False,False
+H2,M3,,interaction: (ext C1-C0) - (src C1-C0),0.002433,-0.002744,0.007606,False,False,False,False,False,True
+H2,M3,,interaction: (ext C2-C0) - (src C2-C0),-0.02189,-0.02789,-0.016023,True,False,False,False,True,True
+H2,M4,,interaction: (ext C1-C0) - (src C1-C0),0.009635,0.004811,0.014399,True,True,False,False,False,True
+H2,M4,,interaction: (ext C2-C0) - (src C2-C0),-0.013684,-0.018533,-0.008668,True,False,False,False,False,True
+H3,M3,,transfer gap M3 - transfer gap M1,-0.02654,-0.032116,-0.021169,True,False,False,False,True,True
+H3,M4,,transfer gap M4 - transfer gap M1,-0.035029,-0.040806,-0.029157,True,False,False,False,True,True
+H4,M3,source,C2 - C1,0.047457,0.042243,0.05237,True,True,True,True,False,False
+H4,M4,source,C2 - C1,0.017326,0.012525,0.021723,True,True,True,True,False,False
+H4,M3,external,C2 - C1,0.023133,0.021142,0.024991,True,True,True,True,False,False
+H4,M4,external,C2 - C1,-0.005993,-0.007959,-0.004076,True,False,False,False,False,False

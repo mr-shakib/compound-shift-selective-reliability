@@ -110,21 +110,36 @@ def decide(point: float, lo: float, hi: float, *,
     50% there regardless of sample size. Materiality is the smallest effect
     worth acting on, not the effect the study is powered against.
     """
+    # Two distinct facts, kept distinct. Whether the interval excludes zero is a
+    # property of the interval. Whether it does so in the hypothesised direction
+    # is what the decision needs. Collapsing them reports an interval lying
+    # entirely below zero as "does not exclude zero", which is false as written
+    # and would misstate a reversed effect as an absent one.
     excludes_zero = (lo > 0.0) or (hi < 0.0)
     if direction == "greater_than_zero":
+        supports_direction = lo > 0.0
         material = point >= materiality
-        excludes_zero = lo > 0.0
     elif direction == "greater_than_or_equal_zero":
+        supports_direction = lo > 0.0
         material = point >= 0.0
     else:
+        supports_direction = excludes_zero
         material = abs(point) >= materiality
+
+    # A reversal is an interval that excludes zero on the opposite side, with a
+    # magnitude that would have been material had the sign been as predicted.
+    reversed_material = bool(excludes_zero and not supports_direction
+                             and abs(point) >= materiality)
+
     return {
         "point_estimate": round(point, 6),
         "ci_low": round(lo, 6), "ci_high": round(hi, 6),
         "ci_excludes_zero": bool(excludes_zero),
+        "ci_supports_direction": bool(supports_direction),
         "reaches_materiality": bool(material),
         "materiality_threshold": materiality,
-        "confirmed": bool(excludes_zero and material),
+        "confirmed": bool(supports_direction and material),
+        "reversed_at_materiality": reversed_material,
         "direction": direction,
     }
 

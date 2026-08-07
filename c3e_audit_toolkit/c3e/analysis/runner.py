@@ -247,8 +247,8 @@ def _render_md(r: dict[str, Any]) -> str:
            f"{s['seed']}, {s['ci_level']:.0%} percentile intervals, coverage "
            f"{s['coverage']:.0%}. A hypothesis is confirmed only when its interval "
            f"excludes zero **and** the point estimate reaches {s['materiality']}.", "",
-           "| H | model | contrast | estimate | 95% CI | excl. 0 | material | confirmed |",
-           "| --- | --- | --- | ---: | :---: | :---: | :---: | :---: |"]
+           "| H | model | contrast | estimate | 95% CI | excl. 0 | supports dir. | material | verdict |",
+           "| --- | --- | --- | ---: | :---: | :---: | :---: | :---: | :---: |"]
     for h in r["hypotheses"]:
         site = f" [{h['site']}]" if "site" in h else ""
         md.append(
@@ -256,8 +256,9 @@ def _render_md(r: dict[str, Any]) -> str:
             f"{h['point_estimate']:+.4f} | "
             f"({h['ci_low']:+.4f}, {h['ci_high']:+.4f}) | "
             f"{'yes' if h['ci_excludes_zero'] else 'no'} | "
+            f"{'yes' if h['ci_supports_direction'] else 'no'} | "
             f"{'yes' if h['reaches_materiality'] else 'no'} | "
-            f"**{'YES' if h['confirmed'] else 'no'}** |")
+            f"**{'CONFIRMED' if h['confirmed'] else ('REVERSED' if h.get('reversed_at_materiality') else 'not confirmed')}** |")
     md += ["", "## Coverage drift", "",
            f"A drift of {r['coverage_drift'][0]['threshold']} from target is "
            "prespecified as material.", "",
@@ -280,8 +281,9 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
 
     buf = io.StringIO(newline="")
     fields = ["hypothesis", "model", "site", "contrast", "point_estimate",
-              "ci_low", "ci_high", "ci_excludes_zero", "reaches_materiality",
-              "confirmed", "confirmatory"]
+              "ci_low", "ci_high", "ci_excludes_zero", "ci_supports_direction",
+              "reaches_materiality", "confirmed", "reversed_at_materiality",
+              "confirmatory"]
     w = csv.DictWriter(buf, fieldnames=fields, lineterminator="\n", extrasaction="ignore")
     w.writeheader()
     for h in report["hypotheses"]:
