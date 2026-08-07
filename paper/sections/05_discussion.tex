@@ -168,13 +168,19 @@ different question, and answering it requires freezing the artifact.
 \cref{sec:limitations} states the full set; three bear directly on how these
 conclusions should be read.
 
-Each model was trained once. The bootstrap quantifies evaluation uncertainty,
-not variation across training runs, so between-model differences of the order of
-materiality are not established against seed variability. This applies to the
-H3 reversal, whose magnitude (\numrange{0.027}{0.035}) is not far above it,
-though the consistency of direction across two independently constructed fusion
-models and the widening of the gap across sites both argue against a seed
-artefact.
+Single-seed training bears on the H3 reversal specifically. Its magnitude,
+\numrange{0.027}{0.035}, is not far above what training variation alone might
+produce, and the bootstrap does not speak to that source of uncertainty. Two
+features of the result argue against a seed artefact: the direction holds across
+two independently constructed fusion models, and the gap widens across sites
+rather than staying flat. Neither is decisive, and a replication with repeated
+seeds would settle it.
+
+Note also that H1, the confirmed primary, is insulated from this concern in a
+way H3 is not. H1 compares the same weights evaluated at two sites, so whatever
+idiosyncrasies a particular training run produced are carried to both and
+largely cancel in the difference. H3 compares two different models, where no
+such cancellation occurs.
 
 The two sites differ in more than institution. Their images have different
 compression histories at origin, their permitted context arrives through
