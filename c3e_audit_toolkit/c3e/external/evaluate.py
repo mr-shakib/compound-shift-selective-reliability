@@ -46,7 +46,9 @@ from .dataset import IMAGE_DIR, CheXpertPlusDataset, build_external_index
 STAGE = "C3-E9b"
 TITLE = "EXTERNAL-SITE EVALUATION UNDER THE FROZEN POLICY"
 OUTPUT_DIR = "results/c3e_chexpert_plus/stage9b_evaluation"
+OUTPUT_DIR_S1 = "results/c3e_chexpert_plus/stage9b_evaluation_findings"
 STAGE7 = "results/c3e_mimic/stage7_thresholds/stage7_thresholds.json"
+STAGE7_S1 = "results/c3e_mimic/stage7_thresholds_findings/stage7_thresholds.json"
 
 DECLARATIONS = (
     "STAGE 9b ONLY",
@@ -97,7 +99,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         label_source: str = "impression") -> dict[str, Any]:
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
-    stage7_path = root / STAGE7
+    stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
     if not stage7_path.exists():
         raise RuntimeError(
             f"missing {STAGE7}; the external evaluation consumes frozen "
@@ -270,7 +272,8 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / OUTPUT_DIR
+    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+                  else OUTPUT_DIR_S1)
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage9b_evaluation.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -290,7 +293,7 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
     names = ["stage9b_evaluation.json", "stage9b_evaluation.md", "stage9b_results.csv"]
     (out / "stage9b_manifest.json").write_text(json.dumps({
         "stage": STAGE, "title": TITLE, "status": report["status"],
-        "declarations": list(DECLARATIONS), "output_dir": OUTPUT_DIR,
+        "declarations": list(DECLARATIONS), "output_dir": str(out.relative_to(root)),
         "artifacts": [{"name": n, "byte_size": (out / n).stat().st_size,
                        "sha256": sha256_file(out / n)} for n in names],
         "compliance": report["compliance"], "environment": report["environment"],

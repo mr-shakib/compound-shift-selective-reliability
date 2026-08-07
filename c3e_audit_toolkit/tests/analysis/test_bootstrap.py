@@ -145,3 +145,20 @@ def test_straddling_zero_is_neither_confirmed_nor_reversed():
     assert d["ci_excludes_zero"] is False
     assert d["confirmed"] is False
     assert d["reversed_at_materiality"] is False
+
+
+def test_label_sources_are_the_two_the_protocol_fixes():
+    """S1 is a label-source sensitivity, not an open parameter."""
+    from c3e.training.dataset import LABEL_FILES
+
+    assert set(LABEL_FILES) == {"impression", "findings"}
+    assert "impression" in LABEL_FILES["impression"]
+    assert "findings" in LABEL_FILES["findings"]
+
+
+def test_unknown_label_source_is_refused(tmp_path):
+    from c3e.training.dataset import build_index
+    import pytest as _pytest
+
+    with _pytest.raises(ValueError, match="unknown label source"):
+        build_index(tmp_path, tier="model_train", label_source="report")

@@ -45,6 +45,7 @@ from .policy import (TARGETS, abstention_threshold_for_coverage,
 STAGE = "C3-E6 Stage 7"
 TITLE = "THRESHOLD SELECTION ON THE CALIBRATION TIER"
 OUTPUT_DIR = "results/c3e_mimic/stage7_thresholds"
+OUTPUT_DIR_S1 = "results/c3e_mimic/stage7_thresholds_findings"
 
 DECLARATIONS = (
     "STAGE 7 ONLY",
@@ -89,7 +90,8 @@ def _load(model, path: Path, device):
     return model
 
 
-def run(*, project_root: str | Path, num_workers: int = 3) -> dict[str, Any]:
+def run(*, project_root: str | Path, num_workers: int = 3,
+        label_source: str = "impression") -> dict[str, Any]:
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
     registry = yaml.safe_load((root / REGISTRY).read_text())
@@ -110,7 +112,8 @@ def run(*, project_root: str | Path, num_workers: int = 3) -> dict[str, Any]:
           f"{cls_cfg['criterion']}  coverages {coverages}", file=sys.stderr, flush=True)
 
     print("  reading calibration tier ...", file=sys.stderr, flush=True)
-    index = build_index(root, tier="threshold_calibration", purpose="calibration")
+    index = build_index(root, tier="threshold_calibration", purpose="calibration",
+                        label_source=label_source)
     print(f"  calibration images {len(index):,}  studies "
           f"{index['study_id'].nunique():,}  patients "
           f"{index['subject_id'].nunique():,}", file=sys.stderr, flush=True)
@@ -204,6 +207,7 @@ def run(*, project_root: str | Path, num_workers: int = 3) -> dict[str, Any]:
         "stage": STAGE, "title": TITLE, "status": "PASS",
         "declarations": list(DECLARATIONS),
         "protocol_version": settings["protocol_version"],
+        "label_source": label_source,
         "policy": {"classification": cls_cfg, "selective": sel_cfg, "analysis_units": units},
         "calibration_tier": {
             "images": int(len(index)),
@@ -266,7 +270,8 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / OUTPUT_DIR
+    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+                  else OUTPUT_DIR_S1)
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage7_thresholds.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -289,7 +294,7 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
              "stage7_threshold_table.csv", "stage7_coverage_table.csv"]
     (out / "stage7_manifest.json").write_text(json.dumps({
         "stage": STAGE, "title": TITLE, "status": report["status"],
-        "declarations": list(DECLARATIONS), "output_dir": OUTPUT_DIR,
+        "declarations": list(DECLARATIONS), "output_dir": str(out.relative_to(root)),
         "frozen": True,
         "artifacts": [{"name": n, "byte_size": (out / n).stat().st_size,
                        "sha256": sha256_file(out / n)} for n in names],
@@ -314,9 +319,12 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Run C3-E6 Stage 7 threshold selection")
     ap.add_argument("--project-root", type=Path, default=default_root)
     ap.add_argument("--num-workers", type=int, default=3)
+    ap.add_argument("--label-source", default="impression",
+                    choices=["impression", "findings"])
     args = ap.parse_args(argv)
     try:
-        report = run(project_root=args.project_root, num_workers=args.num_workers)
+        report = run(project_root=args.project_root, num_workers=args.num_workers,
+                     label_source=args.label_source)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"Stage 7 FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)

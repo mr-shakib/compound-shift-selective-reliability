@@ -90,8 +90,14 @@ PURPOSE_ALLOWED_TIERS = {
 }
 
 
+#: Frozen by targets.primary_label_source and targets.sensitivity_label_source.
+LABEL_FILES = {"impression": "labels/mimic_impression_labels.csv",
+               "findings": "labels/mimic_findings_labels.csv"}
+
+
 def build_index(project_root: Path, tier: str = "model_train", *,
-                purpose: str = "training") -> pd.DataFrame:
+                purpose: str = "training",
+                label_source: str = "impression") -> pd.DataFrame:
     """Build the image-level index for one tier.
 
     Returns one row per frontal image with its study's label vector and context.
@@ -117,7 +123,11 @@ def build_index(project_root: Path, tier: str = "model_train", *,
     root = Path(project_root).resolve()
     data_root = root / "data/mimic"
 
-    labels = pd.read_csv(data_root / "labels/mimic_impression_labels.csv")
+    if label_source not in LABEL_FILES:
+        raise ValueError(
+            f"unknown label source {label_source!r}; the protocol fixes "
+            f"{sorted(LABEL_FILES)} as primary and sensitivity respectively")
+    labels = pd.read_csv(data_root / LABEL_FILES[label_source])
     labels = labels[labels["tier"] == tier].copy()
     if labels.empty:
         raise ValueError(f"no studies in tier '{tier}'")

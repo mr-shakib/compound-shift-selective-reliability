@@ -48,7 +48,9 @@ from .cache import cache_path, checkpoint_digest, load as cache_load
 STAGE = "C3-E6 Stage 10"
 TITLE = "CONFIRMATORY ANALYSIS"
 OUTPUT_DIR = "results/c3e_cross_site/stage10_analysis"
+OUTPUT_DIR_S1 = "results/c3e_cross_site/stage10_analysis_findings"
 STAGE7 = "results/c3e_mimic/stage7_thresholds/stage7_thresholds.json"
+STAGE7_S1 = "results/c3e_mimic/stage7_thresholds_findings/stage7_thresholds.json"
 CKPT_DIR = "data/models/c3e"
 
 DECLARATIONS = (
@@ -74,7 +76,8 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def load_all(root: Path, stage7: dict[str, Any]) -> dict[tuple[str, str, str], dict]:
+def load_all(root: Path, stage7: dict[str, Any],
+             label_source: str = "impression") -> dict[tuple[str, str, str], dict]:
     """Load every cached pass and derive per-study error and confidence."""
     ckpt = root / CKPT_DIR
     shas = {m: checkpoint_digest(ckpt / f"{m.lower()}_best.pt") for m in ("M1", "M2", "M4")}
@@ -86,7 +89,8 @@ def load_all(root: Path, stage7: dict[str, Any]) -> dict[tuple[str, str, str], d
             thr = np.array([stage7["models"][mid]["classification_thresholds"][t]
                             for t in TARGETS])
             for cond in ("C0", "C1", "C2"):
-                hit = cache_load(root, site, mid, cond, checkpoint_sha=shas[mid])
+                hit = cache_load(root, site, mid, cond, checkpoint_sha=shas[mid],
+                                 label_source=label_source)
                 if hit is None:
                     raise RuntimeError(
                         f"missing cached predictions for {site}/{mid}/{cond}. "
@@ -110,10 +114,11 @@ def _cut(stage7: dict, mid: str, cov: float) -> float:
 
 
 def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
-            coverage: float = 0.8) -> dict[str, Any]:
-    stage7_path = root / STAGE7
+            coverage: float = 0.8,
+            label_source: str = "impression") -> dict[str, Any]:
+    stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
     stage7 = json.loads(stage7_path.read_text())
-    data = load_all(root, stage7)
+    data = load_all(root, stage7, label_source)
 
     results: list[dict[str, Any]] = []
     per_pathology_p: dict[str, float] = {}
@@ -223,6 +228,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
     return {
         "stage": STAGE, "title": TITLE, "status": "PASS",
         "declarations": list(DECLARATIONS),
+        "label_source": label_source,
         "settings": {"replicates": replicates, "seed": BOOTSTRAP_SEED,
                      "ci_level": CI_LEVEL, "materiality": MATERIALITY,
                      "coverage": coverage, "resampling_unit": "patient"},
@@ -273,7 +279,8 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / OUTPUT_DIR
+    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+                  else OUTPUT_DIR_S1)
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage10_analysis.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -304,7 +311,7 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
              "stage10_hypotheses.csv", "stage10_coverage_drift.csv"]
     (out / "stage10_manifest.json").write_text(json.dumps({
         "stage": STAGE, "title": TITLE, "status": report["status"],
-        "declarations": list(DECLARATIONS), "output_dir": OUTPUT_DIR,
+        "declarations": list(DECLARATIONS), "output_dir": str(out.relative_to(root)),
         "artifacts": [{"name": n, "byte_size": (out / n).stat().st_size,
                        "sha256": sha256_file(out / n)} for n in names],
         "compliance": report["compliance"], "environment": report["environment"],
@@ -329,13 +336,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--project-root", type=Path, default=default_root)
     ap.add_argument("--replicates", type=int, default=BOOTSTRAP_REPLICATES)
     ap.add_argument("--coverage", type=float, default=0.8)
+    ap.add_argument("--label-source", default="impression",
+                    choices=["impression", "findings"])
     args = ap.parse_args(argv)
     try:
         print(f"{STAGE} — {TITLE}", file=sys.stderr)
         print(f"  {args.replicates:,} replicates, seed {BOOTSTRAP_SEED}, "
               f"coverage {args.coverage:.0%}", file=sys.stderr, flush=True)
         report = analyse(Path(args.project_root).resolve(),
-                         replicates=args.replicates, coverage=args.coverage)
+                         replicates=args.replicates, coverage=args.coverage,
+                         label_source=args.label_source)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"{STAGE} FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)
