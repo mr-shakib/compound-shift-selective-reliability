@@ -260,6 +260,8 @@ H & Contrast & Primary & S1 (findings) & Agreement \\
 \midrule
 H1 & M3 external $-$ source & $+0.0469$ & $-0.1324$ & \textbf{reverses} \\
 H1 & M4 external $-$ source & $+0.0384$ & $-0.1079$ & \textbf{reverses} \\
+H1 & M1 external $-$ source & $+0.0734$ & $-0.0672$ & \textbf{reverses} \\
+H1 & M2 external $-$ source & $+0.0763$ & $-0.2385$ & \textbf{reverses} \\
 H2 & M3 interaction, C1     & $+0.0024$ & $+0.0340$ & changes verdict \\
 H2 & M4 interaction, C1     & $+0.0096$ & $+0.0625$ & changes verdict \\
 H3 & M3 $-$ M1 transfer gap & $-0.0265$ & $-0.0652$ & agrees \\
@@ -280,6 +282,13 @@ H2 also changes verdict. H3 and H4 agree in all eight instances.
 The pattern separates cleanly by contrast type. Every contrast that compares
 across sites changes; every contrast that compares models or conditions within a
 site holds.
+
+The image-only control settles what is driving this. M1 consumes no text, and at
+the external site its cohort is unchanged between the two runs, so it produces
+bit-identical predictions under both label sources (mean study probability
+\num{0.603719} in each). Its transfer gap nonetheless reverses, from $+0.0734$
+to $-0.0672$. A quantity computed from unchanged predictions cannot have changed
+sign because of the models, the images, or the context. Only the labels differ.
 
 \subsection{Label-set comparability across sites}
 \label{sec:comparability}
