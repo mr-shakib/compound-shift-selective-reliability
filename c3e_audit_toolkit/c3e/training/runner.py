@@ -155,13 +155,14 @@ def evaluate(model, loader, device, needs_text: bool, *, amp: bool) -> tuple[flo
 
 
 def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
-              num_workers: int = 6, limit: int | None = None) -> dict[str, Any]:
+              num_workers: int = 6, limit: int | None = None,
+              seed: int = SEED) -> dict[str, Any]:
     root = Path(project_root).resolve()
     opt_cfg = settings["optimization"]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     needs_text = model_id in ("M2", "M4")
 
-    _seed_everything(SEED)
+    _seed_everything(seed)
     # Frozen in v0.4.1. Input shapes are constant, so cuDNN's autotuner pays for
     # itself once per shape rather than per step.
     torch.backends.cudnn.benchmark = bool(opt_cfg.get("cudnn_benchmark", False))
@@ -230,7 +231,9 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
 
     ckpt_dir = root / CKPT_DIR
     ckpt_dir.mkdir(parents=True, exist_ok=True)
-    ckpt_path = ckpt_dir / f"{model_id.lower()}_best.pt"
+    # A replicate seed must not overwrite the primary checkpoint.
+    suffix = "" if seed == SEED else f"_seed{seed}"
+    ckpt_path = ckpt_dir / f"{model_id.lower()}_best{suffix}.pt"
 
     best = -float("inf")
     best_epoch = -1
@@ -317,6 +320,7 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
         "early_stopped": len(history) < opt_cfg["max_epochs"],
         "history": history,
         "elapsed_seconds": round(time.time() - started, 1),
+        "seed": seed,
         "checkpoint": {"relative_path": f"{CKPT_DIR}/{ckpt_path.name}", "sha256": digest},
     }
 
@@ -330,6 +334,8 @@ def main(argv: list[str] | None = None) -> int:
     # and this host has been observed swapping before training even starts.
     ap.add_argument("--num-workers", type=int, default=3)
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--seed", type=int, default=SEED,
+                    help="replicate seed; the frozen default is the preregistered one")
     args = ap.parse_args(argv)
 
     root = Path(args.project_root).resolve()
@@ -354,7 +360,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         try:
             runs.append(train_one(model_id, project_root=root, settings=settings,
-                                  num_workers=args.num_workers, limit=args.limit))
+                                  num_workers=args.num_workers, limit=args.limit,
+                                  seed=args.seed))
         except Exception as exc:  # noqa: BLE001
             print(f"Stage 6 FAIL on {model_id}: {type(exc).__name__}: {exc}", file=sys.stderr)
             return 2

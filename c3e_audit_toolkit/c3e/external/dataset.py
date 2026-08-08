@@ -33,7 +33,8 @@ PERMITTED_COLUMNS = ("section_clinical_history", "section_history")
 
 
 def build_external_index(project_root: Path, *,
-                         label_source: str = "impression") -> pd.DataFrame:
+                         label_source: str = "impression",
+                         threshold: int = 3) -> pd.DataFrame:
     """One row per usable frontal image, with labels, context, and patient.
 
     Studies are identified by the directory portion of the image path, since the
@@ -61,7 +62,8 @@ def build_external_index(project_root: Path, *,
     idx["context"] = (parts[0] + " " + parts[1]).str.strip()
 
     idx["study_key"] = idx["path_to_image"].str.rsplit("/", n=1).str[0]
-    idx["natural_state"] = idx["context"].map(natural_state)
+    idx["natural_state"] = idx["context"].map(
+        lambda t: natural_state(t, threshold))
 
     # Drop images that are unusable in the published dataset. Counted by the
     # caller; silently dropping them would misstate the cohort.

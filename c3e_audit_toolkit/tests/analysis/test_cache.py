@@ -49,3 +49,22 @@ def test_label_source_is_part_of_the_key(tmp_path):
          label_source="impression", **_arrays())
     assert load(tmp_path, "external", "M1", "C0", checkpoint_sha="s",
                 label_source="findings") is None
+
+
+def test_threshold_is_part_of_the_cache_key(tmp_path):
+    """A cache built at one informativeness threshold must not be reused at
+    another. The threshold decides which studies are N1 and therefore which
+    studies are in the cohort at all, so a silent reuse would describe the wrong
+    population while looking like a hit."""
+    save(tmp_path, "source", "M4", "C0", checkpoint_sha="s", threshold=3, **_arrays())
+    assert load(tmp_path, "source", "M4", "C0", checkpoint_sha="s", threshold=3) is not None
+    assert load(tmp_path, "source", "M4", "C0", checkpoint_sha="s", threshold=5) is None
+
+
+def test_primary_threshold_keeps_the_unsuffixed_path(tmp_path):
+    """The preregistered T=3 caches keep their existing names, so adding the key
+    does not invalidate work already done."""
+    p3 = cache_path(tmp_path, "source", "M1", "C0", "impression", 3)
+    p5 = cache_path(tmp_path, "source", "M1", "C0", "impression", 5)
+    assert p3.name == "source__M1__C0__impression.npz"
+    assert p5.name == "source__M1__C0__impression__T5.npz"

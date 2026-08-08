@@ -77,7 +77,8 @@ def sha256_file(path: Path) -> str:
 
 
 def load_all(root: Path, stage7: dict[str, Any],
-             label_source: str = "impression") -> dict[tuple[str, str, str], dict]:
+             label_source: str = "impression",
+             threshold: int = 3) -> dict[tuple[str, str, str], dict]:
     """Load every cached pass and derive per-study error and confidence."""
     ckpt = root / CKPT_DIR
     shas = {m: checkpoint_digest(ckpt / f"{m.lower()}_best.pt") for m in ("M1", "M2", "M4")}
@@ -90,7 +91,7 @@ def load_all(root: Path, stage7: dict[str, Any],
                             for t in TARGETS])
             for cond in ("C0", "C1", "C2"):
                 hit = cache_load(root, site, mid, cond, checkpoint_sha=shas[mid],
-                                 label_source=label_source)
+                                 label_source=label_source, threshold=threshold)
                 if hit is None:
                     raise RuntimeError(
                         f"missing cached predictions for {site}/{mid}/{cond}. "
@@ -115,10 +116,11 @@ def _cut(stage7: dict, mid: str, cov: float) -> float:
 
 def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
             coverage: float = 0.8,
-            label_source: str = "impression") -> dict[str, Any]:
+            label_source: str = "impression",
+            threshold: int = 3) -> dict[str, Any]:
     stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
     stage7 = json.loads(stage7_path.read_text())
-    data = load_all(root, stage7, label_source)
+    data = load_all(root, stage7, label_source, threshold)
 
     results: list[dict[str, Any]] = []
     per_pathology_p: dict[str, float] = {}
@@ -229,6 +231,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
         "stage": STAGE, "title": TITLE, "status": "PASS",
         "declarations": list(DECLARATIONS),
         "label_source": label_source,
+        "informativeness_threshold": threshold,
         "settings": {"replicates": replicates, "seed": BOOTSTRAP_SEED,
                      "ci_level": CI_LEVEL, "materiality": MATERIALITY,
                      "coverage": coverage, "resampling_unit": "patient"},
@@ -279,8 +282,10 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
-                  else OUTPUT_DIR_S1)
+    base = (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+            else OUTPUT_DIR_S1)
+    t = report.get("informativeness_threshold", 3)
+    out = root / (base if t == 3 else f"{base}_T{t}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage10_analysis.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -338,6 +343,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--coverage", type=float, default=0.8)
     ap.add_argument("--label-source", default="impression",
                     choices=["impression", "findings"])
+    ap.add_argument("--threshold", type=int, default=3,
+                    help="informativeness threshold; 3 is the preregistered primary")
     args = ap.parse_args(argv)
     try:
         print(f"{STAGE} — {TITLE}", file=sys.stderr)
@@ -345,7 +352,7 @@ def main(argv: list[str] | None = None) -> int:
               f"coverage {args.coverage:.0%}", file=sys.stderr, flush=True)
         report = analyse(Path(args.project_root).resolve(),
                          replicates=args.replicates, coverage=args.coverage,
-                         label_source=args.label_source)
+                         label_source=args.label_source, threshold=args.threshold)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"{STAGE} FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)

@@ -96,7 +96,8 @@ def _aggregate(frame: pd.DataFrame, probs: np.ndarray, labels: np.ndarray,
 
 
 def run(*, project_root: str | Path, num_workers: int = 3,
-        label_source: str = "impression") -> dict[str, Any]:
+        label_source: str = "impression",
+        threshold: int = 3) -> dict[str, Any]:
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
     stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
@@ -116,7 +117,8 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     print(f"  thresholds from Stage 7 (sha256 {sha256_file(stage7_path)[:16]}…)",
           file=sys.stderr, flush=True)
 
-    index = build_external_index(root, label_source=label_source)
+    index = build_external_index(root, label_source=label_source,
+                                 threshold=threshold)
     excluded = int((~index["_present"]).sum())
     index = index[index["_present"]].drop(columns=["_present"]).reset_index(drop=True)
     states = index.groupby("natural_state")["study_key"].nunique().to_dict()
@@ -162,7 +164,8 @@ def run(*, project_root: str | Path, num_workers: int = 3,
                             pin_memory=pin, persistent_workers=num_workers > 0)
         for mid, model, needs_text in specs:
             hit = cache_load(root, "external", mid, cond,
-                             checkpoint_sha=shas[mid], label_source=label_source)
+                             checkpoint_sha=shas[mid], label_source=label_source,
+                             threshold=threshold)
             if hit is not None:
                 print(f"  {cond} · {mid} (cached)", file=sys.stderr, flush=True)
                 sp, sy, sm = hit["probabilities"], hit["labels"], hit["mask"]
@@ -174,7 +177,8 @@ def run(*, project_root: str | Path, num_workers: int = 3,
                 sp, sy, sm, pats = _aggregate(f, probs, labels, masks)
                 cache_save(root, "external", mid, cond, probabilities=sp,
                            labels=sy, mask=sm, patients=pats,
-                           checkpoint_sha=shas[mid], label_source=label_source)
+                           checkpoint_sha=shas[mid], label_source=label_source,
+                           threshold=threshold)
                 if mid == "M1":
                     m1_probs[cond] = sp
 
@@ -209,6 +213,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         "declarations": list(DECLARATIONS),
         "protocol_version": settings["protocol_version"],
         "label_source": label_source,
+        "informativeness_threshold": threshold,
         "cohort": {
             "images": int(len(index)), "studies": int(index["study_key"].nunique()),
             "patients": int(index["deid_patient_id"].nunique()),
@@ -272,8 +277,10 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
-                  else OUTPUT_DIR_S1)
+    base = (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+            else OUTPUT_DIR_S1)
+    t = report.get("informativeness_threshold", 3)
+    out = root / (base if t == 3 else f"{base}_T{t}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage9b_evaluation.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -319,10 +326,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--num-workers", type=int, default=3)
     ap.add_argument("--label-source", default="impression",
                     choices=["impression", "findings"])
+    ap.add_argument("--threshold", type=int, default=3,
+                    help="informativeness threshold; 3 is the preregistered primary")
     args = ap.parse_args(argv)
     try:
         report = run(project_root=args.project_root, num_workers=args.num_workers,
-                     label_source=args.label_source)
+                     label_source=args.label_source, threshold=args.threshold)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"{STAGE} FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)

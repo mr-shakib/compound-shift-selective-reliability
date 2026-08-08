@@ -30,13 +30,19 @@ import numpy as np
 CACHE_DIR = "data/predictions"
 
 
-def _key(site: str, model_id: str, condition: str, label_source: str) -> str:
-    return f"{site}__{model_id}__{condition}__{label_source}"
+def _key(site: str, model_id: str, condition: str, label_source: str,
+         threshold: int) -> str:
+    # The threshold determines which studies are N1 and therefore which studies
+    # are in the cohort at all. A cache keyed without it would be silently
+    # reused across thresholds and describe the wrong cohort.
+    suffix = "" if threshold == 3 else f"__T{threshold}"
+    return f"{site}__{model_id}__{condition}__{label_source}{suffix}"
 
 
 def cache_path(root: Path, site: str, model_id: str, condition: str,
-               label_source: str = "impression") -> Path:
-    return Path(root) / CACHE_DIR / f"{_key(site, model_id, condition, label_source)}.npz"
+               label_source: str = "impression", threshold: int = 3) -> Path:
+    return (Path(root) / CACHE_DIR /
+            f"{_key(site, model_id, condition, label_source, threshold)}.npz")
 
 
 def checkpoint_digest(path: Path) -> str:
@@ -51,8 +57,8 @@ def checkpoint_digest(path: Path) -> str:
 def save(root: Path, site: str, model_id: str, condition: str, *,
          probabilities: np.ndarray, labels: np.ndarray, mask: np.ndarray,
          patients: np.ndarray, checkpoint_sha: str,
-         label_source: str = "impression") -> Path:
-    p = cache_path(root, site, model_id, condition, label_source)
+         label_source: str = "impression", threshold: int = 3) -> Path:
+    p = cache_path(root, site, model_id, condition, label_source, threshold)
     p.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
         p, probabilities=probabilities, labels=labels, mask=mask,
@@ -60,21 +66,25 @@ def save(root: Path, site: str, model_id: str, condition: str, *,
         meta=np.array([json.dumps({
             "site": site, "model_id": model_id, "condition": condition,
             "label_source": label_source, "checkpoint_sha": checkpoint_sha,
+            "informativeness_threshold": threshold,
             "studies": int(len(probabilities)),
         })]))
     return p
 
 
 def load(root: Path, site: str, model_id: str, condition: str, *,
-         checkpoint_sha: str, label_source: str = "impression") -> dict[str, Any] | None:
+         checkpoint_sha: str, label_source: str = "impression",
+         threshold: int = 3) -> dict[str, Any] | None:
     """Return a cached pass, or None when absent or produced by other weights."""
-    p = cache_path(root, site, model_id, condition, label_source)
+    p = cache_path(root, site, model_id, condition, label_source, threshold)
     if not p.exists():
         return None
     try:
         blob = np.load(p, allow_pickle=False)
         meta = json.loads(str(blob["meta"][0]))
     except Exception:  # noqa: BLE001
+        return None
+    if meta.get("informativeness_threshold", 3) != threshold:
         return None
     if meta.get("checkpoint_sha") != checkpoint_sha:
         # Different weights produced this. Reusing it would silently mix models.
