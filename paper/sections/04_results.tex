@@ -240,14 +240,93 @@ the choice of operating point. The two multimodal models respond to coverage in
 opposite directions --- M3's transfer gap grows with coverage while M4's shrinks
 --- but not enough to alter either verdict.
 
-\paragraph{Sensitivity analyses not yet reported.} Two further pre-specified
-sensitivities are outstanding and are stated here rather than omitted. The
-informativeness threshold was pre-specified at $T=3$ with $T=5$ and $T=10$ as
-sensitivities, and only the primary is reported. The findings-derived label
-source was pre-specified as a mandatory sensitivity (S1) and has not been run.
-Both require re-deriving cohorts or re-running inference under a second label
-set, and the conclusions above should be read as conditional on the primary
-label source and the primary threshold until they are complete.
+\subsection{S1: label-source sensitivity}
+\label{sec:s1}
+
+The findings-derived label source was pre-specified as a mandatory sensitivity.
+It was run end to end: thresholds re-selected on the findings calibration
+labels, both sites re-evaluated, and the same bootstrap applied. The cohort is
+smaller because findings sections are less often present --- \num{9293} source
+evaluation studies against \num{14766}.
+
+\begin{table}[htbp]
+\centering
+\caption{S1 against the primary. Within-site and between-model contrasts agree;
+the two cross-site contrasts do not.}
+\label{tab:s1}
+\begin{tabular}{llccl}
+\toprule
+H & Contrast & Primary & S1 (findings) & Agreement \\
+\midrule
+H1 & M3 external $-$ source & $+0.0469$ & $-0.1324$ & \textbf{reverses} \\
+H1 & M4 external $-$ source & $+0.0384$ & $-0.1079$ & \textbf{reverses} \\
+H2 & M3 interaction, C1     & $+0.0024$ & $+0.0340$ & changes verdict \\
+H2 & M4 interaction, C1     & $+0.0096$ & $+0.0625$ & changes verdict \\
+H3 & M3 $-$ M1 transfer gap & $-0.0265$ & $-0.0652$ & agrees \\
+H3 & M4 $-$ M1 transfer gap & $-0.0350$ & $-0.0408$ & agrees \\
+H4 & M3 source, C2 $-$ C1   & $+0.0475$ & $+0.0606$ & agrees \\
+H4 & M4 source, C2 $-$ C1   & $+0.0173$ & $+0.0479$ & agrees \\
+H4 & M3 external, C2 $-$ C1 & $+0.0231$ & $+0.0089$ & agrees \\
+H4 & M4 external, C2 $-$ C1 & $-0.0060$ & $-0.0104$ & agrees \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{H1 reverses under the sensitivity endpoint.} Under findings-derived
+labels the external site shows \emph{lower} selective error than the source
+site, by \num{0.13} for M3 and \num{0.11} for M4, with intervals excluding zero.
+H2 also changes verdict. H3 and H4 agree in all eight instances.
+
+The pattern separates cleanly by contrast type. Every contrast that compares
+across sites changes; every contrast that compares models or conditions within a
+site holds.
+
+\subsection{Label-set comparability across sites}
+\label{sec:comparability}
+
+The protocol required label distributions be compared site-to-site before the
+cross-site experiment, and designated the findings endpoint a sensitivity rather
+than a primary on the stated grounds that it is sparse. That comparison explains
+the divergence in \cref{tab:s1}.
+
+\begin{table}[htbp]
+\centering
+\caption{Label-set composition by site and source, evaluation cohorts under C0.
+Supervised-cell density is the fraction of study-by-pathology cells carrying a
+label at all; positive rate is computed among those cells. Under the primary
+endpoint the two sites are closely matched. Under the sensitivity endpoint they
+are not.}
+\label{tab:comparability}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Supervised-cell density} & \multicolumn{2}{c}{Positive rate} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Endpoint & Source & External & Source & External \\
+\midrule
+Impression (primary)   & \SI{20.6}{\percent} & \SI{28.8}{\percent}
+                       & \SI{71.1}{\percent} & \SI{70.0}{\percent} \\
+Findings (sensitivity) & \SI{44.6}{\percent} & \SI{9.1}{\percent}
+                       & \SI{33.3}{\percent} & \SI{68.5}{\percent} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under the primary endpoint the aggregate positive rates differ by
+\num{1.1} percentage points and the densities by \num{8.2}. Under the
+sensitivity endpoint the densities differ by a factor of \num{4.9} and the
+positive rates by \num{35.2} percentage points. The asymmetry holds for every
+pathology individually, with density ratios between \numrange{3.1}{8.2}.
+
+The direction is interpretable. Source findings sections describe negatives
+explicitly, so the labeller emits many negative labels; external findings
+sections are sparser, so fewer cells carry any label and those that do are
+predominantly positive. The two endpoints named ``findings'' are therefore
+recording different reporting conventions rather than the same construct
+measured twice.
+
+\paragraph{One sensitivity remains outstanding.} The informativeness threshold
+was pre-specified at $T=3$ with $T=5$ and $T=10$ as sensitivities, and only the
+primary is reported.
 
 \subsection{Reproducibility}
 

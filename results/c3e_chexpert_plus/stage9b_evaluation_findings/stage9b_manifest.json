@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 15734,
+      "name": "stage9b_evaluation.json",
+      "sha256": "1c4de6e668cc89d9a31ef4fb5e0ef6805ff7206f9e040ba1158b5da8db48b11c"
+    },
+    {
+      "byte_size": 2650,
+      "name": "stage9b_evaluation.md",
+      "sha256": "4c382ac4cfc6a046b5603c0e0c237cd01b4cf44ddff761ee21d6f0fcdbd3294e"
+    },
+    {
+      "byte_size": 2952,
+      "name": "stage9b_results.csv",
+      "sha256": "c1c32fbe691bedc3a28e5f33647a5e32a78e71d9785e372c990e3ea932971af9"
+    }
+  ],
+  "compliance": {
+    "external_site_tuning": false,
+    "identifiers_emitted_to_results": false,
+    "intervals_or_tests_computed": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 9b ONLY",
+    "EXTERNAL-SITE EVALUATION",
+    "THRESHOLDS CONSUMED FROZEN FROM STAGE 7",
+    "NO THRESHOLD SELECTED OR REVISED HERE",
+    "NO EXTERNAL-SITE TUNING",
+    "NO MODEL TRAINING",
+    "INFORMATIVENESS RULE TRANSFERRED WITHOUT REFITTING",
+    "POINT ESTIMATES ONLY, NO INTERVALS OR TESTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "output_dir": "results/c3e_chexpert_plus/stage9b_evaluation_findings",
+  "stage": "C3-E9b",
+  "status": "PASS",
+  "title": "EXTERNAL-SITE EVALUATION UNDER THE FROZEN POLICY"
+}

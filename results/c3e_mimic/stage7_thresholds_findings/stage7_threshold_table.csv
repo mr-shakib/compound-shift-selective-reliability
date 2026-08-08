@@ -1,0 +1,21 @@
+model,pathology,threshold,balanced_accuracy,supervised_studies
+M1,Cardiomegaly,0.787,0.840253,3069
+M1,Edema,0.458,0.833731,1539
+M1,Consolidation,0.296,0.814786,2340
+M1,Atelectasis,0.98,0.809738,1227
+M1,Pleural Effusion,0.764,0.881112,4731
+M2,Cardiomegaly,0.932,0.552157,3069
+M2,Edema,0.783,0.607825,1539
+M2,Consolidation,0.519,0.679011,2340
+M2,Atelectasis,0.966,0.567676,1227
+M2,Pleural Effusion,0.944,0.585372,4731
+M3,Cardiomegaly,0.694,0.791569,3069
+M3,Edema,0.656,0.814867,1539
+M3,Consolidation,0.438,0.797571,2340
+M3,Atelectasis,0.988,0.747545,1227
+M3,Pleural Effusion,0.691,0.860594,4731
+M4,Cardiomegaly,0.881,0.807381,3069
+M4,Edema,0.53,0.805479,1539
+M4,Consolidation,0.232,0.803792,2340
+M4,Atelectasis,0.956,0.747218,1227
+M4,Pleural Effusion,0.948,0.816433,4731

@@ -1,0 +1,489 @@
+{
+  "calibration_tier": {
+    "images": 6381,
+    "patients": 2669,
+    "studies": 5733
+  },
+  "compliance": {
+    "confirmatory_result_produced": false,
+    "cross_site_claim": false,
+    "evaluation_tier_read": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "model_training": false
+  },
+  "coverage_table": [
+    {
+      "abstention_threshold": 0.132058,
+      "full_coverage_hamming_error": 0.130409,
+      "model": "M1",
+      "realised_coverage": 0.79993,
+      "selective_hamming_error": 0.114984,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.062595,
+      "full_coverage_hamming_error": 0.130409,
+      "model": "M1",
+      "realised_coverage": 0.899878,
+      "selective_hamming_error": 0.125031,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.214328,
+      "full_coverage_hamming_error": 0.130409,
+      "model": "M1",
+      "realised_coverage": 0.699983,
+      "selective_hamming_error": 0.105146,
+      "target_coverage": 0.7
+    },
+    {
+      "abstention_threshold": 0.100417,
+      "full_coverage_hamming_error": 0.315771,
+      "model": "M2",
+      "realised_coverage": 0.79993,
+      "selective_hamming_error": 0.326159,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.046406,
+      "full_coverage_hamming_error": 0.315771,
+      "model": "M2",
+      "realised_coverage": 0.899878,
+      "selective_hamming_error": 0.322259,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.157679,
+      "full_coverage_hamming_error": 0.315771,
+      "model": "M2",
+      "realised_coverage": 0.699983,
+      "selective_hamming_error": 0.331547,
+      "target_coverage": 0.7
+    },
+    {
+      "abstention_threshold": 0.026101,
+      "full_coverage_hamming_error": 0.178618,
+      "model": "M3",
+      "realised_coverage": 0.79993,
+      "selective_hamming_error": 0.185499,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.011379,
+      "full_coverage_hamming_error": 0.178618,
+      "model": "M3",
+      "realised_coverage": 0.899878,
+      "selective_hamming_error": 0.180423,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.043119,
+      "full_coverage_hamming_error": 0.178618,
+      "model": "M3",
+      "realised_coverage": 0.699983,
+      "selective_hamming_error": 0.190215,
+      "target_coverage": 0.7
+    },
+    {
+      "abstention_threshold": 0.118839,
+      "full_coverage_hamming_error": 0.152279,
+      "model": "M4",
+      "realised_coverage": 0.79993,
+      "selective_hamming_error": 0.145457,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.05511,
+      "full_coverage_hamming_error": 0.152279,
+      "model": "M4",
+      "realised_coverage": 0.899878,
+      "selective_hamming_error": 0.149325,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.182891,
+      "full_coverage_hamming_error": 0.152279,
+      "model": "M4",
+      "realised_coverage": 0.699983,
+      "selective_hamming_error": 0.142848,
+      "target_coverage": 0.7
+    }
+  ],
+  "declarations": [
+    "STAGE 7 ONLY",
+    "THRESHOLD SELECTION ON THE CALIBRATION TIER",
+    "NO MODEL TRAINING",
+    "NO PRESPECIFIED-EVAL-TIER READ",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "THRESHOLDS FROZEN FOR TRANSFER",
+    "SELECTION NUMBERS ARE NOT CONFIRMATORY RESULTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "freeze_note": "these thresholds transfer unchanged to the external site; revising them after inspecting external results would answer a different question than the one preregistered",
+  "frozen": true,
+  "label_source": "findings",
+  "models": {
+    "M1": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.214328,
+          "accepted_studies": 4013,
+          "coverage": 0.699983,
+          "full_coverage_hamming_error": 0.130409,
+          "selective_hamming_error": 0.105146,
+          "target_coverage": 0.7,
+          "total_studies": 5733
+        },
+        "0.80": {
+          "abstention_threshold": 0.132058,
+          "accepted_studies": 4586,
+          "coverage": 0.79993,
+          "full_coverage_hamming_error": 0.130409,
+          "selective_hamming_error": 0.114984,
+          "target_coverage": 0.8,
+          "total_studies": 5733
+        },
+        "0.90": {
+          "abstention_threshold": 0.062595,
+          "accepted_studies": 5159,
+          "coverage": 0.899878,
+          "full_coverage_hamming_error": 0.130409,
+          "selective_hamming_error": 0.125031,
+          "target_coverage": 0.9,
+          "total_studies": 5733
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.98,
+        "Cardiomegaly": 0.787,
+        "Consolidation": 0.296,
+        "Edema": 0.458,
+        "Pleural Effusion": 0.764
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.809738,
+        "Cardiomegaly": 0.840253,
+        "Consolidation": 0.814786,
+        "Edema": 0.833731,
+        "Pleural Effusion": 0.881112
+      }
+    },
+    "M2": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.157679,
+          "accepted_studies": 4013,
+          "coverage": 0.699983,
+          "full_coverage_hamming_error": 0.315771,
+          "selective_hamming_error": 0.331547,
+          "target_coverage": 0.7,
+          "total_studies": 5733
+        },
+        "0.80": {
+          "abstention_threshold": 0.100417,
+          "accepted_studies": 4586,
+          "coverage": 0.79993,
+          "full_coverage_hamming_error": 0.315771,
+          "selective_hamming_error": 0.326159,
+          "target_coverage": 0.8,
+          "total_studies": 5733
+        },
+        "0.90": {
+          "abstention_threshold": 0.046406,
+          "accepted_studies": 5159,
+          "coverage": 0.899878,
+          "full_coverage_hamming_error": 0.315771,
+          "selective_hamming_error": 0.322259,
+          "target_coverage": 0.9,
+          "total_studies": 5733
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.966,
+        "Cardiomegaly": 0.932,
+        "Consolidation": 0.519,
+        "Edema": 0.783,
+        "Pleural Effusion": 0.944
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.567676,
+        "Cardiomegaly": 0.552157,
+        "Consolidation": 0.679011,
+        "Edema": 0.607825,
+        "Pleural Effusion": 0.585372
+      }
+    },
+    "M3": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.043119,
+          "accepted_studies": 4013,
+          "coverage": 0.699983,
+          "full_coverage_hamming_error": 0.178618,
+          "selective_hamming_error": 0.190215,
+          "target_coverage": 0.7,
+          "total_studies": 5733
+        },
+        "0.80": {
+          "abstention_threshold": 0.026101,
+          "accepted_studies": 4586,
+          "coverage": 0.79993,
+          "full_coverage_hamming_error": 0.178618,
+          "selective_hamming_error": 0.185499,
+          "target_coverage": 0.8,
+          "total_studies": 5733
+        },
+        "0.90": {
+          "abstention_threshold": 0.011379,
+          "accepted_studies": 5159,
+          "coverage": 0.899878,
+          "full_coverage_hamming_error": 0.178618,
+          "selective_hamming_error": 0.180423,
+          "target_coverage": 0.9,
+          "total_studies": 5733
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.988,
+        "Cardiomegaly": 0.694,
+        "Consolidation": 0.438,
+        "Edema": 0.656,
+        "Pleural Effusion": 0.691
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.747545,
+        "Cardiomegaly": 0.791569,
+        "Consolidation": 0.797571,
+        "Edema": 0.814867,
+        "Pleural Effusion": 0.860594
+      }
+    },
+    "M4": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.182891,
+          "accepted_studies": 4013,
+          "coverage": 0.699983,
+          "full_coverage_hamming_error": 0.152279,
+          "selective_hamming_error": 0.142848,
+          "target_coverage": 0.7,
+          "total_studies": 5733
+        },
+        "0.80": {
+          "abstention_threshold": 0.118839,
+          "accepted_studies": 4586,
+          "coverage": 0.79993,
+          "full_coverage_hamming_error": 0.152279,
+          "selective_hamming_error": 0.145457,
+          "target_coverage": 0.8,
+          "total_studies": 5733
+        },
+        "0.90": {
+          "abstention_threshold": 0.05511,
+          "accepted_studies": 5159,
+          "coverage": 0.899878,
+          "full_coverage_hamming_error": 0.152279,
+          "selective_hamming_error": 0.149325,
+          "target_coverage": 0.9,
+          "total_studies": 5733
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.956,
+        "Cardiomegaly": 0.881,
+        "Consolidation": 0.232,
+        "Edema": 0.53,
+        "Pleural Effusion": 0.948
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.747218,
+        "Cardiomegaly": 0.807381,
+        "Consolidation": 0.803792,
+        "Edema": 0.805479,
+        "Pleural Effusion": 0.816433
+      }
+    }
+  },
+  "policy": {
+    "analysis_units": {
+      "decision_unit": "study",
+      "frontal_image_aggregation": "arithmetic_mean_probability",
+      "model_inference_unit": "image",
+      "statistical_cluster_unit": "patient",
+      "study_weighting": "equal"
+    },
+    "classification": {
+      "criterion": "balanced_accuracy",
+      "frozen_for_internal_and_external_evaluation": true,
+      "threshold_scope": "per_pathology",
+      "threshold_selection_dataset": "mimic_train_calibration"
+    },
+    "selective": {
+      "abstention_meaning": "refer_for_human_interpretation",
+      "confidence_per_pathology": "abs(2*p-1)",
+      "frozen_threshold_transfer": true,
+      "primary_loss": "five_label_hamming_error",
+      "primary_source_coverage": 0.8,
+      "primary_study_confidence": "minimum_pathology_confidence",
+      "secondary_study_confidence": "mean_pathology_confidence",
+      "sensitivity_source_coverages": [
+        0.9,
+        0.7
+      ],
+      "threshold_selection_dataset": "mimic_train_calibration"
+    }
+  },
+  "protocol_version": "0.4.2",
+  "stage": "C3-E6 Stage 7",
+  "status": "PASS",
+  "threshold_table": [
+    {
+      "balanced_accuracy": 0.840253,
+      "model": "M1",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 3069,
+      "threshold": 0.787
+    },
+    {
+      "balanced_accuracy": 0.833731,
+      "model": "M1",
+      "pathology": "Edema",
+      "supervised_studies": 1539,
+      "threshold": 0.458
+    },
+    {
+      "balanced_accuracy": 0.814786,
+      "model": "M1",
+      "pathology": "Consolidation",
+      "supervised_studies": 2340,
+      "threshold": 0.296
+    },
+    {
+      "balanced_accuracy": 0.809738,
+      "model": "M1",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1227,
+      "threshold": 0.98
+    },
+    {
+      "balanced_accuracy": 0.881112,
+      "model": "M1",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 4731,
+      "threshold": 0.764
+    },
+    {
+      "balanced_accuracy": 0.552157,
+      "model": "M2",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 3069,
+      "threshold": 0.932
+    },
+    {
+      "balanced_accuracy": 0.607825,
+      "model": "M2",
+      "pathology": "Edema",
+      "supervised_studies": 1539,
+      "threshold": 0.783
+    },
+    {
+      "balanced_accuracy": 0.679011,
+      "model": "M2",
+      "pathology": "Consolidation",
+      "supervised_studies": 2340,
+      "threshold": 0.519
+    },
+    {
+      "balanced_accuracy": 0.567676,
+      "model": "M2",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1227,
+      "threshold": 0.966
+    },
+    {
+      "balanced_accuracy": 0.585372,
+      "model": "M2",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 4731,
+      "threshold": 0.944
+    },
+    {
+      "balanced_accuracy": 0.791569,
+      "model": "M3",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 3069,
+      "threshold": 0.694
+    },
+    {
+      "balanced_accuracy": 0.814867,
+      "model": "M3",
+      "pathology": "Edema",
+      "supervised_studies": 1539,
+      "threshold": 0.656
+    },
+    {
+      "balanced_accuracy": 0.797571,
+      "model": "M3",
+      "pathology": "Consolidation",
+      "supervised_studies": 2340,
+      "threshold": 0.438
+    },
+    {
+      "balanced_accuracy": 0.747545,
+      "model": "M3",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1227,
+      "threshold": 0.988
+    },
+    {
+      "balanced_accuracy": 0.860594,
+      "model": "M3",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 4731,
+      "threshold": 0.691
+    },
+    {
+      "balanced_accuracy": 0.807381,
+      "model": "M4",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 3069,
+      "threshold": 0.881
+    },
+    {
+      "balanced_accuracy": 0.805479,
+      "model": "M4",
+      "pathology": "Edema",
+      "supervised_studies": 1539,
+      "threshold": 0.53
+    },
+    {
+      "balanced_accuracy": 0.803792,
+      "model": "M4",
+      "pathology": "Consolidation",
+      "supervised_studies": 2340,
+      "threshold": 0.232
+    },
+    {
+      "balanced_accuracy": 0.747218,
+      "model": "M4",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1227,
+      "threshold": 0.956
+    },
+    {
+      "balanced_accuracy": 0.816433,
+      "model": "M4",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 4731,
+      "threshold": 0.948
+    }
+  ],
+  "title": "THRESHOLD SELECTION ON THE CALIBRATION TIER"
+}

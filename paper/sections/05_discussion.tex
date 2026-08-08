@@ -19,10 +19,17 @@ carried \emph{smaller} transfer gaps than the image-only control
 materiality. The compound interaction was likewise not super-additive: context
 degradation cost less at the external site than at the source, not more.
 
-We report these as they came out. The protocol was frozen, hash-manifested and
-validated before any model existed, and the analysis code was written and tested
-before these numbers were computed. The value of that discipline is precisely
-that it makes a contradicted prediction reportable rather than negotiable.
+The transport result did not survive its pre-specified label-source
+sensitivity, for reasons we take up in \cref{sec:s1-discussion}. It is
+established for the primary label endpoint and is not established as robust to
+label source.
+
+We report all of this as it came out. The protocol was frozen, hash-manifested
+and validated before any model existed, and the analysis code was written and
+tested before these numbers were computed. The value of that discipline is
+precisely that it makes a contradicted prediction reportable rather than
+negotiable, and that it forced a sensitivity whose failure we would otherwise
+have had no occasion to discover.
 
 \subsection{The policy fails before the models do}
 
@@ -94,6 +101,51 @@ Misaligned context remained worse than absent context in three of four
 instances (\cref{tab:h4}), which is the direction predicted. Wrong information
 is not equivalent to no information, and a system that treats a populated
 context field as evidence of a usable one will pay for that.
+
+\subsection{What the label-source sensitivity establishes, and what it does not}
+\label{sec:s1-discussion}
+
+H1 does not survive its own pre-specified sensitivity. Under findings-derived
+labels the cross-site difference reverses, and we report that rather than
+qualifying it away. The claim that selective reliability fails to transport is
+therefore established for the primary label endpoint and \emph{not} established
+as robust to label source.
+
+The reason is measurable and was anticipated. The frozen harmonisation plan
+designated the findings endpoint a sensitivity rather than a primary on the
+stated grounds that it is sparse, and required label distributions be compared
+site-to-site before the cross-site experiment. That comparison
+(\cref{tab:comparability}) shows the two findings label sets differ by a factor
+of \num{4.9} in how often a cell carries a label at all, and by \num{35}
+percentage points in what fraction of labelled cells are positive, against
+\num{1.1} points under the primary endpoint. A risk computed over
+\SI{9}{\percent} of cells that are \SI{69}{\percent} positive is not commensurable
+with one computed over \SI{45}{\percent} of cells that are \SI{33}{\percent}
+positive, and a difference between two such quantities is not a transport
+estimate.
+
+That reading is constrained rather than convenient, and \cref{tab:s1} shows why:
+the divergence separates exactly by contrast type. Every contrast comparing
+across sites moves; every contrast comparing models or conditions within a site
+holds, in all eight instances. Had the sensitivity simply been noisier, or had
+the models behaved differently under a second label set, the disagreement would
+not have partitioned so cleanly along the axis that label-set non-comparability
+predicts.
+
+Two consequences follow. H3 and H4, which never compare across sites within a
+single estimate, carry their label-source robustness. H1 and H2 do not, and the
+strength of those claims should be read accordingly.
+
+The broader point is methodological, and we think it is the more useful one.
+Cross-site evaluation presupposes commensurable labels, and label sets bearing
+the same name at two institutions need not be commensurable. Ours were not, and
+the divergence is large enough to reverse a sign. Any study comparing risk
+across institutions inherits this requirement whether or not it checks it; we
+checked it only because the protocol demanded the check in advance. This is a
+concrete instance of the argument that cross-domain failure in chest radiography
+is driven by label shift~\cite{cohen2020limits}, arriving here not as a
+competing explanation for model behaviour but as a constraint on what can be
+compared at all.
 
 \subsection{Relation to prior work}
 
