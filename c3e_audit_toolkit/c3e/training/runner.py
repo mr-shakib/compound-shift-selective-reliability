@@ -62,6 +62,12 @@ OUTPUT_DIR = "results/c3e_mimic/stage6_training"
 SEED = 20260718
 
 
+def checkpoint_name(model_id: str, seed: int | None = None) -> str:
+    """Checkpoint filename for a model, optionally from a replicate seed."""
+    suffix = "" if seed is None or seed == SEED else f"_seed{seed}"
+    return f"{model_id.lower()}_best{suffix}.pt"
+
+
 def load_frozen_settings(root: Path) -> dict[str, Any]:
     """Read the frozen optimisation block. These are not runner arguments."""
     reg = yaml.safe_load((root / REGISTRY).read_text())

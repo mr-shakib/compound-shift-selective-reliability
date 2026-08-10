@@ -68,3 +68,20 @@ def test_primary_threshold_keeps_the_unsuffixed_path(tmp_path):
     p5 = cache_path(tmp_path, "source", "M1", "C0", "impression", 5)
     assert p3.name == "source__M1__C0__impression.npz"
     assert p5.name == "source__M1__C0__impression__T5.npz"
+
+
+def test_replicate_seed_gets_its_own_cache_file(tmp_path):
+    """A replicate must not overwrite the primary cache.
+
+    The checkpoint digest already prevents a stale cache being *read*, but
+    without the seed in the filename the replicate would overwrite the primary
+    on *save*, destroying predictions that cannot be recomputed without
+    retraining.
+    """
+    save(tmp_path, "source", "M4", "C0", checkpoint_sha="a", **_arrays())
+    save(tmp_path, "source", "M4", "C0", checkpoint_sha="b", seed=20260719, **_arrays())
+    primary = cache_path(tmp_path, "source", "M4", "C0")
+    replicate = cache_path(tmp_path, "source", "M4", "C0", seed=20260719)
+    assert primary != replicate
+    assert primary.exists() and replicate.exists()
+    assert load(tmp_path, "source", "M4", "C0", checkpoint_sha="a") is not None

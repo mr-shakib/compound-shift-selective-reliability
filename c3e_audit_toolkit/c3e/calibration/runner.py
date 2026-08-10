@@ -35,7 +35,7 @@ import yaml
 
 from ..training.dataset import C3EStudyImageDataset, build_index
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
-from ..training.runner import (CKPT_DIR, IMAGE_DIR, REGISTRY, SEED,
+from ..training.runner import (CKPT_DIR, IMAGE_DIR, REGISTRY, SEED, checkpoint_name,
                                _available_ram_gb, _seed_everything,
                                load_frozen_settings)
 from .policy import (TARGETS, abstention_threshold_for_coverage,
@@ -46,6 +46,7 @@ STAGE = "C3-E6 Stage 7"
 TITLE = "THRESHOLD SELECTION ON THE CALIBRATION TIER"
 OUTPUT_DIR = "results/c3e_mimic/stage7_thresholds"
 OUTPUT_DIR_S1 = "results/c3e_mimic/stage7_thresholds_findings"
+OUTPUT_DIR_SEED = "results/c3e_mimic/stage7_thresholds_seed{seed}"
 
 DECLARATIONS = (
     "STAGE 7 ONLY",
@@ -91,7 +92,8 @@ def _load(model, path: Path, device):
 
 
 def run(*, project_root: str | Path, num_workers: int = 3,
-        label_source: str = "impression") -> dict[str, Any]:
+        label_source: str = "impression",
+        seed: int | None = None) -> dict[str, Any]:
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
     registry = yaml.safe_load((root / REGISTRY).read_text())
@@ -128,8 +130,8 @@ def run(*, project_root: str | Path, num_workers: int = 3,
                         persistent_workers=num_workers > 0)
 
     ckpt = root / CKPT_DIR
-    m1 = _load(M1ImageOnly(), ckpt / "m1_best.pt", device).to(device)
-    m2 = _load(M2TextOnly(), ckpt / "m2_best.pt", device).to(device)
+    m1 = _load(M1ImageOnly(), ckpt / checkpoint_name("M1", seed), device).to(device)
+    m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device).to(device)
 
     preds: dict[str, np.ndarray] = {}
     print("  scoring M1 ...", file=sys.stderr, flush=True)
@@ -141,7 +143,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     del m1, m2
     torch.cuda.empty_cache()
     print("  scoring M4 ...", file=sys.stderr, flush=True)
-    m4 = _load(M4FeatureFusion(), ckpt / "m4_best.pt", device).to(device)
+    m4 = _load(M4FeatureFusion(), ckpt / checkpoint_name("M4", seed), device).to(device)
     preds["M4"], _, _ = predict(m4, loader, device, True)
     del m4
     torch.cuda.empty_cache()
@@ -207,7 +209,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         "stage": STAGE, "title": TITLE, "status": "PASS",
         "declarations": list(DECLARATIONS),
         "protocol_version": settings["protocol_version"],
-        "label_source": label_source,
+        "label_source": label_source, "seed": seed,
         "policy": {"classification": cls_cfg, "selective": sel_cfg, "analysis_units": units},
         "calibration_tier": {
             "images": int(len(index)),
@@ -270,8 +272,12 @@ def _render_md(r: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, report: dict[str, Any]) -> None:
-    out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
-                  else OUTPUT_DIR_S1)
+    sd = report.get("seed")
+    if sd is not None:
+        out = root / OUTPUT_DIR_SEED.format(seed=sd)
+    else:
+        out = root / (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
+                      else OUTPUT_DIR_S1)
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage7_thresholds.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -321,10 +327,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--num-workers", type=int, default=3)
     ap.add_argument("--label-source", default="impression",
                     choices=["impression", "findings"])
+    ap.add_argument("--seed", type=int, default=None,
+                    help="replicate seed; omit for the primary models")
     args = ap.parse_args(argv)
     try:
         report = run(project_root=args.project_root, num_workers=args.num_workers,
-                     label_source=args.label_source)
+                     label_source=args.label_source, seed=args.seed)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"Stage 7 FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)

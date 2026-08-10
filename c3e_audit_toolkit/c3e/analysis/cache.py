@@ -31,18 +31,25 @@ CACHE_DIR = "data/predictions"
 
 
 def _key(site: str, model_id: str, condition: str, label_source: str,
-         threshold: int) -> str:
+         threshold: int, seed: int | None = None) -> str:
     # The threshold determines which studies are N1 and therefore which studies
     # are in the cohort at all. A cache keyed without it would be silently
     # reused across thresholds and describe the wrong cohort.
     suffix = "" if threshold == 3 else f"__T{threshold}"
+    # A replicate seed writes to its own file. The checkpoint digest already
+    # prevents a stale cache being read, but without this the replicate would
+    # overwrite the primary on save and destroy work that cannot be recomputed
+    # without retraining.
+    if seed is not None:
+        suffix += f"__seed{seed}"
     return f"{site}__{model_id}__{condition}__{label_source}{suffix}"
 
 
 def cache_path(root: Path, site: str, model_id: str, condition: str,
-               label_source: str = "impression", threshold: int = 3) -> Path:
+               label_source: str = "impression", threshold: int = 3,
+               seed: int | None = None) -> Path:
     return (Path(root) / CACHE_DIR /
-            f"{_key(site, model_id, condition, label_source, threshold)}.npz")
+            f"{_key(site, model_id, condition, label_source, threshold, seed)}.npz")
 
 
 def checkpoint_digest(path: Path) -> str:
@@ -57,8 +64,9 @@ def checkpoint_digest(path: Path) -> str:
 def save(root: Path, site: str, model_id: str, condition: str, *,
          probabilities: np.ndarray, labels: np.ndarray, mask: np.ndarray,
          patients: np.ndarray, checkpoint_sha: str,
-         label_source: str = "impression", threshold: int = 3) -> Path:
-    p = cache_path(root, site, model_id, condition, label_source, threshold)
+         label_source: str = "impression", threshold: int = 3,
+         seed: int | None = None) -> Path:
+    p = cache_path(root, site, model_id, condition, label_source, threshold, seed)
     p.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
         p, probabilities=probabilities, labels=labels, mask=mask,
@@ -66,7 +74,7 @@ def save(root: Path, site: str, model_id: str, condition: str, *,
         meta=np.array([json.dumps({
             "site": site, "model_id": model_id, "condition": condition,
             "label_source": label_source, "checkpoint_sha": checkpoint_sha,
-            "informativeness_threshold": threshold,
+            "informativeness_threshold": threshold, "seed": seed,
             "studies": int(len(probabilities)),
         })]))
     return p
@@ -74,9 +82,9 @@ def save(root: Path, site: str, model_id: str, condition: str, *,
 
 def load(root: Path, site: str, model_id: str, condition: str, *,
          checkpoint_sha: str, label_source: str = "impression",
-         threshold: int = 3) -> dict[str, Any] | None:
+         threshold: int = 3, seed: int | None = None) -> dict[str, Any] | None:
     """Return a cached pass, or None when absent or produced by other weights."""
-    p = cache_path(root, site, model_id, condition, label_source, threshold)
+    p = cache_path(root, site, model_id, condition, label_source, threshold, seed)
     if not p.exists():
         return None
     try:

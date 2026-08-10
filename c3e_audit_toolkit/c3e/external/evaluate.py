@@ -38,7 +38,7 @@ from ..calibration.policy import (TARGETS, hamming_error, selective_risk,
 from ..calibration.runner import predict
 from ..evaluation.interventions import apply_c1, apply_c2, check_invariants
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
-from ..training.runner import (CKPT_DIR, SEED, _available_ram_gb,
+from ..training.runner import (CKPT_DIR, checkpoint_name, SEED, _available_ram_gb,
                                _seed_everything, load_frozen_settings)
 from ..analysis.cache import checkpoint_digest, load as cache_load, save as cache_save
 from .dataset import IMAGE_DIR, CheXpertPlusDataset, build_external_index
@@ -97,7 +97,8 @@ def _aggregate(frame: pd.DataFrame, probs: np.ndarray, labels: np.ndarray,
 
 def run(*, project_root: str | Path, num_workers: int = 3,
         label_source: str = "impression",
-        threshold: int = 3) -> dict[str, Any]:
+        threshold: int = 3,
+        seed: int | None = None) -> dict[str, Any]:
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
     stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
@@ -144,14 +145,14 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     pin = _available_ram_gb() >= 6.0
 
     ckpt = root / CKPT_DIR
-    shas = {mid: checkpoint_digest(ckpt / f"{mid.lower()}_best.pt")
+    shas = {mid: checkpoint_digest(ckpt / checkpoint_name(mid, seed))
             for mid in ("M1", "M2", "M4")}
     # M3 has no weights of its own; its identity is that of its two components.
     shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
-    m1 = _load(M1ImageOnly(), ckpt / "m1_best.pt", device)
-    m2 = _load(M2TextOnly(), ckpt / "m2_best.pt", device)
+    m1 = _load(M1ImageOnly(), ckpt / checkpoint_name("M1", seed), device)
+    m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device)
     m3 = M3LateFusion(m1, m2).to(device)
-    m4 = _load(M4FeatureFusion(), ckpt / "m4_best.pt", device)
+    m4 = _load(M4FeatureFusion(), ckpt / checkpoint_name("M4", seed), device)
     specs = (("M1", m1, False), ("M2", m2, True), ("M3", m3, True), ("M4", m4, True))
 
     rows: list[dict[str, Any]] = []
@@ -178,7 +179,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
                 cache_save(root, "external", mid, cond, probabilities=sp,
                            labels=sy, mask=sm, patients=pats,
                            checkpoint_sha=shas[mid], label_source=label_source,
-                           threshold=threshold)
+                           threshold=threshold, seed=seed)
                 if mid == "M1":
                     m1_probs[cond] = sp
 
@@ -213,7 +214,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         "declarations": list(DECLARATIONS),
         "protocol_version": settings["protocol_version"],
         "label_source": label_source,
-        "informativeness_threshold": threshold,
+        "informativeness_threshold": threshold, "seed": seed,
         "cohort": {
             "images": int(len(index)), "studies": int(index["study_key"].nunique()),
             "patients": int(index["deid_patient_id"].nunique()),
@@ -280,7 +281,10 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
     base = (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
             else OUTPUT_DIR_S1)
     t = report.get("informativeness_threshold", 3)
+    sd = report.get("seed")
     out = root / (base if t == 3 else f"{base}_T{t}")
+    if sd is not None:
+        out = Path(str(out) + f"_seed{sd}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage9b_evaluation.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -328,10 +332,12 @@ def main(argv: list[str] | None = None) -> int:
                     choices=["impression", "findings"])
     ap.add_argument("--threshold", type=int, default=3,
                     help="informativeness threshold; 3 is the preregistered primary")
+    ap.add_argument("--seed", type=int, default=None,
+                    help="replicate seed; omit for the primary models")
     args = ap.parse_args(argv)
     try:
         report = run(project_root=args.project_root, num_workers=args.num_workers,
-                     label_source=args.label_source, threshold=args.threshold)
+                     label_source=args.label_source, threshold=args.threshold, seed=args.seed)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"{STAGE} FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)

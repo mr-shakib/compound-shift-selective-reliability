@@ -43,12 +43,14 @@ from .bootstrap import (BOOTSTRAP_REPLICATES, BOOTSTRAP_SEED, CI_LEVEL,
                         MATERIALITY, bootstrap_pvalue, coverage_drift, decide,
                         holm_adjust, independent_bootstrap, paired_bootstrap,
                         percentile_ci, selective_error)
+from ..training.runner import checkpoint_name
 from .cache import cache_path, checkpoint_digest, load as cache_load
 
 STAGE = "C3-E6 Stage 10"
 TITLE = "CONFIRMATORY ANALYSIS"
 OUTPUT_DIR = "results/c3e_cross_site/stage10_analysis"
 OUTPUT_DIR_S1 = "results/c3e_cross_site/stage10_analysis_findings"
+STAGE7_SEED = "results/c3e_mimic/stage7_thresholds_seed{seed}/stage7_thresholds.json"
 STAGE7 = "results/c3e_mimic/stage7_thresholds/stage7_thresholds.json"
 STAGE7_S1 = "results/c3e_mimic/stage7_thresholds_findings/stage7_thresholds.json"
 CKPT_DIR = "data/models/c3e"
@@ -78,20 +80,30 @@ def sha256_file(path: Path) -> str:
 
 def load_all(root: Path, stage7: dict[str, Any],
              label_source: str = "impression",
-             threshold: int = 3) -> dict[tuple[str, str, str], dict]:
+             threshold: int = 3,
+             seed: int | None = None) -> dict[tuple[str, str, str], dict]:
     """Load every cached pass and derive per-study error and confidence."""
     ckpt = root / CKPT_DIR
-    shas = {m: checkpoint_digest(ckpt / f"{m.lower()}_best.pt") for m in ("M1", "M2", "M4")}
+    shas = {m: checkpoint_digest(ckpt / checkpoint_name(m, seed))
+            for m in ("M1", "M2", "M4")}
     shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
+
+    models = ("M1", "M2", "M3", "M4") if seed is None else ("M1", "M4")
+    if seed is not None:
+        # M3 averages M1 and M2, and no M2 replicate exists. Building it from a
+        # replicate M1 and the primary M2 would mix seeds inside one model.
+        print(f"  seed {seed}: scoring M1 and M4 only; M3 needs an M2 replicate",
+              file=sys.stderr, flush=True)
 
     out: dict[tuple[str, str, str], dict] = {}
     for site in ("source", "external"):
-        for mid in ("M1", "M2", "M3", "M4"):
+        for mid in models:
             thr = np.array([stage7["models"][mid]["classification_thresholds"][t]
                             for t in TARGETS])
             for cond in ("C0", "C1", "C2"):
                 hit = cache_load(root, site, mid, cond, checkpoint_sha=shas[mid],
-                                 label_source=label_source, threshold=threshold)
+                                 label_source=label_source, threshold=threshold,
+                                 seed=seed)
                 if hit is None:
                     raise RuntimeError(
                         f"missing cached predictions for {site}/{mid}/{cond}. "
@@ -117,10 +129,12 @@ def _cut(stage7: dict, mid: str, cov: float) -> float:
 def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
             coverage: float = 0.8,
             label_source: str = "impression",
-            threshold: int = 3) -> dict[str, Any]:
-    stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
+            threshold: int = 3,
+            seed: int | None = None) -> dict[str, Any]:
+    stage7_path = root / (STAGE7_SEED.format(seed=seed) if seed is not None
+                          else (STAGE7 if label_source == "impression" else STAGE7_S1))
     stage7 = json.loads(stage7_path.read_text())
-    data = load_all(root, stage7, label_source, threshold)
+    data = load_all(root, stage7, label_source, threshold, seed)
 
     results: list[dict[str, Any]] = []
     per_pathology_p: dict[str, float] = {}
@@ -134,7 +148,8 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
         return pats, vals
 
     # ---- H1: external C0 minus source C0, unpaired across sites --------------
-    for mid in MULTIMODAL + (IMAGE_ONLY, "M2"):
+    h1_models = MULTIMODAL + (IMAGE_ONLY, "M2") if seed is None else ("M4", IMAGE_ONLY)
+    for mid in h1_models:
         cut = _cut(stage7, mid, coverage)
         ps, vs = site_arrays("source", mid)
         pe, ve = site_arrays("external", mid)
@@ -150,7 +165,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
         results.append(d)
 
     # ---- H2: interaction, paired within site, unpaired between ---------------
-    for mid in MULTIMODAL:
+    for mid in (MULTIMODAL if seed is None else ("M4",)):
         cut = _cut(stage7, mid, coverage)
         ps, vs = site_arrays("source", mid)
         pe, ve = site_arrays("external", mid)
@@ -171,7 +186,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
             results.append(d)
 
     # ---- H3: multimodal transfer gap minus image-only transfer gap -----------
-    for mid in MULTIMODAL:
+    for mid in (MULTIMODAL if seed is None else ("M4",)):
         cut_mm, cut_im = _cut(stage7, mid, coverage), _cut(stage7, IMAGE_ONLY, coverage)
         ps_mm, vs_mm = site_arrays("source", mid)
         pe_mm, ve_mm = site_arrays("external", mid)
@@ -201,7 +216,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
 
     # ---- H4: C2 minus C1 within site, paired --------------------------------
     for site in ("source", "external"):
-        for mid in MULTIMODAL:
+        for mid in (MULTIMODAL if seed is None else ("M4",)):
             cut = _cut(stage7, mid, coverage)
             pats, vals = site_arrays(site, mid)
             stat = lambda v: (selective_error(v["e_C2"], v["c_C2"], cut)
@@ -231,7 +246,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
         "stage": STAGE, "title": TITLE, "status": "PASS",
         "declarations": list(DECLARATIONS),
         "label_source": label_source,
-        "informativeness_threshold": threshold,
+        "informativeness_threshold": threshold, "seed": seed,
         "settings": {"replicates": replicates, "seed": BOOTSTRAP_SEED,
                      "ci_level": CI_LEVEL, "materiality": MATERIALITY,
                      "coverage": coverage, "resampling_unit": "patient"},
@@ -285,7 +300,10 @@ def write_outputs(root: Path, report: dict[str, Any]) -> None:
     base = (OUTPUT_DIR if report.get("label_source", "impression") == "impression"
             else OUTPUT_DIR_S1)
     t = report.get("informativeness_threshold", 3)
+    sd = report.get("seed")
     out = root / (base if t == 3 else f"{base}_T{t}")
+    if sd is not None:
+        out = Path(str(out) + f"_seed{sd}")
     out.mkdir(parents=True, exist_ok=True)
     (out / "stage10_analysis.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -345,6 +363,8 @@ def main(argv: list[str] | None = None) -> int:
                     choices=["impression", "findings"])
     ap.add_argument("--threshold", type=int, default=3,
                     help="informativeness threshold; 3 is the preregistered primary")
+    ap.add_argument("--seed", type=int, default=None,
+                    help="replicate seed; omit for the primary models")
     args = ap.parse_args(argv)
     try:
         print(f"{STAGE} — {TITLE}", file=sys.stderr)
@@ -352,7 +372,7 @@ def main(argv: list[str] | None = None) -> int:
               f"coverage {args.coverage:.0%}", file=sys.stderr, flush=True)
         report = analyse(Path(args.project_root).resolve(),
                          replicates=args.replicates, coverage=args.coverage,
-                         label_source=args.label_source, threshold=args.threshold)
+                         label_source=args.label_source, threshold=args.threshold, seed=args.seed)
         write_outputs(Path(args.project_root).resolve(), report)
     except Exception as exc:  # noqa: BLE001
         print(f"{STAGE} FAIL: {type(exc).__name__}: {exc}", file=sys.stderr)
