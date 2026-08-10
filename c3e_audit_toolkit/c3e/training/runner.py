@@ -235,14 +235,39 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
     suffix = "" if seed == SEED else f"_seed{seed}"
     ckpt_path = ckpt_dir / f"{model_id.lower()}_best{suffix}.pt"
 
+    # Resume state. Training is long enough that an interruption costs a day,
+    # and a run that restarts from epoch 1 is not the same run: its best epoch
+    # may lie beyond where the interrupted one stopped. Optimiser and scheduler
+    # state are saved with the epoch counter so a resumed run continues the same
+    # trajectory rather than beginning a new one.
+    resume_path = ckpt_dir / f"{model_id.lower()}{suffix}_resume.pt"
     best = -float("inf")
     best_epoch = -1
     patience = opt_cfg["early_stopping_patience"]
     since_improved = 0
     history: list[dict[str, Any]] = []
+    start_epoch = 1
+
+    if resume_path.exists():
+        state = torch.load(resume_path, map_location=device, weights_only=False)
+        if state.get("model_id") == model_id and state.get("seed") == seed:
+            model.load_state_dict(state["model_state"])
+            optimizer.load_state_dict(state["optimizer_state"])
+            scaler.load_state_dict(state["scaler_state"])
+            best = state["best"]
+            best_epoch = state["best_epoch"]
+            since_improved = state["since_improved"]
+            history = state["history"]
+            start_epoch = state["epoch"] + 1
+            print(f"  [{model_id}] resuming at epoch {start_epoch}; best so far "
+                  f"{best:.4f} at epoch {best_epoch}", file=sys.stderr, flush=True)
+        else:
+            print(f"  [{model_id}] ignoring resume state from a different run",
+                  file=sys.stderr, flush=True)
+
     started = time.time()
 
-    for epoch in range(1, opt_cfg["max_epochs"] + 1):
+    for epoch in range(start_epoch, opt_cfg["max_epochs"] + 1):
         model.train()
         running, seen, t0, last = 0.0, 0, time.time(), 0.0
         for step, batch in enumerate(dl_tr, 1):
@@ -299,13 +324,27 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
         if improved:
             best, best_epoch, since_improved = val_auroc, epoch, 0
             torch.save({"model_id": model_id, "epoch": epoch, "val_auroc_macro": val_auroc,
-                        "state_dict": model.state_dict()}, ckpt_path)
+                        "seed": seed, "state_dict": model.state_dict()}, ckpt_path)
         else:
             since_improved += 1
-            if since_improved >= patience:
-                print(f"  [{model_id}] early stop: no improvement in {patience} epochs",
-                      file=sys.stderr, flush=True)
-                break
+
+        # Written every epoch, improvement or not, so an interruption resumes
+        # from the last completed epoch rather than the last improvement.
+        torch.save({"model_id": model_id, "seed": seed, "epoch": epoch,
+                    "best": best, "best_epoch": best_epoch,
+                    "since_improved": since_improved, "history": history,
+                    "model_state": model.state_dict(),
+                    "optimizer_state": optimizer.state_dict(),
+                    "scaler_state": scaler.state_dict()}, resume_path)
+
+        if since_improved >= patience:
+            print(f"  [{model_id}] early stop: no improvement in {patience} epochs",
+                  file=sys.stderr, flush=True)
+            break
+
+    # The run completed on its own terms, so the resume state is no longer
+    # meaningful and would otherwise make a later rerun a no-op.
+    resume_path.unlink(missing_ok=True)
 
     digest = hashlib.sha256(ckpt_path.read_bytes()).hexdigest() if ckpt_path.exists() else None
     return {
@@ -315,6 +354,7 @@ def train_one(model_id: str, *, project_root: Path, settings: dict[str, Any],
         "train_patients": int(train_idx["subject_id"].nunique()),
         "internal_val_patients": int(val_idx["subject_id"].nunique()),
         "epochs_run": len(history),
+        "completed_normally": True,
         "best_epoch": best_epoch,
         "best_val_auroc_macro": round(best, 6) if best > -float("inf") else None,
         "early_stopped": len(history) < opt_cfg["max_epochs"],
