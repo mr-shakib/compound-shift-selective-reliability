@@ -1,0 +1,40 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+% JAMIA requires a Conclusion section matching the abstract heading. The
+% venue-neutral draft ends on Future work; this states the takeaway once.
+
+A selective policy frozen at its development hospital did not hold its operating
+point at a second institution. The degradation was driven by institution rather
+than by context fragility, and adding pre-diagnostic clinical context did not
+increase transfer exposure --- both multimodal models transported better than
+the image-only control, contrary to our hypothesis and stable across a second
+training seed.
+
+Two properties of that failure matter more for practice than its size. It is
+invisible to coverage monitoring: every realised coverage stayed inside the
+prespecified drift materiality at both sites while selective error rose. And it
+is erased by the standard remedy: re-calibrating thresholds at the target site
+would have restored the operating point and concealed that the shipped artifact
+had never transported. A site that monitored coverage and re-calibrated on
+arrival would have observed nothing wrong.
+
+The study also constrains how such comparisons can be made at all. A
+prespecified label-source sensitivity reversed every cross-site contrast while
+leaving every within-site contrast intact, and the image-only control settles
+why: it produced bit-identical external predictions under both label sources
+while its transfer gap changed sign. Nothing about the model, the images, or
+the intervention differed --- only the labels. The two automatically derived
+label sets are not commensurable across these cohorts, differing more than
+fourfold in labelling density. Cross-site selective-error contrasts between
+these datasets are therefore defined only relative to a label source, and any
+benchmark that compares them under automatically derived labels inherits that
+constraint.
+
+What generalises is the protocol rather than the effect size. Two sites give a
+difference, not a distribution, and the transfer gap measured here should not
+be read as the gap to expect elsewhere. What should transfer is the design:
+freeze the policy, transfer it unchanged, vary context deliberately at both
+sites, and prespecify the label sensitivity --- because on this evidence a
+cross-site reliability claim that has not been tested against a second label
+source has not yet been tested.

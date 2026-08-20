@@ -1,0 +1,349 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Principal findings}
+
+A selective prediction policy calibrated at one hospital did not transport. At
+the external site, with clinical context fully intact, selective error rose by
+\num{0.047} for probability late fusion and \num{0.038} for feature fusion,
+each several times the materiality threshold and each with an interval
+comfortably excluding zero. Nothing had to be manipulated to produce this: the
+degradation is a property of moving between institutions.
+
+Two of the three remaining hypotheses came back contrary to prediction, and one
+of those reversals is decisive. We set out expecting multimodal models to carry
+greater exposure, on the reasoning that a model which gains from context has
+more to lose when context degrades. The opposite held. Both multimodal models
+carried \emph{smaller} transfer gaps than the image-only control
+(\cref{tab:h3}), with intervals lying entirely below zero and magnitudes above
+materiality. The compound interaction was likewise not super-additive: context
+degradation cost less at the external site than at the source, not more.
+
+The transport result did not survive its pre-specified label-source
+sensitivity, for reasons we take up in \cref{sec:s1-discussion}. It is
+established for the primary label endpoint and is not established as robust to
+label source.
+
+We report all of this as it came out. The protocol was frozen, hash-manifested
+and validated before any model existed, and the analysis code was written and
+tested before these numbers were computed. The value of that discipline is
+precisely that it makes a contradicted prediction reportable rather than
+negotiable, and that it forced a sensitivity whose failure we would otherwise
+have had no occasion to discover.
+
+\subsection{The policy fails before the models do}
+
+The pattern across \cref{tab:selective-risk} and the coverage results is
+consistent: institutional transfer degrades selective risk substantially, while
+the abstention mechanism holds its operating point --- until context is
+manipulated, at which point coverage moves sharply.
+
+Under intact context, no model breached the prespecified coverage-drift
+criterion at either site, and feature fusion sat within \num{0.005} of its
+\SI{80}{\percent} target at a hospital it had never seen. All four breaches
+arose under intervention. The clearest is mechanical rather than subtle: with
+every context replaced by one placeholder, the text-only model emits a constant
+prediction, every study clears the confidence cutoff at once, and coverage goes
+to \SI{100}{\percent}. A system that abstains on nothing has stopped being a
+selective classifier while continuing to report a confidence.
+
+This distinction has practical weight. A deployment that monitored coverage
+alone would have seen an operating point that looked correct at the new site
+while error rose by a third to two thirds. A deployment that monitored accuracy
+alone would have missed the condition under which the abstention mechanism
+degenerates. Neither signal is sufficient by itself.
+
+\subsection{Why the multimodal reversal is worth taking seriously}
+
+The reversal is not a small effect near a threshold. Both intervals exclude zero
+on the side opposite the prediction, and the advantage of feature fusion over
+the image-only control \emph{widens} across sites, from \num{0.034} to
+\num{0.069}.
+
+It is also not explained by the text arm being independently robust. The
+text-only model had the \emph{largest} transfer gap of the four
+(\num{+0.076}). Both unimodal models transported worse than both multimodal
+ones. Whatever is happening, it is not that one modality is site-invariant and
+carries the other.
+
+We offer two candidate explanations and label them as conjecture, since the
+design was not built to separate them. The first is that jointly trained fusion
+constrains the image pathway from relying on acquisition characteristics
+specific to the source institution, in the way an auxiliary signal can act as a
+regulariser. The second is that the two modalities fail on partially disjoint
+subsets of studies, so a fused confidence ranks errors more stably under shift
+than either alone even when both are individually degraded. Distinguishing these
+would require ablations the present protocol does not contain, and we do not
+claim to have done so.
+
+What can be said without conjecture is narrower and still useful: on this pair
+of hospitals, with these labels and this policy, adding pre-diagnostic context
+did not increase the cost of institutional transfer, and the burden of proof for
+the opposite claim now sits with anyone asserting it.
+
+\subsection{Sub-additive rather than compounding shift}
+
+The interaction estimates were near zero or negative, so removing or corrupting
+context cost less at the external site than at the source. One explanation is
+available from the design itself and belongs in the interpretation rather than
+being left implicit.
+
+The informativeness rule that admits a study to the intervention counts
+effective tokens. As \cref{sec:limitations} states, it detects emptiness and
+brevity, not vagueness. Studies at the two sites that both qualify as
+informative need not carry equal diagnostic signal, and if external context is
+on average thinner in content while passing the same token threshold, then
+removing it necessarily costs less. That is a limitation of the state
+assignment, not evidence about compound shift, and it is the reading we favour
+over any claim that compound shift is benign.
+
+Misaligned context remained worse than absent context in three of four
+instances (\cref{tab:h4}), which is the direction predicted. Wrong information
+is not equivalent to no information, and a system that treats a populated
+context field as evidence of a usable one will pay for that.
+
+\subsection{What the label-source sensitivity establishes, and what it does not}
+\label{sec:s1-discussion}
+
+H1 does not survive its own pre-specified sensitivity. Under findings-derived
+labels the cross-site difference reverses, and we report that rather than
+qualifying it away. The claim that selective reliability fails to transport is
+therefore established for the primary label endpoint and \emph{not} established
+as robust to label source.
+
+The reason is measurable and was anticipated. The frozen harmonisation plan
+designated the findings endpoint a sensitivity rather than a primary on the
+stated grounds that it is sparse, and required label distributions be compared
+site-to-site before the cross-site experiment. That comparison
+(\cref{tab:comparability}) shows the two findings label sets differ by a factor
+of \num{4.9} in how often a cell carries a label at all, and by \num{35}
+percentage points in what fraction of labelled cells are positive, against
+\num{1.1} points under the primary endpoint. A risk computed over
+\SI{9}{\percent} of cells that are \SI{69}{\percent} positive is not commensurable
+with one computed over \SI{45}{\percent} of cells that are \SI{33}{\percent}
+positive, and a difference between two such quantities is not a transport
+estimate.
+
+That reading is constrained rather than convenient, and two observations close
+it off from the alternatives. First, the divergence separates exactly by contrast
+type: every contrast comparing across sites moves, every contrast comparing
+models or conditions within a site holds, in all eight instances. Had the
+sensitivity merely been noisier, the disagreement would not have partitioned
+along the one axis that label non-comparability predicts.
+
+Second, and more directly, the image-only control reverses too. M1 consumes no
+text, and its external cohort is identical between the two runs, so it emits
+bit-identical predictions under both label sources. Its transfer gap still flips
+sign. A difference computed from predictions that did not change cannot have
+changed because of the model, the images, or the context; the labels are the only
+thing that moved. This is not an inference we could have declined to draw.
+
+Two consequences follow. H3 and H4, which never compare across sites within a
+single estimate, carry their label-source robustness. H1 and H2 do not, and the
+strength of those claims should be read accordingly.
+
+The broader point is methodological, and we think it is the more useful one.
+Cross-site evaluation presupposes commensurable labels, and label sets bearing
+the same name at two institutions need not be commensurable. Ours were not, and
+the divergence is large enough to reverse a sign. Any study comparing risk
+across institutions inherits this requirement whether or not it checks it; we
+checked it only because the protocol demanded the check in advance. This is a
+concrete instance of the argument that cross-domain failure in chest radiography
+is driven by label shift~\cite{cohen2020limits}, arriving here not as a
+competing explanation for model behaviour but as a constraint on what can be
+compared at all.
+
+\subsection{Relation to prior work}
+
+Our source-site results are consistent with the finding that clinical history
+improves chest-radiograph classification~\cite{yang2025mcxnet}: feature fusion
+attained the lowest selective error under every condition at both sites. Where
+we depart is in what that improvement implies. That work observes naturally
+context-free images within one institution; we intervene on context under a
+frozen rule and evaluate across institutions, and find that the benefit does not
+convert into transfer fragility.
+
+The dominance of institutional over contextual degradation is consonant with
+the argument that cross-domain failure in chest radiography is driven by label
+shift rather than image shift~\cite{cohen2020limits}, and with the observation
+that calibration and cross-center generalisation remain open after multi-center
+benchmarking~\cite{cxrlt2026}. Our contribution to that line is to show the
+failure persists when the quantity being transferred is an explicit abstention
+policy rather than a classifier alone, and to quantify it at a fixed operating
+burden.
+
+Our reversal also has a precedent worth naming. Comparing architectures for
+robustness to acquisition view type, model rankings reversed entirely on a
+second dataset, with the model best on internal validation becoming the worst
+externally~\cite{farquhar2026acquisition}. Our H3 result is a reversal of the
+same kind and in the opposite direction: the ordering we predicted from
+source-site behaviour did not survive the move, and the models we expected to be
+most exposed proved least. Two findings of this shape, on different shift axes
+and different architectures, suggest a general caution rather than a
+peculiarity of either study. Internal ranking is not evidence about external
+ranking, and reporting one as though it licensed the other is a recurring error
+this literature has yet to stop making.
+
+The missing-modality literature treats absent inputs as an obstacle to engineer
+around~\cite{wang2025missing,wang2025moehealth}. Our results suggest a
+reordering of priorities for deployment: on this evidence, the modality
+robustness problem was less costly than the institutional transfer problem, and
+architectural effort spent on the former would not have addressed the latter.
+
+\subsection{Methodological observations}
+
+Two findings arose from constructing the protocol and generalise past it.
+
+A substantial minority of source reports embed a preliminary radiologist
+interpretation inside the report body. Any pipeline that takes text preceding
+the findings section as pre-diagnostic context ingests post-diagnostic text for
+those studies. This is a silent contamination: it inflates apparent context
+value without producing any visible failure, and it affects any study using this
+corpus in this way, not only ours.
+
+Separately, the decision rule this literature commonly adopts --- requiring both
+that an interval exclude zero and that the point estimate reach a materiality
+threshold --- caps power at \SI{50}{\percent} when the true effect equals that
+threshold, for any sample size. Studies adopting such a rule should power
+against a minimum detectable effect and state materiality as the smallest effect
+worth acting on, not as the effect they are powered to detect.
+
+\subsection{Implications for deployment}
+
+A frozen abstention threshold should not be assumed to transport. On this
+evidence it does not, and the failure is invisible to coverage monitoring under
+normal operation, because coverage was well behaved at the external site
+precisely where error was not.
+
+Re-calibrating at the target site would have concealed this. A study that
+re-fitted thresholds externally would have reported an operating point restored
+and a policy that transports, when what had actually been demonstrated is that
+the method can be re-tuned. Whether the shipped artifact survives the move is a
+different question, and answering it requires freezing the artifact.
+
+\subsection{Limitations bearing on interpretation}
+
+\cref{sec:limitations} states the full set; three bear directly on how these
+conclusions should be read.
+
+Single-seed training bears on the H3 reversal specifically. Its magnitude,
+\numrange{0.027}{0.035}, is not far above what training variation alone might
+produce, and the bootstrap does not speak to that source of uncertainty. Two
+features of the result argue against a seed artefact: the direction holds across
+two independently constructed fusion models, and the gap widens across sites
+rather than staying flat. Neither is decisive, and a replication with repeated
+seeds would settle it.
+
+Note also that H1, the confirmed primary, is insulated from this concern in a
+way H3 is not. H1 compares the same weights evaluated at two sites, so whatever
+idiosyncrasies a particular training run produced are carried to both and
+largely cancel in the difference. H3 compares two different models, where no
+such cancellation occurs.
+
+The two sites differ in more than institution. Their images have different
+compression histories at origin, their permitted context arrives through
+different mechanisms, and their label prevalences differ. The design isolates
+context by intervention within each site, but the institutional contrast remains
+a comparison of two hospitals rather than of institution alone.
+
+Finally, this is one pair of hospitals. Nothing here establishes how large a
+transfer gap to expect elsewhere, only that a frozen policy failed to transport
+between these two by a margin that would matter clinically.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+
+Several limitations are known independently of the confirmatory result and are
+stated here rather than deferred.
+
+\paragraph{Effective token count measures brevity, not vagueness.}
+The informativeness rule that separates informative from low-information context
+counts tokens carrying alphanumeric content after de-identification placeholders
+are removed. It therefore detects emptiness and brevity. A genuinely vague but
+lengthy indication --- ``evaluate'' followed by boilerplate --- scores as
+informative. This is a measurement limitation of the state assignment, not of
+the controlled interventions, which do not depend on it beyond eligibility.
+
+\paragraph{The primary evaluation partition is not an official split.}
+The official test split of the source dataset yields too few patients within the
+study cohort to support the primary comparison, so a patient-disjoint partition
+was carved from the training split using patient identifiers and a frozen seed
+alone. Primary estimates are consequently not directly comparable to published
+official-split baselines. The official validation and test splits are retained
+and reported as secondary confirmation.
+
+\paragraph{The transport result is not robust to label source.}
+H1 is established under the primary label endpoint and reverses under the
+pre-specified sensitivity endpoint. The two findings-derived label sets proved
+non-commensurable across sites, differing by a factor of five in labelling
+density, so the sensitivity cannot arbitrate the cross-site contrast in either
+direction. What this leaves is a transport failure demonstrated for one label
+endpoint, with its label-source robustness untested rather than refuted.
+Establishing it would require a label endpoint that is dense and comparable at
+both institutions, which neither available endpoint is.
+
+\paragraph{Two training seeds, and only for two of the four models.}
+The bootstrap quantifies uncertainty in \emph{evaluation}, not variability
+across training runs. A second seed was run for the image-only and
+feature-fusion models and reproduced every verdict
+(\cref{sec:seed-replicate}), but two runs bound seed variability loosely: point
+estimates moved by up to a third of their own magnitude while keeping their
+sign and their verdict. Differences between models smaller than the materiality
+threshold remain unestablished against seed-to-seed variation. The text-only
+model was not retrained, so neither it nor the late-fusion model that consumes
+it has been replicated.
+
+\paragraph{Source images are lossy, external images are lossless.}
+The source dataset publishes JPEG images and the external dataset publishes PNG.
+Both were reduced to the model input resolution by a single identical bilinear
+step, so no additional resampling asymmetry was introduced, but the compression
+history of the two sites differs at origin. This difference tracks the site
+variable and cannot be removed by preprocessing choices.
+
+\paragraph{One external image is unusable at source.}
+One frontal image in the external dataset matches the publisher's recorded
+checksum yet fails to decode: its PNG header parses while an IDAT chunk fails
+its cyclic redundancy check. The damage is upstream and no retransfer repairs
+it. That study is excluded, and the exclusion is reported rather than absorbed.
+
+\paragraph{Studies whose only images lack a view label are excluded.}
+Images carrying no view label are treated as non-frontal, which is the
+conservative reading, since assuming them frontal would admit views the protocol
+excludes. Such exclusions may not be missing at random.
+
+\paragraph{Section boundaries derive from a curated header vocabulary.}
+Reports whose headers fall outside that vocabulary are excluded rather than
+parsed heuristically, which trades coverage for the guarantee that no
+post-diagnostic text enters a pre-diagnostic field.
+
+\paragraph{No sociodemographic subgroup or fairness analysis was performed.}
+This study reports no patient demographics and no subgroup performance
+estimates, and applied no fairness-specific method. The omission was not a
+considered exclusion: the protocol specified cohorts, endpoints, contrasts and
+materiality without naming sociodemographic strata, so no such analysis was
+frozen in advance, and adding one after the external results were inspected
+would be post-hoc exploratory by the protocol's own rule.
+
+The gap matters here more than it would in a study reporting only aggregate
+accuracy, because it interacts with the central finding. If a frozen abstention
+policy transports poorly between institutions, there is no reason to assume it
+transports uniformly across patient groups within one. A policy that deferred
+disproportionately on one group would be a fairness failure invisible to every
+metric reported here --- the same silence that makes coverage monitoring
+inadequate for institutional transfer would hide it. Both datasets publish
+demographic fields sufficient to test this, and doing so is the natural
+companion to the third site identified in \cref{sec:future-work}.
+
+\subsection{Future work}
+\label{sec:future-work}
+
+The most informative next step is not a better model but a third site. Two sites
+give a difference; three begin to give a distribution, and would show whether
+the multimodal transfer advantage observed here is a property of these
+institutions or of multimodal fusion.
+
+Separately, the sub-additivity result motivates an informativeness rule that
+measures content rather than length. A rule that admitted studies on the
+strength of what their context says, rather than how much of it there is, would
+make the interaction estimate interpretable in a way the present one is not.

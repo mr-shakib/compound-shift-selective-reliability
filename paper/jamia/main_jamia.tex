@@ -1,0 +1,230 @@
+% C3E --- JAMIA Research and Applications submission build.
+%
+% SEPARATE FROM ../main.tex BY DESIGN. ../main.tex holds the full-length,
+% venue-neutral manuscript and remains the source text for the supplement.
+% This build is the one that gets compressed to JAMIA's limits; the full-length
+% draft must survive intact so that material cut from here has somewhere to go.
+%
+% Requirements encoded below are from the JAMIA General Instructions
+% (academic.oup.com/jamia/pages/General_Instructions), Research and
+% Applications article type:
+%
+%   Body            4,000 words  (Background through Conclusion; excludes
+%                                 abstract, references, legends, table notes)
+%   Abstract          250 words  structured, five named headings
+%   Tables                    4
+%   Figures                   6
+%   References        unlimited
+%   Layout            double-spaced, line-numbered
+%   Sections          Background and Significance / Objective /
+%                     Materials and Methods / Results / Discussion / Conclusion
+%
+% NOTE: JAMIA Open is a different journal with tighter limits (2,000 words,
+% 150-word abstract). Do not format against its instructions by mistake.
+%
+% Build:  cd paper/jamia && latexmk -pdf main_jamia.tex
+% Budget: ./budget.sh
+
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{xcolor}
+
+% JAMIA requires double spacing and line numbers for review.
+\usepackage{setspace}
+\usepackage[modulo]{lineno}
+\doublespacing
+\linenumbers
+
+% Figures and sections live in the parent directory; this build borrows them
+% rather than copying, so a figure regenerated upstream is picked up here.
+\graphicspath{{../}{./}}
+
+\sisetup{detect-weight=true, group-minimum-digits=4, group-separator={,}}
+
+% Marks text still over budget or awaiting a decision. Every instance must be
+% gone before submission; budget.sh counts them.
+\newcommand{\overbudget}[1]{%
+  \par\medskip\noindent\fcolorbox{orange!60}{orange!5}{%
+    \parbox{0.95\linewidth}{\small\textbf{OVER BUDGET:} #1}}\par\medskip}
+
+\title{Does multimodal selective reliability transport across hospitals when
+pre-diagnostic clinical context changes? A compound-shift evaluation}
+
+\date{}
+
+\begin{document}
+
+% ---------------------------------------------------------------------------
+% Title page. JAMIA requires: title, corresponding author's full contact
+% details, every co-author's name / department / institution / degrees, up to
+% five keywords (MeSH preferred), and the body word count.
+% ---------------------------------------------------------------------------
+\begin{titlepage}
+\thispagestyle{empty}
+\nolinenumbers
+\begin{singlespace}
+
+\noindent{\LARGE\bfseries Does multimodal selective reliability transport
+across hospitals when pre-diagnostic clinical context changes? A compound-shift
+evaluation\par}
+
+\vspace{2em}
+
+\noindent\textbf{Authors}
+
+\vspace{0.5em}
+
+\noindent Shakib Howlader,\textsuperscript{1} [DEGREES]\\
+Adnan Rahman Sayeem,\textsuperscript{1} [DEGREES]
+
+\vspace{1em}
+
+\noindent\textsuperscript{1}[DEPARTMENT], Daffodil International University,
+Dhaka, Bangladesh
+
+\vspace{2em}
+
+\noindent\textbf{Corresponding author}
+
+\vspace{0.5em}
+
+\noindent Shakib Howlader\\
+{}[DEPARTMENT], Daffodil International University\\
+{}[FULL POSTAL ADDRESS], Dhaka, Bangladesh\\
+Email: [INSTITUTIONAL EMAIL --- journals prefer an institutional address to a
+personal one]\\
+ORCID: [ORCID iD]
+
+\vspace{2em}
+
+\noindent\textbf{Keywords}
+
+\vspace{0.5em}
+
+\noindent Radiography, Thoracic; Machine Learning; Reproducibility of Results;
+Data Accuracy; Clinical Decision Support Systems
+
+\vspace{2em}
+
+\noindent\textbf{Word count}
+
+\vspace{0.5em}
+
+\noindent Body (Background and Significance through Conclusion), excluding
+abstract, references, figure legends and table notes: [INSERT --- run
+\texttt{./budget.sh}]
+
+\end{singlespace}
+\end{titlepage}
+
+% ---------------------------------------------------------------------------
+% Structured abstract. Five headings, 250 words maximum.
+% ---------------------------------------------------------------------------
+\section*{Abstract}
+
+\noindent\textbf{Objective.}
+To determine whether a selective-prediction policy frozen at the development
+hospital --- per-pathology thresholds and an abstention cutoff --- holds its
+operating point when a multimodal chest-radiograph model is deployed where
+pre-diagnostic clinical context also differs.
+
+\noindent\textbf{Materials and Methods.}
+Preregistered evaluation crossing institutional and context shift. Four models
+--- image-only and text-only controls, probability late fusion, and joint
+feature fusion --- were developed on MIMIC-CXR-JPG (\num{14766} studies) and
+evaluated on CheXpert Plus (\num{132923} informative studies, \num{64709}
+patients), thresholds transferred unchanged. At each site, context was
+left intact, removed, or replaced with another patient's. The endpoint was
+selective five-label Hamming error at \SI{80}{\percent} coverage, with
+\SI{95}{\percent} percentile intervals from a patient-clustered bootstrap
+(\num{2000} replicates); materiality \num{0.02}.
+
+\noindent\textbf{Results.}
+The policy did not transport. With context intact, selective error rose by
+\num{0.047} (\SI{95}{\percent} CI \numrange{0.041}{0.053}) for late fusion and
+\num{0.038} (\numrange{0.034}{0.043}) for feature fusion. Contrary to
+hypothesis, both multimodal models transported \emph{better} than the
+image-only control, by \num{0.027} and \num{0.035}. Coverage held across sites
+but broke under context intervention, reaching \SI{100}{\percent}. A second
+training seed reproduced all seven available verdicts.
+
+\noindent\textbf{Discussion.}
+A pre-specified label-source sensitivity reversed every cross-site contrast
+while leaving within-site contrasts intact. The image-only control produced
+bit-identical external predictions under both label sources yet changed sign,
+establishing that the two CheXbert label sets are non-commensurable across
+these cohorts (labelling density \SI{44.6}{\percent} versus
+\SI{9.1}{\percent}).
+
+\noindent\textbf{Conclusion.}
+Cross-site selective-error contrasts are defined only relative to a label
+source. Coverage monitoring alone would not have detected the degradation, and
+re-calibrating at the target site would have concealed it.
+
+\clearpage
+
+% ---------------------------------------------------------------------------
+% Body
+% ---------------------------------------------------------------------------
+\input{sections/01_background}
+\input{sections/02_objective}
+\input{sections/03_materials_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_conclusion}
+
+% ---------------------------------------------------------------------------
+% Statements required by JAMIA. Every one of these is mandatory except CRediT,
+% which is recommended; the data availability statement is explicitly required.
+% ---------------------------------------------------------------------------
+\clearpage
+\section*{Acknowledgments}
+[TO COMPLETE]
+
+\section*{Author contributions}
+% CRediT taxonomy. JAMIA recommends rather than requires this.
+[TO COMPLETE --- CRediT roles for both authors: conceptualization, methodology,
+software, formal analysis, investigation, data curation, writing (original
+draft), writing (review and editing), visualization, supervision.]
+
+\section*{Funding}
+[TO COMPLETE --- state ``This research received no specific grant from any
+funding agency in the public, commercial, or not-for-profit sectors'' if
+unfunded. Funders must be named from the Crossref Funder Registry.]
+
+\section*{Conflicts of interest}
+[TO COMPLETE --- ``None declared.'' if none.]
+
+\section*{Data availability}
+% Mandatory at JAMIA. Both datasets are credentialed-access rather than open,
+% which the statement has to say plainly; the analysis code is the part that
+% can be released.
+The data underlying this article are third-party datasets available under
+credentialed access. MIMIC-CXR-JPG is available from PhysioNet to users who
+complete the required training and sign the data use agreement. CheXpert Plus
+is available from the Stanford AIMI repository under its own registration and
+data use agreement. Neither dataset may be redistributed by the authors. The
+analysis code, the preregistered protocol, the amendment log, and all aggregate
+result artifacts that support this article are available at [REPOSITORY URL /
+DOI --- to complete].
+
+\clearpage
+% JAMIA uses Vancouver (numbered, Medline journal abbreviations). vancouver.bst
+% is not installed here; unsrt is numbered-in-citation-order, which matches the
+% ordering rule. Install texlive-publishers for true vancouver.bst before
+% submission, or verify reference formatting by hand.
+\bibliographystyle{unsrt}
+\bibliography{../references}
+
+\end{document}

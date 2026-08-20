@@ -1,0 +1,40 @@
+\section{Objective}
+\label{sec:objective}
+
+% JAMIA requires an Objective section matching the abstract heading. The
+% venue-neutral draft states the aim across the closing paragraphs of the
+% introduction instead; this section states it once, explicitly, and names the
+% four prespecified contrasts so the Results section can be read against them.
+
+We asked whether a selective-prediction policy survives deployment at a hospital
+other than the one that produced it, when the pre-diagnostic clinical context
+the model consumes changes at the same time. The policy under test is the one
+that would actually ship: per-pathology decision thresholds and an abstention
+cutoff selected once at the source site and transferred unchanged, rather than
+re-fitted at the target site.
+
+Four contrasts were prespecified in a hash-manifested protocol before any
+external-site result existed:
+
+\begin{itemize}
+  \item \textbf{H1 --- transport.} Selective error at the external site minus
+    selective error at the source site, with context intact. Tests whether the
+    frozen policy holds its operating point across institutions.
+  \item \textbf{H2 --- compound interaction.} The context effect at the
+    external site minus the same effect at the source site. A positive value
+    would indicate that the two shifts compound super-additively.
+  \item \textbf{H3 --- multimodal exposure.} The transfer gap of each
+    multimodal model minus the transfer gap of the image-only control. A
+    positive value would indicate that consuming clinical context increases
+    exposure to institutional transfer.
+  \item \textbf{H4 --- conflicting versus absent context.} Selective error
+    under replaced context minus selective error under removed context, within
+    site. A non-negative value would indicate that misaligned context is no
+    better than no context at all.
+\end{itemize}
+
+Two further questions were prespecified as mandatory sensitivities rather than
+as hypotheses: whether the confirmatory verdicts hold under an alternative
+label source derived from a different report section, and whether they hold
+under a second training seed. Both are reported with the confirmatory results,
+because the first of them changed what the study can claim.

@@ -1,0 +1,190 @@
+\section{Background and Significance}
+\label{sec:background}
+
+A chest-radiograph classifier that knows when to defer is more useful in a
+hospital than one that is merely accurate. Selective prediction formalises
+this: the model returns a decision only when its confidence clears a threshold,
+and refers the remainder to a human reader. The threshold fixes an operating
+point --- a coverage --- and with it the workload the system imposes on
+radiology.
+
+That operating point is chosen once, on data from the hospital where the system
+was developed. It is then deployed somewhere else. Whether it survives the move
+is an empirical question that is rarely asked, and the way it is usually asked
+answers something narrower than intended: models are re-evaluated at a second
+site, but the abstention threshold is re-fitted there too. A re-fitted threshold
+tests whether a \emph{method} transfers. It cannot test whether a \emph{deployed
+policy} transfers, because the policy that would actually ship is the frozen
+one.
+
+A second shift travels with the first and is usually left implicit. Multimodal
+chest-radiograph models increasingly consume clinical context alongside the
+image --- the indication, the referring history, the reason the study was
+ordered. This text is not a stable input. Its availability is a property of how
+a particular hospital documents care, and it varies across institutions in ways
+that have nothing to do with the patient. A model that learned to lean on the
+indication field at one site may find it thin, absent, or differently written at
+the next.
+
+Institution and context therefore shift together. Studies that vary one hold the
+other fixed: cross-institution work is typically image-only, and multimodal
+context work is typically single-institution. Holding one fixed cannot reveal
+whether they interact, and interaction is precisely what determines deployment
+risk. If a multimodal model is more accurate at the source site \emph{because}
+of context, and context is scarcer at the target site, then the measured benefit
+and the unmeasured fragility are the same phenomenon observed from two sides.
+
+This paper contributes an evaluation protocol that crosses the two shifts
+deliberately, so their interaction can be estimated rather than assumed away:
+
+\begin{itemize}
+  \item \textbf{Two sites.} A source hospital, where models are developed and
+    the selective policy is calibrated, and an external hospital used only for
+    evaluation.
+  \item \textbf{Three controlled context states at each site.} Context left
+    intact, context removed, and context replaced with another patient's ---
+    the last separating \emph{absence} of information from \emph{wrong}
+    information.
+  \item \textbf{A frozen policy.} Per-pathology thresholds and abstention
+    cutoffs are selected once at the source site and transferred unchanged, so
+    what is evaluated is the policy that would actually ship.
+  \item \textbf{Preregistration} in a machine-readable, hash-manifested
+    protocol, with every amendment dated and its confirmatory status recorded,
+    so the boundary between prespecified and post-hoc is auditable rather than
+    asserted.
+\end{itemize}
+
+The contribution is the protocol and what it measures. We propose no new
+architecture and no new uncertainty algorithm; the backbones are deliberately
+conventional, held constant so that architecture cannot serve as a competing
+explanation for any effect observed. This is not a prospective clinical study or
+a regulatory validation.
+
+Two further contributions emerged from building the protocol and are reported
+because they generalise beyond it. First, a structural hazard in deriving
+pre-diagnostic context from radiology reports: a substantial minority of reports
+embed a preliminary interpretation inside the report body, so any pipeline that
+takes ``everything before the findings section'' as context silently ingests
+post-diagnostic text (\cref{sec:report-structure}). Second, a property of the
+decision rule this literature commonly uses --- requiring both that a confidence
+interval exclude zero and that the point estimate reach a materiality threshold
+--- which caps statistical power at \SI{50}{\percent} when the true effect
+equals that threshold, regardless of sample size (\cref{sec:power}).
+
+\label{sec:related-work}
+
+Every work cited here was verified against its official publication page or
+full text.
+
+\subsection{Selective prediction under distribution shift}
+
+Selective classification has been extended to distribution shift outside
+medicine. The closest methodological work generalises selective classification
+so that a model rejects not only ambiguous in-distribution inputs but
+label-shifted and covariate-shifted ones, using margin-based confidence scores
+requiring no access to training data, evaluated on ImageNet, ImageNet-C,
+OpenImage-O, iWildCam, Amazon and CIFAR~\cite{selective_shift_2025}.
+
+That line establishes the machinery this paper applies. It does not take it to a
+clinical setting, does not involve a second hospital, and does not transfer a
+threshold frozen at one site to another. Whether an abstention policy remains at
+its intended operating point after institutional transfer is not addressed
+there, and is the question we ask.
+
+\subsection{Clinical context as a model input}
+\label{sec:rw-context}
+
+Clinical history improves chest-radiograph classification. The most directly
+comparable work fuses view-specific image encoders with clinical history through
+an attention-refinement mechanism on MIMIC-CXR-JPG, reporting
+\num{135682} images with clinical history alongside a further \num{59846}
+without~\cite{yang2025mcxnet}.
+
+That paper is a premise for ours rather than a competitor, and the distinction
+is worth stating precisely. It is single-institution, evaluated on held-out
+splits of one source, with no abstention policy, no audit of whether the
+diagnosis leaks into the history text, and no calibration transfer. Its
+\num{59846} context-free images are an \emph{observation} of naturally occurring
+missingness. We \emph{intervene} on context under a frozen informativeness rule,
+which is what allows an effect to be attributed to the manipulation rather than
+to whatever else distinguishes patients whose indication field happens to be
+empty.
+
+A second study reaches the same conclusion by a different route, fusing
+multi-view radiographs with clinical indications and vital signs and reporting
+an ablation in which each added modality
+contributes~\cite{sloan2025clinically}. That ablation is additive: it measures
+what each modality contributes as the model is built. Ours is interventional: it
+measures what a fixed, already-trained model loses when context degrades at
+deployment. The distinction is not pedantic, since a component that improves a
+model during development need not be one whose absence degrades it
+proportionally afterwards, and only the second quantity bears on deployment
+risk. That work also evaluates on benchmark splits of a single source, with no
+second institution, no abstention, and no threshold transfer.
+
+\subsection{Missing modalities as an architectural problem}
+
+A body of work treats missing modalities as something to engineer around.
+Transformer-based bi-modal fusion modules combined into a tri-modal framework,
+trained with multivariate losses for robustness to missing modalities on a
+14-label diagnosis task over MIMIC-IV and MIMIC-CXR, is
+representative~\cite{wang2025missing}; so is a mixture-of-experts framework
+selecting experts according to which modalities are present, for mortality,
+length-of-stay and readmission prediction~\cite{wang2025moehealth}.
+
+The orientation differs from ours in a way that matters. There, missingness is
+an obstacle and robustness is the objective; the natural question is how to keep
+performance up when a modality drops out. Here, missingness is the
+\emph{estimand}. We do not ask how to build a model that resists context loss,
+but how much reliability a conventionally built model loses when context
+degrades, and whether that loss is larger at a hospital the model has never
+seen. Both approaches also evaluate within a single source, so neither can speak
+to transfer.
+
+\subsection{Cross-institution generalisation in chest radiography}
+
+Cross-domain generalisation for chest-radiograph models is well studied.
+Foundational work across multiple datasets argues that cross-domain failure is
+driven by label shift rather than image shift, observing that models with strong
+individual performance disagree substantially with one
+another~\cite{cohen2020limits}. More recent multi-center benchmarking over
+\num{145000} images from PadChest and NIH Chest X-ray evaluates head-versus-tail
+performance, calibration and cross-center generalisation gaps, and concludes
+that detecting rare findings under multi-center shift remains
+challenging~\cite{cxrlt2026}.
+
+A related strand examines robustness to technical acquisition parameters rather
+than to institution. Comparing four architectures for the sensitivity gap
+between anteroposterior and posteroanterior views, model rankings reverse
+completely on a second dataset: a chest-radiograph-specific vision-language
+model with the smallest internal gap (\SI{14.3}{\percent}) shows the largest
+external one (\SI{48.9}{\percent}), while a self-supervised model stays near
+its internal value~\cite{farquhar2026acquisition}. That the second dataset
+shares an institution with the first, differing principally in labelling
+convention, makes the reversal more striking rather than less: internal ranking
+failed to predict external ranking without a change of hospital at all.
+
+This line is image-only. It varies institution, acquisition, or labelling while
+holding input availability fixed --- the mirror image of
+\cref{sec:rw-context} --- and none of it evaluates abstention or transfers a
+threshold frozen. Thresholds are re-fitted per dataset, typically by Youden's
+statistic, so what is measured is whether a method can be re-tuned rather than
+whether a policy survives the move. That the most recent multi-center benchmark
+still names calibration and cross-center generalisation as open problems
+supports treating the crossed question as unresolved rather than answered
+piecemeal.
+
+\subsection{The gap}
+
+Each axis has been studied in isolation: selective prediction under shift
+outside medicine~\cite{selective_shift_2025}; clinical context helping within a
+single hospital~\cite{yang2025mcxnet,sloan2025clinically}; missing modalities
+handled architecturally within a single
+source~\cite{wang2025missing,wang2025moehealth}; institutional, acquisition and
+labelling shift characterised for image-only
+models~\cite{cohen2020limits,cxrlt2026,farquhar2026acquisition}.
+
+Absent is the crossing: an evaluation in which institution and pre-diagnostic
+context availability vary together, under a selective policy frozen at the
+source site and transferred without refitting, with the interaction estimated
+rather than assumed. That is the design this paper specifies and reports.

@@ -152,14 +152,16 @@ data/chexpert_plus/_staging/
 # Cached per-study predictions (restricted: patient identifiers)
 data/predictions/
 
-# LaTeX build products
-paper/*.aux
-paper/*.bbl
-paper/*.blg
-paper/*.fdb_latexmk
-paper/*.fls
-paper/*.log
-paper/*.out
-paper/*.pdf
-paper/*.synctex.gz
-paper/*.toc
+# LaTeX build products. Globbed with ** so per-venue build directories
+# (paper/jamia/, and any future one) are covered without a new block each time;
+# paper/*.x would not match paper/jamia/*.x.
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.fdb_latexmk
+paper/**/*.fls
+paper/**/*.log
+paper/**/*.out
+paper/**/*.pdf
+paper/**/*.synctex.gz
+paper/**/*.toc
