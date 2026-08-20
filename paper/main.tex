@@ -39,8 +39,12 @@
 pre-diagnostic clinical context changes?\\
 \large A compound-shift evaluation protocol}
 
-\author[1]{Shakib Howlader}
-\affil[1]{Daffodil International University}
+% No optional affiliation marks: both authors share the one affiliation, so
+% authblk renders the byline without superscripts. Reintroduce [n] tags here
+% and matching \affil[n] lines if an author from another institution joins.
+\author{Shakib Howlader}
+\author{Adnan Rahman Sayeem}
+\affil{Daffodil International University}
 
 \date{Draft --- \today}
 
@@ -72,18 +76,29 @@ error at \SI{80}{\percent} coverage rose by \num{0.047} (\SI{95}{\percent} CI
 prespecified materiality threshold. Contrary to our hypothesis, both multimodal
 models transported \emph{better} than the image-only control, by \num{0.027} and
 \num{0.035} respectively, with intervals excluding zero. Coverage held under
-institutional transfer --- feature fusion stayed within \num{0.005} of target at
-the unseen hospital --- but broke under context intervention, including a
-degenerate case reaching \SI{100}{\percent} coverage.
+institutional transfer --- every realised coverage stayed within the
+prespecified \num{0.05} drift materiality --- but broke under context
+intervention, including a degenerate case reaching \SI{100}{\percent} coverage.
+A pre-specified second training seed reproduced all seven available verdicts,
+including the reversal.
 
 Selective reliability failed to transport across hospitals under the primary
 label endpoint, and the failure was driven by institution rather than by context
-fragility. Adding clinical context did not increase transfer risk. The
-cross-site result did not survive a pre-specified label-source sensitivity, and
-the label sets involved proved non-commensurable across sites by a factor of
-five in labelling density; the within-site findings were unaffected. Coverage
+fragility. Adding clinical context did not increase transfer risk. Coverage
 monitoring alone would not have detected the degradation, and re-calibrating at
 the target site would have concealed it.
+
+A pre-specified label-source sensitivity then reversed every cross-site
+contrast while leaving every within-site contrast intact. Tracing that
+dissociation established a second result: the CheXbert label sets derived from
+the two report sections are not commensurable across these cohorts, differing
+five-fold in labelling density and by \SI{35}{\percent} in positive rate. The
+image-only control is decisive, producing bit-identical external predictions
+under both label sources while its transfer gap changed sign. Cross-site
+selective-error contrasts are therefore defined only relative to a label
+source, which constrains this study's cross-site claims and, more generally,
+any benchmark that compares these two cohorts under automatically derived
+labels.
 \end{abstract}
 
 \input{sections/01_introduction}

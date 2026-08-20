@@ -30,11 +30,16 @@ endpoint, with its label-source robustness untested rather than refuted.
 Establishing it would require a label endpoint that is dense and comparable at
 both institutions, which neither available endpoint is.
 
-\paragraph{A single training seed.}
-Each model was trained once. The bootstrap quantifies uncertainty in
-\emph{evaluation}, not variability across training runs, so small differences
-between models are not established against seed-to-seed variation. Differences
-smaller than the materiality threshold should be read with that in mind.
+\paragraph{Two training seeds, and only for two of the four models.}
+The bootstrap quantifies uncertainty in \emph{evaluation}, not variability
+across training runs. A second seed was run for the image-only and
+feature-fusion models and reproduced every verdict
+(\cref{sec:seed-replicate}), but two runs bound seed variability loosely: point
+estimates moved by up to a third of their own magnitude while keeping their
+sign and their verdict. Differences between models smaller than the materiality
+threshold remain unestablished against seed-to-seed variation. The text-only
+model was not retrained, so neither it nor the late-fusion model that consumes
+it has been replicated.
 
 \paragraph{Source images are lossy, external images are lossless.}
 The source dataset publishes JPEG images and the external dataset publishes PNG.
@@ -58,3 +63,21 @@ excludes. Such exclusions may not be missing at random.
 Reports whose headers fall outside that vocabulary are excluded rather than
 parsed heuristically, which trades coverage for the guarantee that no
 post-diagnostic text enters a pre-diagnostic field.
+
+\paragraph{No sociodemographic subgroup or fairness analysis was performed.}
+This study reports no patient demographics and no subgroup performance
+estimates, and applied no fairness-specific method. The omission was not a
+considered exclusion: the protocol specified cohorts, endpoints, contrasts and
+materiality without naming sociodemographic strata, so no such analysis was
+frozen in advance, and adding one after the external results were inspected
+would be post-hoc exploratory by the protocol's own rule.
+
+The gap matters here more than it would in a study reporting only aggregate
+accuracy, because it interacts with the central finding. If a frozen abstention
+policy transports poorly between institutions, there is no reason to assume it
+transports uniformly across patient groups within one. A policy that deferred
+disproportionately on one group would be a fairness failure invisible to every
+metric reported here --- the same silence that makes coverage monitoring
+inadequate for institutional transfer would hide it. Both datasets publish
+demographic fields sufficient to test this, and doing so is the natural
+companion to the third site identified in \cref{sec:future-work}.

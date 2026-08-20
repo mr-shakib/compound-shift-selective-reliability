@@ -240,14 +240,78 @@ the choice of operating point. The two multimodal models respond to coverage in
 opposite directions --- M3's transfer gap grows with coverage while M4's shrinks
 --- but not enough to alter either verdict.
 
-\subsection{S1: label-source sensitivity}
+\subsection{Informativeness-threshold sensitivity}
+\label{sec:threshold-sensitivity}
+
+A study enters the intervention cohort as N1 only if its pre-diagnostic context
+carries at least $T$ effective tokens. $T = 3$ was pre-specified as primary;
+$T = 5$ and $T = 10$ were pre-specified as sensitivities. The threshold is a
+cohort definition rather than a model setting, so raising it does not merely
+perturb an estimate --- it re-runs the whole evaluation on a smaller and more
+text-rich population. At the external site the N1 cohort falls from
+\num{132923} studies at $T = 3$ to \num{111040} at $T = 5$ and \num{23146} at
+$T = 10$, the last retaining under a fifth of the primary cohort; at the source
+site it falls from \num{14766} to \num{13600} and \num{8381}. Studies leaving N1
+become N2, so the comparison is between populations, not nested subsamples of
+one.
+
+\begin{table}[htbp]
+\centering
+\caption{Point estimates for the two confirmatory contrasts across the three
+pre-specified informativeness thresholds, at \SI{80}{\percent} coverage. H1 is
+the transfer gap under intact context; H3 is that gap minus the image-only
+control's.}
+\label{tab:threshold-sensitivity}
+\begin{tabular}{llccc}
+\toprule
+& Model & $T = 3$ & $T = 5$ & $T = 10$ \\
+\midrule
+\multirow{2}{*}{H1} & M3 & $+0.0469$ & $+0.0381$ & $+0.0221$ \\
+                    & M4 & $+0.0384$ & $+0.0330$ & $+0.0232$ \\
+\midrule
+\multirow{2}{*}{H3} & M3 & $-0.0265$ & $-0.0314$ & $-0.0338$ \\
+                    & M4 & $-0.0350$ & $-0.0366$ & $-0.0327$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All fourteen contrasts --- the four confirmatory ones and the ten secondary and
+descriptive ones --- return the same verdict at every threshold. Both H1
+estimates stay positive and above materiality, and both H3 estimates stay
+negative and above materiality in magnitude, so neither the confirmation of H1
+nor the reversal of H3 depends on where the informativeness cut is placed.
+
+The two hypotheses respond to the threshold in opposite directions, and the
+direction is interpretable. H1's transfer gap shrinks as $T$ rises, roughly
+halving for M3 between $T = 3$ and $T = 10$: restricting the cohort to studies
+with substantial context reduces, but does not remove, the penalty for moving
+sites. H3's reversal instead deepens slightly, so the multimodal models'
+advantage over the image-only control is not an artifact of admitting
+thin-context studies that the fusion models handle better than M1 does.
+
+One interval changes character without changing a verdict. H4 for M4 at the
+external site is $-0.0060$ (\SI{95}{\percent} CI \numrange{-0.0080}{-0.0041}) at
+$T = 3$ but $-0.0020$ ($-0.0067$ to $+0.0023$) at $T = 10$, crossing zero as the
+cohort shrinks to \num{23146} studies. The verdict is unaffected because the
+estimate falls far short of the \num{0.02} materiality threshold at every $T$
+and was never confirmed, but the widening is the expected consequence of a
+five-fold smaller cohort and is reported rather than suppressed.
+
+\subsection{S1: cross-site contrasts are not label-invariant}
 \label{sec:s1}
 
 The findings-derived label source was pre-specified as a mandatory sensitivity.
-It was run end to end: thresholds re-selected on the findings calibration
-labels, both sites re-evaluated, and the same bootstrap applied. The cohort is
-smaller because findings sections are less often present --- \num{9293} source
-evaluation studies against \num{14766}.
+It did not perturb the primary estimates; it reversed every contrast that
+compares the two sites while leaving every contrast computed within a site
+intact. That dissociation is the result of this section. It localises the
+instability to the site comparison itself rather than to the models, the
+images, or the context intervention, and \cref{sec:comparability} identifies
+its cause.
+
+The sensitivity was run end to end: thresholds re-selected on the findings
+calibration labels, both sites re-evaluated, and the same bootstrap applied. The
+cohort is smaller because findings sections are less often present ---
+\num{9293} source evaluation studies against \num{14766}.
 
 \begin{table}[htbp]
 \centering
@@ -289,6 +353,18 @@ bit-identical predictions under both label sources (mean study probability
 \num{0.603719} in each). Its transfer gap nonetheless reverses, from $+0.0734$
 to $-0.0672$. A quantity computed from unchanged predictions cannot have changed
 sign because of the models, the images, or the context. Only the labels differ.
+
+The consequence is narrower than a failed replication and wider than a caveat.
+It is not that the primary H1 estimate is unstable under resampling --- the
+coverage and threshold sensitivities in
+\cref{tab:coverage-sensitivity,tab:threshold-sensitivity} show it is not. It is
+that a cross-site selective-error contrast is defined only relative to a label
+source, and the two label sources compared here are not measuring the same
+quantity at the two sites. Any cross-site claim in this paper, in either
+direction, is therefore conditional on its endpoint. We report both endpoints
+rather than nominating the one that agrees with our hypothesis, and
+\cref{sec:comparability} shows the two label sets are not commensurable enough
+for either to arbitrate the other.
 
 \subsection{Label-set comparability across sites}
 \label{sec:comparability}
@@ -336,6 +412,69 @@ measured twice.
 \paragraph{One sensitivity remains outstanding.} The informativeness threshold
 was pre-specified at $T=3$ with $T=5$ and $T=10$ as sensitivities, and only the
 primary is reported.
+
+\subsection{Seed replicate}
+\label{sec:seed-replicate}
+
+The bootstrap quantifies uncertainty in evaluation, not variability across
+training runs, so a second training seed was pre-specified to test whether the
+verdicts survive a different initialisation. Seed \num{20260719} retrained the
+image-only control and the feature-fusion model end to end, and the full
+pipeline was re-run against them: thresholds re-selected on the calibration
+tier, both sites re-evaluated under all three conditions, and the same
+patient-clustered bootstrap applied. The text-only model was not retrained, so
+the replicate excludes it and excludes late fusion with it, since a probability
+average of a replicate image model and a primary text model would mix seeds
+inside one model.
+
+\begin{table}[htbp]
+\centering
+\caption{Every contrast available under the replicate, against the primary.
+Verdicts are the pre-specified decision rule: an interval excluding zero
+\emph{and} a point estimate reaching materiality.}
+\label{tab:seed-replicate}
+\begin{tabular}{lllccl}
+\toprule
+H & Model & Site & Primary & Replicate & Verdict \\
+\midrule
+H1 & M4 &          & $+0.0384$ & $+0.0246$ & confirmed in both \\
+H1 & M1 &          & $+0.0734$ & $+0.0511$ & confirmed in both \\
+H2 & M4 & C1       & $+0.0096$ & $+0.0088$ & not confirmed in both \\
+H2 & M4 & C2       & $-0.0137$ & $-0.0062$ & not confirmed in both \\
+H3 & M4 &          & $-0.0350$ & $-0.0265$ & reverses in both \\
+H4 & M4 & source   & $+0.0173$ & $+0.0060$ & confirmed in both \\
+H4 & M4 & external & $-0.0060$ & $-0.0090$ & not confirmed in both \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All seven contrasts return the verdict the primary returned. H1 remains
+confirmed for both models, with the transfer gap positive and above materiality
+under either seed. H3 remains reversed: the feature-fusion model transports
+better than the image-only control by \num{0.027} under the replicate against
+\num{0.035} under the primary, so the finding that contradicted our hypothesis
+is not an artifact of one initialisation. Neither H2 interaction reaches
+materiality under either seed.
+
+Point estimates are uniformly smaller in magnitude under the replicate, most
+visibly for H1 where M1's gap falls from \num{0.073} to \num{0.051}. The
+direction and the verdict are stable; the magnitude is not established to
+better than roughly a third of its own size by two runs, which is the
+limitation a two-seed design can identify but not resolve.
+
+Coverage behaves the same way. Every realised coverage stays within the
+\num{0.05} drift materiality at both sites under both seeds, so the coverage
+verdict replicates. Its precision does not: feature fusion sat within
+\num{0.005} of target at the external site under the primary but within
+\num{0.026} under the replicate. The claim that coverage holds under
+institutional transfer survives; the tightness reported for the primary is a
+property of that run rather than of the policy.
+
+The replicate covers two of the four models, so it tests the stability of every
+confirmatory contrast but leaves the two models that depend on the text encoder
+unreplicated. Its external cohort is one study smaller than the primary's
+(\num{132922} against \num{132923}), an image lost to a storage fault after
+acquisition.
 
 \subsection{Reproducibility}
 
