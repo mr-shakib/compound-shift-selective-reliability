@@ -36,6 +36,7 @@ import yaml
 from ..training.dataset import C3EStudyImageDataset, build_index
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
 from ..training.runner import (CKPT_DIR, IMAGE_DIR, REGISTRY, SEED, checkpoint_name,
+                               scored_models,
                                _available_ram_gb, _seed_everything,
                                load_frozen_settings)
 from .policy import (TARGETS, abstention_threshold_for_coverage,
@@ -47,6 +48,32 @@ TITLE = "THRESHOLD SELECTION ON THE CALIBRATION TIER"
 OUTPUT_DIR = "results/c3e_mimic/stage7_thresholds"
 OUTPUT_DIR_S1 = "results/c3e_mimic/stage7_thresholds_findings"
 OUTPUT_DIR_SEED = "results/c3e_mimic/stage7_thresholds_seed{seed}"
+
+
+def stage7_path(root: Path, label_source: str = "impression",
+                seed: int | None = None) -> Path:
+    """Locate the frozen thresholds a downstream stage must consume.
+
+    Every stage after this one applies thresholds it did not choose, so every
+    stage has to agree on which file holds them. They did not: Stages 8 and 9b
+    hardcoded the primary path and ignored the seed, so a replicate run scored
+    replicate predictions against the primary model's abstention cutoff and
+    reported the result as a seed replicate. The predictions were unaffected
+    -- only the cutoff applied to them was wrong -- which is what made the
+    mismatch survive a reading of the output.
+
+    Resolution lives here, in the stage that writes these files, so a consumer
+    cannot hold an opinion about the path.
+    """
+    if seed is not None and seed != SEED:
+        if label_source != "impression":
+            raise RuntimeError(
+                f"no Stage 7 exists for seed {seed} with label source "
+                f"{label_source!r}; the replicate was run on the primary "
+                "endpoint only")
+        return Path(root) / OUTPUT_DIR_SEED.format(seed=seed) / "stage7_thresholds.json"
+    return Path(root) / (OUTPUT_DIR if label_source == "impression"
+                         else OUTPUT_DIR_S1) / "stage7_thresholds.json"
 
 DECLARATIONS = (
     "STAGE 7 ONLY",
@@ -130,17 +157,23 @@ def run(*, project_root: str | Path, num_workers: int = 3,
                         persistent_workers=num_workers > 0)
 
     ckpt = root / CKPT_DIR
-    m1 = _load(M1ImageOnly(), ckpt / checkpoint_name("M1", seed), device).to(device)
-    m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device).to(device)
+    scored = scored_models(seed)
+    if seed is not None:
+        print(f"  seed {seed}: calibrating {', '.join(scored)} only; "
+              "M3 needs an M2 replicate", file=sys.stderr, flush=True)
 
     preds: dict[str, np.ndarray] = {}
+    m1 = _load(M1ImageOnly(), ckpt / checkpoint_name("M1", seed), device).to(device)
     print("  scoring M1 ...", file=sys.stderr, flush=True)
     preds["M1"], labels, masks = predict(m1, loader, device, False)
-    print("  scoring M2 ...", file=sys.stderr, flush=True)
-    preds["M2"], _, _ = predict(m2, loader, device, True)
-    print("  scoring M3 ...", file=sys.stderr, flush=True)
-    preds["M3"], _, _ = predict(M3LateFusion(m1, m2).to(device), loader, device, True)
-    del m1, m2
+    if "M2" in scored:
+        m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device).to(device)
+        print("  scoring M2 ...", file=sys.stderr, flush=True)
+        preds["M2"], _, _ = predict(m2, loader, device, True)
+        print("  scoring M3 ...", file=sys.stderr, flush=True)
+        preds["M3"], _, _ = predict(M3LateFusion(m1, m2).to(device), loader, device, True)
+        del m2
+    del m1
     torch.cuda.empty_cache()
     print("  scoring M4 ...", file=sys.stderr, flush=True)
     m4 = _load(M4FeatureFusion(), ckpt / checkpoint_name("M4", seed), device).to(device)
@@ -152,7 +185,7 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     threshold_rows: list[dict[str, Any]] = []
     coverage_rows: list[dict[str, Any]] = []
 
-    for mid in ("M1", "M2", "M3", "M4"):
+    for mid in scored:
         # Aggregate images to studies before any decision is made.
         frame = pd.DataFrame({"subject_id": index["subject_id"].to_numpy(),
                               "study_id": index["study_id"].to_numpy()})
@@ -250,7 +283,7 @@ def _render_md(r: dict[str, Any]) -> str:
            "Selected by balanced accuracy on study-level mean probabilities.", "",
            "| model | " + " | ".join(TARGETS) + " |",
            "| --- | " + " | ".join("---:" for _ in TARGETS) + " |"]
-    for mid in ("M1", "M2", "M3", "M4"):
+    for mid in scored_models(r.get("seed")):
         t = r["models"][mid]["classification_thresholds"]
         md.append(f"| {mid} | " + " | ".join(f"{t[p]:.3f}" for p in TARGETS) + " |")
     md += ["", "## Selective policy", "",

@@ -39,8 +39,10 @@ from ..calibration.policy import (TARGETS, aggregate_images_to_studies,
 from ..calibration.runner import predict
 from ..training.dataset import C3EStudyImageDataset, build_index
 from ..training.models import M1ImageOnly, M2TextOnly, M3LateFusion, M4FeatureFusion
+from ..calibration.runner import stage7_path as resolve_stage7
 from ..training.runner import (CKPT_DIR, checkpoint_name, IMAGE_DIR, SEED, _available_ram_gb,
-                               _seed_everything, load_frozen_settings)
+                               _seed_everything, load_frozen_settings,
+                               scored_models, weighted_models)
 from ..analysis.cache import checkpoint_digest, load as cache_load, save as cache_save
 from .interventions import apply_c1, apply_c2, check_invariants, natural_state
 
@@ -86,11 +88,11 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     root = Path(project_root).resolve()
     settings = load_frozen_settings(root)
 
-    stage7_path = root / (STAGE7 if label_source == "impression" else STAGE7_S1)
+    stage7_path = resolve_stage7(root, label_source, seed)
     if not stage7_path.exists():
         raise RuntimeError(
-            f"missing {STAGE7}. Stage 8 consumes frozen thresholds and must not "
-            "derive them against the confirmatory tier.")
+            f"missing {stage7_path}. Stage 8 consumes frozen thresholds and "
+            "must not derive them against the confirmatory tier.")
     stage7 = json.loads(stage7_path.read_text())
     coverages = [c["target_coverage"] for c in stage7["coverage_table"]
                  if c["model"] == "M1"]
@@ -130,15 +132,22 @@ def run(*, project_root: str | Path, num_workers: int = 3,
     pin = _available_ram_gb() >= 6.0
 
     ckpt = root / CKPT_DIR
+    scored = scored_models(seed)
+    if seed is not None:
+        print(f"  seed {seed}: scoring {', '.join(scored)} only; "
+              "M3 needs an M2 replicate", file=sys.stderr, flush=True)
     shas = {mid: checkpoint_digest(ckpt / checkpoint_name(mid, seed))
-            for mid in ("M1", "M2", "M4")}
-    # M3 has no weights of its own; its identity is that of its two components.
-    shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
+            for mid in weighted_models(seed)}
     m1 = _load(M1ImageOnly(), ckpt / checkpoint_name("M1", seed), device)
-    m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device)
-    m3 = M3LateFusion(m1, m2).to(device)
     m4 = _load(M4FeatureFusion(), ckpt / checkpoint_name("M4", seed), device)
-    specs = (("M1", m1, False), ("M2", m2, True), ("M3", m3, True), ("M4", m4, True))
+    built = {"M1": (m1, False), "M4": (m4, True)}
+    if "M2" in scored:
+        m2 = _load(M2TextOnly(), ckpt / checkpoint_name("M2", seed), device)
+        # M3 has no weights of its own; its identity is that of its two components.
+        shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
+        built["M2"] = (m2, True)
+        built["M3"] = (M3LateFusion(m1, m2).to(device), True)
+    specs = tuple((mid, *built[mid]) for mid in scored)
 
     rows: list[dict[str, Any]] = []
     image_only_check: dict[str, np.ndarray] = {}
@@ -223,7 +232,8 @@ def run(*, project_root: str | Path, num_workers: int = 3,
         },
         "invariants": invariants,
         "m1_max_prediction_drift_across_conditions": max_drift,
-        "threshold_source": {"path": STAGE7, "sha256": sha256_file(stage7_path)},
+        "threshold_source": {"path": str(stage7_path.relative_to(root)),
+                             "sha256": sha256_file(stage7_path)},
         "results": rows,
         "compliance": {
             "model_training": False,
@@ -257,7 +267,7 @@ def _render_md(r: dict[str, Any]) -> str:
         md += [f"### Target coverage {cov:.0%}", "",
                "| model | C0 original | C1 no context | C2 misaligned | C1 − C0 | C2 − C0 |",
                "| --- | ---: | ---: | ---: | ---: | ---: |"]
-        for mid in ("M1", "M2", "M3", "M4"):
+        for mid in scored_models(r.get("seed")):
             got = {row["condition"]: row["selective_hamming_error"]
                    for row in r["results"]
                    if row["model"] == mid and row["target_coverage"] == cov}

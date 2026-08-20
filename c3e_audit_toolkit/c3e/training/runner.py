@@ -68,6 +68,30 @@ def checkpoint_name(model_id: str, seed: int | None = None) -> str:
     return f"{model_id.lower()}_best{suffix}.pt"
 
 
+def scored_models(seed: int | None = None) -> tuple[str, ...]:
+    """Model ids that a replicate seed can honestly score.
+
+    Only M1 and M4 were retrained under the replicate seed. M2 has no
+    replicate, and M3 is the probability average of M1 and M2, so scoring
+    either one under a replicate would silently mix a replicate model with a
+    primary one and report the result as a seed replicate. Every stage that
+    loads checkpoints asks here rather than deciding for itself, because a
+    stage that disagreed with the analysis about which models exist would
+    either crash on a missing file or cache a mixed-seed pass.
+
+    ``seed is None`` and ``seed == SEED`` both mean the primary, matching
+    checkpoint_name. Naming the primary seed explicitly must not drop M2 and
+    M3 from a run whose checkpoints are all present.
+    """
+    primary = seed is None or seed == SEED
+    return ("M1", "M2", "M3", "M4") if primary else ("M1", "M4")
+
+
+def weighted_models(seed: int | None = None) -> tuple[str, ...]:
+    """Scored models that have checkpoints of their own. M3 has none."""
+    return tuple(m for m in scored_models(seed) if m != "M3")
+
+
 def load_frozen_settings(root: Path) -> dict[str, Any]:
     """Read the frozen optimisation block. These are not runner arguments."""
     reg = yaml.safe_load((root / REGISTRY).read_text())

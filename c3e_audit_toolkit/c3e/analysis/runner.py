@@ -43,7 +43,8 @@ from .bootstrap import (BOOTSTRAP_REPLICATES, BOOTSTRAP_SEED, CI_LEVEL,
                         MATERIALITY, bootstrap_pvalue, coverage_drift, decide,
                         holm_adjust, independent_bootstrap, paired_bootstrap,
                         percentile_ci, selective_error)
-from ..training.runner import checkpoint_name
+from ..calibration.runner import stage7_path as resolve_stage7
+from ..training.runner import checkpoint_name, scored_models, weighted_models
 from .cache import cache_path, checkpoint_digest, load as cache_load
 
 STAGE = "C3-E6 Stage 10"
@@ -85,10 +86,11 @@ def load_all(root: Path, stage7: dict[str, Any],
     """Load every cached pass and derive per-study error and confidence."""
     ckpt = root / CKPT_DIR
     shas = {m: checkpoint_digest(ckpt / checkpoint_name(m, seed))
-            for m in ("M1", "M2", "M4")}
-    shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
+            for m in weighted_models(seed)}
+    if "M2" in shas:
+        shas["M3"] = hashlib.sha256((shas["M1"] + shas["M2"]).encode()).hexdigest()[:16]
 
-    models = ("M1", "M2", "M3", "M4") if seed is None else ("M1", "M4")
+    models = scored_models(seed)
     if seed is not None:
         # M3 averages M1 and M2, and no M2 replicate exists. Building it from a
         # replicate M1 and the primary M2 would mix seeds inside one model.
@@ -131,8 +133,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
             label_source: str = "impression",
             threshold: int = 3,
             seed: int | None = None) -> dict[str, Any]:
-    stage7_path = root / (STAGE7_SEED.format(seed=seed) if seed is not None
-                          else (STAGE7 if label_source == "impression" else STAGE7_S1))
+    stage7_path = resolve_stage7(root, label_source, seed)
     stage7 = json.loads(stage7_path.read_text())
     data = load_all(root, stage7, label_source, threshold, seed)
 
@@ -233,7 +234,7 @@ def analyse(root: Path, *, replicates: int = BOOTSTRAP_REPLICATES,
     # ---- coverage drift ------------------------------------------------------
     drift_rows = []
     for site in ("source", "external"):
-        for mid in ("M1", "M2", "M3", "M4"):
+        for mid in scored_models(seed):
             cut = _cut(stage7, mid, coverage)
             for cond in ("C0", "C1", "C2"):
                 conf = data[(site, mid, cond)]["confidence"]
