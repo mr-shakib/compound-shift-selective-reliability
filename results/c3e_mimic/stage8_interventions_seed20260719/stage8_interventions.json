@@ -1,0 +1,259 @@
+{
+  "cohort": {
+    "images_in_tier": 16456,
+    "n1_images": 16456,
+    "n1_patients": 5000,
+    "n1_studies": 14766,
+    "natural_states_by_study": {
+      "N1": 14766
+    },
+    "patients_in_tier": 5000,
+    "studies_in_tier": 14766
+  },
+  "compliance": {
+    "cross_site_claim": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "intervals_or_tests_computed": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 8 ONLY",
+    "SOURCE-SITE CONFIRMATORY TIER",
+    "THRESHOLDS CONSUMED FROZEN FROM STAGE 7",
+    "NO THRESHOLD SELECTED OR REVISED HERE",
+    "NO MODEL TRAINING",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "POINT ESTIMATES ONLY, NO INTERVALS OR TESTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "informativeness_threshold": 3,
+  "invariants": {
+    "c1_fully_replaced": true,
+    "c2_note": "strata with a single member cannot satisfy the different-patient constraint and retain their own context; these are counted, not hidden",
+    "c2_self_assignment_fraction": 0.000365,
+    "c2_studies_retaining_own_context": 6,
+    "no_forbidden_section_in_any_payload": true,
+    "row_counts_match": true,
+    "study_ids_identical_across_interventions": true
+  },
+  "label_source": "impression",
+  "m1_max_prediction_drift_across_conditions": 0.0,
+  "protocol_version": "0.4.2",
+  "results": [
+    {
+      "accepted_studies": 11896,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.126264,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.805635,
+      "selective_hamming_error": 0.095291,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13370,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.058107,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.905458,
+      "selective_hamming_error": 0.103065,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10316,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.207723,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.698632,
+      "selective_hamming_error": 0.082879,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 11927,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.083848,
+      "full_coverage_hamming_error": 0.12566,
+      "model": "M4",
+      "realised_coverage": 0.807734,
+      "selective_hamming_error": 0.114974,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13334,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.040597,
+      "full_coverage_hamming_error": 0.12566,
+      "model": "M4",
+      "realised_coverage": 0.90302,
+      "selective_hamming_error": 0.120641,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10399,
+      "condition": "C0",
+      "frozen_abstention_threshold": 0.137145,
+      "full_coverage_hamming_error": 0.12566,
+      "model": "M4",
+      "realised_coverage": 0.704253,
+      "selective_hamming_error": 0.10709,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 11896,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.126264,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.805635,
+      "selective_hamming_error": 0.095291,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13370,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.058107,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.905458,
+      "selective_hamming_error": 0.103065,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10316,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.207723,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.698632,
+      "selective_hamming_error": 0.082879,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 12108,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.083848,
+      "full_coverage_hamming_error": 0.135226,
+      "model": "M4",
+      "realised_coverage": 0.819992,
+      "selective_hamming_error": 0.116618,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13414,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.040597,
+      "full_coverage_hamming_error": 0.135226,
+      "model": "M4",
+      "realised_coverage": 0.908438,
+      "selective_hamming_error": 0.126575,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10721,
+      "condition": "C1",
+      "frozen_abstention_threshold": 0.137145,
+      "full_coverage_hamming_error": 0.135226,
+      "model": "M4",
+      "realised_coverage": 0.72606,
+      "selective_hamming_error": 0.107506,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 11896,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.126264,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.805635,
+      "selective_hamming_error": 0.095291,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13370,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.058107,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.905458,
+      "selective_hamming_error": 0.103065,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10316,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.207723,
+      "full_coverage_hamming_error": 0.111779,
+      "model": "M1",
+      "realised_coverage": 0.698632,
+      "selective_hamming_error": 0.082879,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 11775,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.083848,
+      "full_coverage_hamming_error": 0.132162,
+      "model": "M4",
+      "realised_coverage": 0.79744,
+      "selective_hamming_error": 0.122644,
+      "target_coverage": 0.8,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 13259,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.040597,
+      "full_coverage_hamming_error": 0.132162,
+      "model": "M4",
+      "realised_coverage": 0.897941,
+      "selective_hamming_error": 0.128432,
+      "target_coverage": 0.9,
+      "total_studies": 14766
+    },
+    {
+      "accepted_studies": 10172,
+      "condition": "C2",
+      "frozen_abstention_threshold": 0.137145,
+      "full_coverage_hamming_error": 0.132162,
+      "model": "M4",
+      "realised_coverage": 0.68888,
+      "selective_hamming_error": 0.113858,
+      "target_coverage": 0.7,
+      "total_studies": 14766
+    }
+  ],
+  "seed": 20260719,
+  "stage": "C3-E6 Stage 8",
+  "status": "PASS",
+  "threshold_source": {
+    "path": "results/c3e_mimic/stage7_thresholds_seed20260719/stage7_thresholds.json",
+    "sha256": "81a8219414cc46b07734a83999a3161f9e49025602dc930bb5da5088e3d918b7"
+  },
+  "tier": "prespecified_eval",
+  "title": "CONTEXT INTERVENTIONS ON THE CONFIRMATORY TIER"
+}

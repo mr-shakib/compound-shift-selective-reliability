@@ -1,0 +1,47 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 13560,
+      "name": "stage8_interventions.json",
+      "sha256": "8e405c497e1bd752aa3b14dd625fdb97e623cdf7f6136a9b9a9f3bd8a76c6f92"
+    },
+    {
+      "byte_size": 2249,
+      "name": "stage8_interventions.md",
+      "sha256": "4a75dcd043878dccc3a705e2e19c0cf3041369feaa52fb3e4cc35aa2a4fe5253"
+    },
+    {
+      "byte_size": 2214,
+      "name": "stage8_results.csv",
+      "sha256": "7ddbb22585e62c9520fb5b5788cc88b8fd626e624677a346d60e79e540f23a42"
+    }
+  ],
+  "compliance": {
+    "cross_site_claim": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "intervals_or_tests_computed": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 8 ONLY",
+    "SOURCE-SITE CONFIRMATORY TIER",
+    "THRESHOLDS CONSUMED FROZEN FROM STAGE 7",
+    "NO THRESHOLD SELECTED OR REVISED HERE",
+    "NO MODEL TRAINING",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "POINT ESTIMATES ONLY, NO INTERVALS OR TESTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "output_dir": "results/c3e_mimic/stage8_interventions_T5",
+  "stage": "C3-E6 Stage 8",
+  "status": "PASS",
+  "title": "CONTEXT INTERVENTIONS ON THE CONFIRMATORY TIER"
+}

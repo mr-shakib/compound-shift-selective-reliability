@@ -1,0 +1,13 @@
+site,model,condition,target_coverage,realised_coverage,drift,material
+source,M1,C0,0.8,0.805635,0.005635,False
+source,M1,C1,0.8,0.805635,0.005635,False
+source,M1,C2,0.8,0.805635,0.005635,False
+source,M4,C0,0.8,0.807734,0.007734,False
+source,M4,C1,0.8,0.819992,0.019992,False
+source,M4,C2,0.8,0.79744,-0.00256,False
+external,M1,C0,0.8,0.765246,-0.034754,False
+external,M1,C1,0.8,0.765246,-0.034754,False
+external,M1,C2,0.8,0.765246,-0.034754,False
+external,M4,C0,0.8,0.774101,-0.025899,False
+external,M4,C1,0.8,0.777817,-0.022183,False
+external,M4,C2,0.8,0.767096,-0.032904,False

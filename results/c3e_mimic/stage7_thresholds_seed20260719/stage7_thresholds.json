@@ -1,0 +1,282 @@
+{
+  "calibration_tier": {
+    "images": 10264,
+    "patients": 3000,
+    "studies": 9233
+  },
+  "compliance": {
+    "confirmatory_result_produced": false,
+    "cross_site_claim": false,
+    "evaluation_tier_read": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "model_training": false
+  },
+  "coverage_table": [
+    {
+      "abstention_threshold": 0.126264,
+      "full_coverage_hamming_error": 0.112163,
+      "model": "M1",
+      "realised_coverage": 0.799957,
+      "selective_hamming_error": 0.098283,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.058107,
+      "full_coverage_hamming_error": 0.112163,
+      "model": "M1",
+      "realised_coverage": 0.899924,
+      "selective_hamming_error": 0.106296,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.207723,
+      "full_coverage_hamming_error": 0.112163,
+      "model": "M1",
+      "realised_coverage": 0.699989,
+      "selective_hamming_error": 0.089644,
+      "target_coverage": 0.7
+    },
+    {
+      "abstention_threshold": 0.083848,
+      "full_coverage_hamming_error": 0.123263,
+      "model": "M4",
+      "realised_coverage": 0.799957,
+      "selective_hamming_error": 0.11012,
+      "target_coverage": 0.8
+    },
+    {
+      "abstention_threshold": 0.040597,
+      "full_coverage_hamming_error": 0.123263,
+      "model": "M4",
+      "realised_coverage": 0.899924,
+      "selective_hamming_error": 0.117347,
+      "target_coverage": 0.9
+    },
+    {
+      "abstention_threshold": 0.137145,
+      "full_coverage_hamming_error": 0.123263,
+      "model": "M4",
+      "realised_coverage": 0.699989,
+      "selective_hamming_error": 0.103618,
+      "target_coverage": 0.7
+    }
+  ],
+  "declarations": [
+    "STAGE 7 ONLY",
+    "THRESHOLD SELECTION ON THE CALIBRATION TIER",
+    "NO MODEL TRAINING",
+    "NO PRESPECIFIED-EVAL-TIER READ",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "THRESHOLDS FROZEN FOR TRANSFER",
+    "SELECTION NUMBERS ARE NOT CONFIRMATORY RESULTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "freeze_note": "these thresholds transfer unchanged to the external site; revising them after inspecting external results would answer a different question than the one preregistered",
+  "frozen": true,
+  "label_source": "impression",
+  "models": {
+    "M1": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.207723,
+          "accepted_studies": 6463,
+          "coverage": 0.699989,
+          "full_coverage_hamming_error": 0.112163,
+          "selective_hamming_error": 0.089644,
+          "target_coverage": 0.7,
+          "total_studies": 9233
+        },
+        "0.80": {
+          "abstention_threshold": 0.126264,
+          "accepted_studies": 7386,
+          "coverage": 0.799957,
+          "full_coverage_hamming_error": 0.112163,
+          "selective_hamming_error": 0.098283,
+          "target_coverage": 0.8,
+          "total_studies": 9233
+        },
+        "0.90": {
+          "abstention_threshold": 0.058107,
+          "accepted_studies": 8309,
+          "coverage": 0.899924,
+          "full_coverage_hamming_error": 0.112163,
+          "selective_hamming_error": 0.106296,
+          "target_coverage": 0.9,
+          "total_studies": 9233
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.985,
+        "Cardiomegaly": 0.679,
+        "Consolidation": 0.508,
+        "Edema": 0.703,
+        "Pleural Effusion": 0.627
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.732654,
+        "Cardiomegaly": 0.836392,
+        "Consolidation": 0.846632,
+        "Edema": 0.809178,
+        "Pleural Effusion": 0.847551
+      }
+    },
+    "M4": {
+      "abstention_thresholds": {
+        "0.70": {
+          "abstention_threshold": 0.137145,
+          "accepted_studies": 6463,
+          "coverage": 0.699989,
+          "full_coverage_hamming_error": 0.123263,
+          "selective_hamming_error": 0.103618,
+          "target_coverage": 0.7,
+          "total_studies": 9233
+        },
+        "0.80": {
+          "abstention_threshold": 0.083848,
+          "accepted_studies": 7386,
+          "coverage": 0.799957,
+          "full_coverage_hamming_error": 0.123263,
+          "selective_hamming_error": 0.11012,
+          "target_coverage": 0.8,
+          "total_studies": 9233
+        },
+        "0.90": {
+          "abstention_threshold": 0.040597,
+          "accepted_studies": 8309,
+          "coverage": 0.899924,
+          "full_coverage_hamming_error": 0.123263,
+          "selective_hamming_error": 0.117347,
+          "target_coverage": 0.9,
+          "total_studies": 9233
+        }
+      },
+      "classification_thresholds": {
+        "Atelectasis": 0.995,
+        "Cardiomegaly": 0.689,
+        "Consolidation": 0.607,
+        "Edema": 0.685,
+        "Pleural Effusion": 0.697
+      },
+      "threshold_balanced_accuracy": {
+        "Atelectasis": 0.739957,
+        "Cardiomegaly": 0.849495,
+        "Consolidation": 0.846344,
+        "Edema": 0.825289,
+        "Pleural Effusion": 0.869394
+      }
+    }
+  },
+  "policy": {
+    "analysis_units": {
+      "decision_unit": "study",
+      "frontal_image_aggregation": "arithmetic_mean_probability",
+      "model_inference_unit": "image",
+      "statistical_cluster_unit": "patient",
+      "study_weighting": "equal"
+    },
+    "classification": {
+      "criterion": "balanced_accuracy",
+      "frozen_for_internal_and_external_evaluation": true,
+      "threshold_scope": "per_pathology",
+      "threshold_selection_dataset": "mimic_train_calibration"
+    },
+    "selective": {
+      "abstention_meaning": "refer_for_human_interpretation",
+      "confidence_per_pathology": "abs(2*p-1)",
+      "frozen_threshold_transfer": true,
+      "primary_loss": "five_label_hamming_error",
+      "primary_source_coverage": 0.8,
+      "primary_study_confidence": "minimum_pathology_confidence",
+      "secondary_study_confidence": "mean_pathology_confidence",
+      "sensitivity_source_coverages": [
+        0.9,
+        0.7
+      ],
+      "threshold_selection_dataset": "mimic_train_calibration"
+    }
+  },
+  "protocol_version": "0.4.2",
+  "seed": 20260719,
+  "stage": "C3-E6 Stage 7",
+  "status": "PASS",
+  "threshold_table": [
+    {
+      "balanced_accuracy": 0.836392,
+      "model": "M1",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 2127,
+      "threshold": 0.679
+    },
+    {
+      "balanced_accuracy": 0.809178,
+      "model": "M1",
+      "pathology": "Edema",
+      "supervised_studies": 2126,
+      "threshold": 0.703
+    },
+    {
+      "balanced_accuracy": 0.846632,
+      "model": "M1",
+      "pathology": "Consolidation",
+      "supervised_studies": 773,
+      "threshold": 0.508
+    },
+    {
+      "balanced_accuracy": 0.732654,
+      "model": "M1",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1835,
+      "threshold": 0.985
+    },
+    {
+      "balanced_accuracy": 0.847551,
+      "model": "M1",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 3064,
+      "threshold": 0.627
+    },
+    {
+      "balanced_accuracy": 0.849495,
+      "model": "M4",
+      "pathology": "Cardiomegaly",
+      "supervised_studies": 2127,
+      "threshold": 0.689
+    },
+    {
+      "balanced_accuracy": 0.825289,
+      "model": "M4",
+      "pathology": "Edema",
+      "supervised_studies": 2126,
+      "threshold": 0.685
+    },
+    {
+      "balanced_accuracy": 0.846344,
+      "model": "M4",
+      "pathology": "Consolidation",
+      "supervised_studies": 773,
+      "threshold": 0.607
+    },
+    {
+      "balanced_accuracy": 0.739957,
+      "model": "M4",
+      "pathology": "Atelectasis",
+      "supervised_studies": 1835,
+      "threshold": 0.995
+    },
+    {
+      "balanced_accuracy": 0.869394,
+      "model": "M4",
+      "pathology": "Pleural Effusion",
+      "supervised_studies": 3064,
+      "threshold": 0.697
+    }
+  ],
+  "title": "THRESHOLD SELECTION ON THE CALIBRATION TIER"
+}

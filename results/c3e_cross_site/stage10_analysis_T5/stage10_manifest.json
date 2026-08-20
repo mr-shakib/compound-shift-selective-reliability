@@ -1,0 +1,48 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 13420,
+      "name": "stage10_analysis.json",
+      "sha256": "0bcc634991b862f3000578241d67a51d370826ba165297303b221dd6022fddae"
+    },
+    {
+      "byte_size": 3560,
+      "name": "stage10_analysis.md",
+      "sha256": "ef0e43c3f52fc8a24c994f776c9f47bf0b0d601d86ccf6ef6ca64a2644cbc70c"
+    },
+    {
+      "byte_size": 1492,
+      "name": "stage10_hypotheses.csv",
+      "sha256": "92bff41a1f8a0b005150ecbe69710b44f89801c2411799a891900e196abb5792"
+    },
+    {
+      "byte_size": 1066,
+      "name": "stage10_coverage_drift.csv",
+      "sha256": "e59441c30f5a3ae6bc50f8397e7040c844e330065d1f54289d46f54f546bb470"
+    }
+  ],
+  "compliance": {
+    "identifiers_emitted_to_results": false,
+    "inference_rerun_for_intervals": false,
+    "model_training": false,
+    "threshold_selection": false
+  },
+  "declarations": [
+    "STAGE 10 ONLY",
+    "CONFIRMATORY ANALYSIS",
+    "CONTRASTS AND DECISION RULE PRESPECIFIED BEFORE THESE NUMBERS EXISTED",
+    "THRESHOLDS CONSUMED FROZEN FROM STAGE 7",
+    "NO MODEL TRAINING",
+    "NO THRESHOLD SELECTION OR REVISION",
+    "PATIENT-CLUSTERED BOOTSTRAP, 2000 REPLICATES, SEED 20260718",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4"
+  },
+  "output_dir": "results/c3e_cross_site/stage10_analysis_T5",
+  "stage": "C3-E6 Stage 10",
+  "status": "PASS",
+  "title": "CONFIRMATORY ANALYSIS"
+}

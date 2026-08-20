@@ -1,0 +1,53 @@
+{
+  "artifacts": [
+    {
+      "byte_size": 8085,
+      "name": "stage7_thresholds.json",
+      "sha256": "81a8219414cc46b07734a83999a3161f9e49025602dc930bb5da5088e3d918b7"
+    },
+    {
+      "byte_size": 1973,
+      "name": "stage7_thresholds.md",
+      "sha256": "4f6ca98ab3c6ef7c7e9f9ad7bcd09ecc59cec87ba5ca02065fffe37a44c1e341"
+    },
+    {
+      "byte_size": 415,
+      "name": "stage7_threshold_table.csv",
+      "sha256": "6b4335241d8894d5109b1c21c66df25d1906c4de24bdd9a7eb6eda96fd5b4d23"
+    },
+    {
+      "byte_size": 370,
+      "name": "stage7_coverage_table.csv",
+      "sha256": "40d58dd4047bf9c2c7a0c60c57d49ccc2f36082c9b12c876558ab31fb826fd24"
+    }
+  ],
+  "compliance": {
+    "confirmatory_result_produced": false,
+    "cross_site_claim": false,
+    "evaluation_tier_read": false,
+    "external_site_inference": false,
+    "identifiers_emitted_to_results": false,
+    "model_training": false
+  },
+  "declarations": [
+    "STAGE 7 ONLY",
+    "THRESHOLD SELECTION ON THE CALIBRATION TIER",
+    "NO MODEL TRAINING",
+    "NO PRESPECIFIED-EVAL-TIER READ",
+    "NO EXTERNAL-SITE INFERENCE",
+    "NO CROSS-SITE CLAIM",
+    "THRESHOLDS FROZEN FOR TRANSFER",
+    "SELECTION NUMBERS ARE NOT CONFIRMATORY RESULTS",
+    "NO IDENTIFIERS EMITTED TO RESULTS"
+  ],
+  "environment": {
+    "platform": "Linux-x86_64",
+    "python": "3.14.4",
+    "torch": "2.13.0+cu126"
+  },
+  "frozen": true,
+  "output_dir": "results/c3e_mimic/stage7_thresholds_seed20260719",
+  "stage": "C3-E6 Stage 7",
+  "status": "PASS",
+  "title": "THRESHOLD SELECTION ON THE CALIBRATION TIER"
+}
