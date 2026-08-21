@@ -1,0 +1,174 @@
+% C3E --- npj Digital Medicine submission build.
+%
+% One of three builds. ../main.tex is the full-length venue-neutral draft and is
+% never compressed; ../jamia/ is the JAMIA fallback; this is the primary target.
+% Each venue build owns its own sections/ copies because the three restructure
+% the same material differently and cannot share files.
+%
+% Requirements from the official npj submission guide
+% (nature.com/documents/npj-submission-guide.pdf), Article content type:
+%
+%   Abstract        ~150 words, UNSTRUCTURED and unreferenced
+%   Main text       5,000 words
+%   Methods         separate from the main-text count; typically <= 3,000,
+%                   "may be longer if necessary"
+%   Display items   10 --- figures and tables COMBINED, not 4 + 6
+%   References      usually up to 70
+%   Title           <= 15 words, no punctuation, no abbreviations, no active verbs
+%   Headings        "Avoid 'Introduction' as a heading". Subheadings belong
+%                   mainly in Results.
+%   Order           abstract, unheaded opening, Results, Discussion, METHODS,
+%                   Data Availability, References
+%
+% The Methods-excluded main-text budget is why this build has far less to cut
+% than the JAMIA one: 5,000 words of main text plus a separately counted Methods,
+% against JAMIA's 4,000 for everything.
+%
+% Build:  cd paper/npjdm && latexmk -pdf main_npjdm.tex
+% Budget: ./budget.sh
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage[modulo]{lineno}
+
+% npj is flexible about initial-submission formatting ("style and length will not
+% influence consideration"), but line numbers and generous spacing make a
+% reviewer's job easier and cost nothing.
+\onehalfspacing
+\linenumbers
+
+\graphicspath{{../}{./}}
+
+\sisetup{detect-weight=true, group-minimum-digits=4, group-separator={,}}
+
+\newcommand{\overbudget}[1]{%
+  \par\medskip\noindent\fcolorbox{orange!60}{orange!5}{%
+    \parbox{0.95\linewidth}{\small\textbf{OVER BUDGET:} #1}}\par\medskip}
+
+\date{}
+
+\begin{document}
+
+% ---------------------------------------------------------------------------
+% Title. npj asks for 15 words or fewer, with no punctuation and no active
+% verbs -- which rules out the question form used by the venue-neutral draft
+% and the JAMIA build ("Does multimodal selective reliability transport across
+% hospitals when pre-diagnostic clinical context changes?", 17 words, a
+% question mark and an active verb). Recast as a noun phrase, 13 words.
+% ALTERNATIVE, if the two findings should be given equal billing:
+%   "Label dependence and non-transport of frozen selective-prediction policies
+%    across hospitals" (10 words)
+% ---------------------------------------------------------------------------
+\begin{center}
+{\LARGE\bfseries Non-transport of a frozen multimodal selective-prediction
+policy across hospitals under compound context shift\par}
+
+\vspace{1.5em}
+
+{\large Shakib Howlader\textsuperscript{1,*} \quad
+Adnan Rahman Sayeem\textsuperscript{1}\par}
+
+\vspace{1em}
+
+\begin{singlespace}
+\textsuperscript{1}[DEPARTMENT], Daffodil International University, Dhaka,
+Bangladesh\\
+\textsuperscript{*}Corresponding author: [INSTITUTIONAL EMAIL]
+\end{singlespace}
+\end{center}
+
+\vspace{2em}
+
+% ---------------------------------------------------------------------------
+% Abstract. npj wants roughly 150 words, unstructured and unreferenced: a
+% general introduction to the topic, then a non-technical summary of the main
+% results and their implication. This is NOT the JAMIA structured abstract --
+% do not paste that one in.
+% ---------------------------------------------------------------------------
+\begin{abstract}
+\noindent
+Selective prediction lets a chest-radiograph model defer uncertain cases to a
+radiologist, and the abstention threshold that fixes its operating point is
+chosen once, at the hospital where the model was built. We report a
+preregistered evaluation of whether that frozen policy survives deployment
+elsewhere, while the pre-diagnostic clinical context such models consume also
+changes. Models developed on one hospital's radiographs were evaluated at a
+second with every threshold transferred unchanged, under context left intact,
+removed, or replaced with another patient's. The policy did not transport:
+selective error rose several times above the prespecified materiality while
+realised coverage stayed within its drift tolerance --- a degradation invisible
+to coverage monitoring, and erased rather than repaired by re-calibrating at
+the receiving site. A prespecified label-source sensitivity then reversed every
+cross-site contrast while leaving within-site contrasts intact, establishing
+that the two automatically derived label sets are not commensurable across
+these cohorts.
+\end{abstract}
+
+\clearpage
+
+% ---------------------------------------------------------------------------
+% Main text. Opens without a heading, per Nature style.
+% ---------------------------------------------------------------------------
+\input{sections/01_opening}
+\input{sections/02_results}
+\input{sections/03_discussion}
+
+% Methods come after the Discussion in Nature style, and are counted separately
+% from the 5,000-word main text.
+\clearpage
+\input{sections/04_methods}
+
+% ---------------------------------------------------------------------------
+% Data Availability. npj requires this as its own section, placed after the
+% Methods and before the References, under exactly this heading.
+% ---------------------------------------------------------------------------
+\section*{Data Availability}
+
+The data underlying this article are third-party datasets available under
+credentialed access. MIMIC-CXR-JPG is available from PhysioNet to users who
+complete the required training and sign the data use agreement. CheXpert Plus
+is available from the Stanford AIMI repository under its own registration and
+data use agreement. Neither dataset may be redistributed by the authors. The
+preregistered protocol, its amendment log, and every aggregate result artifact
+supporting this article are available at [REPOSITORY URL / DOI].
+
+% ---------------------------------------------------------------------------
+% Remaining required statements.
+% ---------------------------------------------------------------------------
+\section*{Author contributions}
+[TO COMPLETE --- npj requires a statement specifying each co-author's
+individual contributions, in the form ``S.H. contributed X and Y; A.R.S.
+contributed Z.'']
+
+\section*{Competing interests}
+[TO COMPLETE --- required for all npj content. ``The authors declare no
+competing interests.'' if none.]
+
+\section*{Acknowledgements}
+% Optional at npj, and they ask for brevity: no thanks to referees or editors.
+[OPTIONAL --- omit entirely if there is nothing substantive.]
+
+\section*{Materials \& Correspondence}
+Correspondence and requests for materials should be addressed to Shakib
+Howlader.
+
+\clearpage
+% npj uses Nature referencing style. unsrt is numbered in order of appearance,
+% which matches; the 10 references need a style check before submission.
+\bibliographystyle{unsrt}
+\bibliography{../references}
+
+\end{document}

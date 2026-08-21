@@ -1,0 +1,316 @@
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Study design}
+
+We evaluate whether a selective prediction policy calibrated at one hospital
+remains reliable at another when pre-diagnostic clinical context changes in
+availability or alignment. The design is a retrospective pre-deployment
+evaluation.
+
+Two shifts are crossed:
+
+\begin{itemize}
+  \item \textbf{Institutional shift} --- source site versus external site.
+  \item \textbf{Context shift} --- three controlled interventions on
+    pre-diagnostic text.
+\end{itemize}
+
+Crossing them is the point. Varying one while holding the other fixed cannot
+recover their interaction, and the interaction is what determines whether a
+model's measured benefit at one site is also its exposure at the next.
+
+\subsection{Sites and roles}
+
+\begin{table}[htbp]
+\centering
+\caption{Site roles. The external site is locked: architecture selection, early
+stopping, temperature selection, threshold selection, text-cleaning rules and
+context-state rules may not be revised using it. These prohibitions are encoded
+in the protocol registry and enforced by an automated validator.}
+\label{tab:sites}
+\begin{tabular}{llll}
+\toprule
+Role & Dataset & Function & Tuning \\
+\midrule
+Source   & MIMIC-CXR-JPG v2.1.0~\cite{johnson2019mimiccxr}
+         & development and internal evaluation & permitted \\
+External & CheXpert Plus~\cite{chexpertplus2024}
+         & locked external evaluation only & prohibited \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Data intake and integrity}
+
+Source metadata and the report archive were verified against the official
+SHA-256 manifest before use. The report archive was checked entry by entry:
+\num{227835} members, zero CRC mismatches, zero read errors, zero undecodable
+members. Three independent sources agree exactly on the study inventory --- the
+study list, the report archive members, and the checksum manifest --- and the
+record list agrees exactly with the manifest's DICOM entries (\num{377110}
+records). Patient disjointness across the official splits holds exactly.
+
+All \num{193282} source frontal images were acquired and hashed against the
+publisher manifest: \num{193282} of \num{193282} matched. One file failed on
+first pass as a partial object left by an interrupted transfer and was
+re-fetched and re-verified.
+
+At the external site, \num{191071} frontal images were acquired and checked
+against the publisher's per-file checksums, with zero mismatches. One image
+matches its recorded checksum yet does not decode, so the damage is upstream;
+it is excluded, leaving \num{191070} usable images
+(\cref{sec:limitations}).
+
+Verifying that data \emph{arrived} is not the same as verifying that it
+\emph{loads}. The checksum pass accepted the corrupt external file, and only a
+full decode revealed it.
+
+\subsection{Report structure and the permitted text policy}
+\label{sec:report-structure}
+
+The protocol requires model input to be \emph{pre-diagnostic}: text available
+before the interpretation exists. Findings, impression, and full reports are
+prohibited as inputs and may act only as label sources.
+
+All \num{227835} source reports were parsed structurally using a curated
+section-header vocabulary and header-driven --- not position-driven ---
+extraction. Permitted context is \texttt{indication} plus \texttt{history}, the
+structural analogue of the external site's two permitted sections. Widening the
+set was measured and rejected: adding \texttt{examination} gains
+\SI{0.11}{\percent} of coverage, while adding \texttt{comparison} gains
+\SI{1.49}{\percent} but admits text that can quote prior diagnostic conclusions.
+
+Three structural hazards were identified and are handled explicitly.
+
+\begin{enumerate}
+  \item \textbf{Preliminary interpretations embedded in reports.}
+    \num{17551} reports (\SI{7.70}{\percent}) contain a \texttt{WET READ}
+    section --- a preliminary radiologist reading. This is post-diagnostic text
+    sitting inside the report body. Any extraction rule that takes ``everything
+    before FINDINGS'' as context silently ingests it. We exclude these sections
+    while retaining the study.
+  \item \textbf{Non-monotone section order.} \num{181} reports place a
+    pre-diagnostic section \emph{after} the first diagnostic section, so
+    position-based splitting mis-assigns their text. Extraction is therefore
+    header-driven.
+  \item \textbf{Non-separable label sections.} \num{134} reports merge findings
+    and impression into one section, and \num{66} expose no recognised header.
+    Both are excluded (\num{200} studies, \SI{0.09}{\percent}).
+\end{enumerate}
+
+The first hazard is the most transferable: it applies to any pipeline that
+treats MIMIC report text as pre-diagnostic context, not only to this one.
+
+\subsection{Context states and interventions}
+
+Natural states are assigned by an informativeness rule defined on the source
+site. An \emph{effective token} is a whitespace-delimited token containing at
+least one alphanumeric character, counted after de-identification placeholder
+runs are removed, so a body of placeholders does not count as context.
+
+\begin{table}[htbp]
+\centering
+\caption{Natural context states. $T=3$ is primary; $T=5$ and $T=10$ are
+pre-specified sensitivity analyses. The rule is fixed on the source site and
+transferred to the external site without refitting.}
+\label{tab:states}
+\begin{tabular}{lll}
+\toprule
+State & Name & Rule \\
+\midrule
+N1 & informative      & effective tokens $\geq T$ \\
+N2 & low information  & $0 <$ effective tokens $< T$ \\
+N3 & absent           & effective tokens $= 0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Choosing $T$ is consequential and was therefore pre-specified. A design-stage
+sweep found the confirmatory cohort spanning \num{187847} studies at $T=1$ and
+\num{8996} at $T=30$ --- a twentyfold range driven by a parameter no prior
+specification fixes. Results are reported at the primary $T=3$; the $T=5$ and
+$T=10$ sensitivities are outstanding (\cref{sec:results}).
+
+Three controlled interventions are applied to N1 studies only, since removing
+context that was never present, or misaligning context that was already absent,
+tests nothing:
+
+\begin{itemize}
+  \item \textbf{C0, original context} --- identity.
+  \item \textbf{C1, no context} --- all permitted context replaced by
+    \texttt{[NO\_CONTEXT]}.
+  \item \textbf{C2, misaligned context} --- deterministic permutation under
+    constraints: same institution, same split, different patient, same
+    context-length bin, seed \num{20260718}.
+\end{itemize}
+
+C2 is implemented as a rotation within strata rather than a shuffle. A shuffle
+can leave fixed points, and a fixed point is silently a C0 study sitting inside
+C2, which would bias the misalignment effect toward zero without any visible
+failure. Five invariants are asserted at run time rather than assumed, including
+that every C2 recipient holds a different patient's text and that image-only
+predictions are identical across all three conditions.
+
+\subsection{Cohort construction and evaluation partition}
+
+\begin{table}[htbp]
+\centering
+\caption{Source-site cohort construction.}
+\label{tab:cohort}
+\begin{tabular}{lrr}
+\toprule
+Step & Removed & Remaining \\
+\midrule
+All studies                      & ---          & \num{227835} \\
+No recognised section            & \num{66}     & \num{227769} \\
+Merged label sections            & \num{133}    & \num{227636} \\
+Frontal view required            & \num{9688}   & \num{217948} \\
+Official split assigned          & \num{0}      & \num{217948} \\
+Context informative ($T=3$)      & \num{15001}  & \num{202947} \\
+Impression label source present  & \num{29375}  & \textbf{\num{173572}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The final source cohort is \num{173572} studies, \num{58689} patients,
+\num{193282} frontal images. The official test split yields only \num{282}
+patients within this cohort, which a design-stage power analysis showed is
+materially underpowered for the primary hypothesis, so a prespecified
+patient-disjoint evaluation partition was carved from the training split.
+Assignment used patient identifiers and the frozen seed only --- no label,
+outcome, image, or model output participated --- so this is a design
+construction, not a data-dependent selection. All tiers are verified
+patient-disjoint, and reserved tiers are unreadable in code by any stage that
+could influence a model, a threshold, or a policy.
+
+\subsection{Models and selective policy}
+
+Four models: image-only (M1, non-multimodal control), text-only (M2,
+text-signal and shortcut control), probability late fusion (M3), and
+feature-concatenation fusion (M4). M3 holds no trainable parameters by
+construction, which is what allows any advantage M4 shows over it to be
+attributed to the learned fusion rather than to the mere presence of two
+modalities.
+
+Backbones are DenseNet-121 initialised from ImageNet at \SI{224}{px} for the
+image arm and BERT-base-uncased at 128 tokens for the text arm, fixed by
+amendment before any model was trained. The choice is deliberately conventional:
+the study claims no architectural novelty, so the backbone is a control held
+constant rather than a variable to optimise, and architecture cannot serve as a
+competing explanation for any transport effect observed.
+
+Targets are five pathologies --- Cardiomegaly, Edema, Pleural Effusion,
+Atelectasis, Consolidation --- labelled by a single labeller family applied
+identically at both sites, so a site effect cannot be confounded with a labeller
+artefact. Uncertain and unmentioned labels carry no supervision and are excluded
+from the loss rather than mapped to negative; mapping them would alter the
+prevalence the protocol froze.
+
+Per-pathology thresholds are selected by balanced accuracy on the source
+calibration tier. Balanced accuracy rather than accuracy because these
+pathologies are far from balanced, and at Consolidation's prevalence a
+plain-accuracy threshold drifts toward predicting the majority class
+everywhere. Confidence is $\lvert 2p-1 \rvert$ per pathology; study confidence
+is the minimum across the five, so a study is only as trustworthy as its least
+certain finding. Loss is five-label Hamming error and abstention means referral
+for human interpretation. Coverage is set at \SI{80}{\percent} (primary), with
+\SI{90}{\percent} and \SI{70}{\percent} as sensitivity analyses, and transferred
+frozen.
+
+Coverage is held fixed and error allowed to vary, rather than the reverse, so
+the two sites are compared at the same operating burden on the human reader.
+
+\subsection{Label sources and the comparability check}
+\label{sec:label-sources}
+
+Both sites are labelled by the same labeller family applied to the same two
+report scopes, so that a site effect cannot be confounded with a labeller
+artefact. The impression-derived endpoint is primary and the findings-derived
+endpoint is a mandatory sensitivity. That ordering was fixed in advance on the
+stated ground that the findings section is present in only about a quarter of
+external rows, making it too sparse to carry the primary estimand.
+
+The harmonisation plan additionally required that label distributions be
+compared site-to-site before the cross-site experiment was run. We report that
+comparison in \cref{sec:comparability} rather than treating it as a
+housekeeping step, because whether two label sets are commensurable across
+institutions determines whether a difference in risk between them can be read as
+a transport estimate at all. A risk computed over a sparse, predominantly
+positive set of labelled cells at one site is not the same quantity as a risk
+computed over a dense, predominantly negative set at the other, however
+identically the two are named.
+
+\subsection{Statistical analysis}
+\label{sec:power}
+
+Inference is by patient-level bootstrap, \num{2000} replicates, seed
+\num{20260718}, \SI{95}{\percent} percentile intervals. Patients are the
+resampling unit because a patient contributes several studies whose errors are
+correlated; resampling studies would treat those as independent and understate
+the interval.
+
+Controlled context comparisons are paired within site: C0, C1 and C2 are the
+same patients under three interventions, so each replicate draws a patient set
+once and reads all three conditions for it. Cross-institution comparisons use
+independent within-site bootstraps, since the sites hold different patients.
+Per-pathology secondary analyses use Holm correction; the primary estimand is
+the aggregate Hamming loss and pays no multiplicity penalty.
+
+A hypothesis is declared confirmed when its interval excludes zero \emph{and}
+the point estimate reaches a materiality threshold of \num{0.02} absolute.
+
+\paragraph{A note on that rule.} Because it requires the point estimate itself
+to reach materiality, evaluating it at a true effect exactly equal to
+materiality yields rejection in only half of repetitions: power is capped at
+\SI{50}{\percent} regardless of sample size. We verified this holds at an
+implied $n$ of order $10^{9}$. Materiality is therefore the smallest effect
+worth acting on, not the design effect, and the study is powered against the
+minimum detectable effect instead. This ceiling generalises to any study using a
+``interval excludes zero \textsc{and} estimate $\geq \delta$'' decision rule.
+
+Design-stage power was computed over a declared grid of base risks, effect
+sizes, intra-patient correlations and coverages --- swept, never fitted, since
+no outcome existed. On the prespecified partition the minimum detectable effect
+at \SI{80}{\percent} power is \numrange{0.022}{0.026} absolute, against
+\numrange{0.026}{0.072} on the official test split. The normal approximation
+used for the grid agreed with the frozen bootstrap procedure to within
+\num{0.015} across validation cells. Any hypothesis whose minimum detectable
+effect exceeds the achievable range is reported as estimation with an interval
+rather than as a powered decision.
+
+A coverage drift of \num{0.05} from target is prespecified as material. A frozen
+cutoff is intended to hold the operating burden constant across sites and
+conditions; where it does not, the comparison is no longer at equal coverage,
+and the drift is itself a result rather than a nuisance.
+
+\subsection{External site}
+
+The external site publishes permitted context as structured fields rather than
+as sections parsed from a report body. The mechanism differs, the intent does
+not, and the informativeness rule is the source-site rule applied without
+refitting --- refitting it on external text would constitute external-site
+tuning, which the registry prohibits.
+
+Normalisation, channel handling, study aggregation and label masking are
+identical to the source site. Both sites reduce full-resolution images to the
+model input in a single bilinear step; applying a second resampling only at the
+external site would introduce a preprocessing difference tracking the site
+variable under study, and was avoided at the cost of a larger transfer.
+
+Unlike the source site, where every cohort study is informative by construction,
+the natural-state distribution is informative at the external site and is
+reported.
+
+\subsection*{Code availability}
+% npj requires this statement inside the Methods, under exactly this heading,
+% whenever custom code is central to the conclusions. It is here, not in the
+% Data Availability section.
+
+The analysis toolkit that produced every result in this article --- cohort
+construction, the context interventions, threshold selection, both evaluation
+stages and the patient-clustered bootstrap --- is available at [REPOSITORY URL
+/ DOI]. The preregistered protocol is machine-readable and hash-manifested, and
+the amendment log records every change with its date and confirmatory status,
+so the boundary between prespecified and post-hoc analysis can be audited
+rather than taken on trust.
