@@ -1,0 +1,189 @@
+% C3E --- JAMIA Research and Applications submission build, Revision R1.
+%
+% Built from the R1 revision (../revision/). Every number is a macro from
+% ../revision/generated/numbers.tex or a generated table; nothing is typed by
+% hand. The previous JAMIA build (../jamia/) carries superseded conclusions and
+% is left untouched.
+%
+% JAMIA Research and Applications (General Instructions, checked 2026-10-07):
+%   body <= 4,000 words (Background and Significance .. Conclusion; excludes
+%   title page, abstract, references, figures, tables); structured abstract
+%   <= 250 words (Objective / Materials and Methods / Results / Discussion /
+%   Conclusion); <= 4 tables; <= 6 figures (also uploaded separately, each with
+%   alt text under its legend); references unlimited, numbered in order;
+%   double-spaced; LaTeX accepted with compiled PDF; data availability
+%   statement required; CRediT contributions; AI use disclosed in the cover
+%   letter and in Methods or Acknowledgements.
+%
+% Build:  cd paper/jamia_r1 && ./build.sh      (supplement first, then main)
+% Budget: ./budget.sh
+
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[super]{cite}
+\usepackage{setspace}
+\usepackage[modulo]{lineno}
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage{xr-hyper}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\emergencystretch}{3em}
+\doublespacing
+\linenumbers
+
+\externaldocument[S-]{supplement_jamia_r1}
+\graphicspath{{../revision/figures/}}
+\input{../revision/generated/numbers}
+
+\newcommand{\authorinput}[1]{\textcolor{red!70!black}{\textbf{[AUTHOR INPUT REQUIRED: #1]}}}
+\newcommand{\alttext}[1]{\par\smallskip\noindent\textit{Alt text:} #1}
+\newcommand{\stab}[1]{Supplementary Table~\ref{S-#1}}
+\newcommand{\ssec}[1]{Supplementary Section~\ref{S-#1}}
+
+\begin{document}
+
+% ------------------------------------------------------------------ title page
+\begin{titlepage}
+\thispagestyle{empty}
+\nolinenumbers
+\begin{singlespace}
+\noindent{\Large\bfseries Frozen selective prediction for multimodal
+chest-radiograph models across two hospitals: a preregistered compound-shift
+evaluation with label-dependent cross-site conclusions\par}
+
+\vspace{1.5em}
+\noindent Shakib Howlader, BSc,\textsuperscript{1}
+\url{https://orcid.org/0009-0009-5318-2999}\\
+Adnan Rahman Sayeem, BSc,\textsuperscript{1}
+\url{https://orcid.org/0009-0008-0403-0617}
+
+\vspace{0.8em}
+\noindent\textsuperscript{1}Department of Computer Science and Engineering,
+Daffodil International University, Dhaka, Bangladesh
+
+\vspace{1.5em}
+\noindent\textbf{Corresponding author:} Shakib Howlader,
+Department of Computer Science and Engineering, Daffodil International
+University, Daffodil Smart City, Birulia, Savar, \mbox{Dhaka-1216}, Bangladesh.
+Email: howlader15-6029@diu.edu.bd.
+% The telephone number is kept out of the public repository: private_phone.tex
+% is gitignored and exists only on the submitting author's machine.
+Telephone: \IfFileExists{private_phone.tex}{\input{private_phone.tex}\unskip}{withheld
+from the public repository}.
+
+\vspace{1.5em}
+\noindent\textbf{Keywords:} Radiography, Thoracic; Machine Learning;
+Diagnosis, Computer-Assisted; Data Accuracy; Reproducibility of Results
+
+\vspace{1.5em}
+\noindent\textbf{Word count:} \input{wordcount.tex}\unskip{} words (Background
+and Significance through Conclusion; excluding title page, abstract,
+references, figure legends and tables).
+\end{singlespace}
+\end{titlepage}
+
+% ------------------------------------------------------------------ abstract
+\section*{Abstract}
+% ABSTRACT-START
+\noindent\textbf{Objective:} To test whether a selective-prediction policy for
+chest radiographs, frozen at one hospital, keeps its error and coverage at
+another when pre-diagnostic clinical context is intact, removed or misaligned,
+and to establish what the cross-site estimate measures.
+
+\noindent\textbf{Materials and Methods:} Image-only, text-only, late-fusion and
+feature-fusion models were trained on MIMIC-CXR-JPG. Per-pathology thresholds
+and an 80\%-coverage abstention cutoff were selected at the source and applied
+unchanged to CheXpert Plus. Labels for five pathologies came from CheXbert
+applied to report impressions. The protocol was registered before data access;
+a post-results audit corrected a verified defect, and later analyses are
+labelled post hoc.
+
+\noindent\textbf{Results:} The original estimator counted studies without a
+labelled target (\NoLabSrcImpression{} at the source, \NoLabExtImpression{}
+externally) as error-free, producing transfer gaps of \HOneMThreeOrigPt{} (late
+fusion) and \HOneMFourOrigPt{} (feature fusion). Over studies with a labelled
+target, the gaps were \HOneMThreeEvalPt{} and \HOneMFourEvalPt{}, with intervals
+inside $\pm$0.02. With predictions and thresholds fixed, label handling moved
+the feature-fusion gap from \SensUncPosHOneMFourPt{} to \SensUnmNegHOneMFourPt{},
+and a second training seed shifted both multimodal gaps by about $-$0.04. Frozen
+thresholds moved operating points (cardiomegaly specificity \MFourCardSpecSrc{}
+versus \MFourCardSpecExt{}), while coverage stayed within 0.05 of target.
+
+\noindent\textbf{Discussion:} The originally reported transport failure reflected label
+availability, not model error. Misaligned context was worse than absent context
+for late fusion at the source under every specification, but not externally
+under the second seed.
+
+\noindent\textbf{Conclusion:} With report-derived labels available at
+different rates, cross-site selective-risk comparisons are not identified.
+% ABSTRACT-END
+
+\clearpage
+
+% ------------------------------------------------------------------ body
+\input{sections/01_background}
+\input{sections/02_objective}
+\input{sections/03_materials_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_conclusion}
+
+% ------------------------------------------------------------------ statements
+\clearpage
+\section*{Acknowledgments}
+We thank the creators of MIMIC-CXR, MIMIC-CXR-JPG and PhysioNet, and of CheXpert
+Plus at the Stanford Center for Artificial Intelligence in Medicine and Imaging,
+for making the data available.\cite{johnson2019cxr,johnson2024cxrdata,johnson2019jpgpaper,johnson2024jpgdata,pollard2026,chambon2024}
+\authorinput{any further acknowledgments}
+
+\noindent\textit{Use of generative AI.} The authors used generative AI
+assistants throughout this project: ChatGPT and Codex (OpenAI) and Claude
+(Anthropic) helped plan the study, write and review analysis code, and draft
+and edit text. During the revision, Claude was also used to audit the analysis,
+run analyses through code executed on the authors' machine, generate tables and
+figures, and verify references. No images, report text, or patient-, study- or
+image-level records were entered into any AI tool. Every number in the
+manuscript is generated by code from aggregate analysis outputs in the public
+repository. The authors reviewed all outputs and take full responsibility for
+the content. AI tools are not authors.
+
+\section*{Funding}
+This research received no specific grant from any funding agency in the public,
+commercial, or not-for-profit sectors.
+
+\section*{Author contributions}
+\authorinput{CRediT roles for each author, e.g. Conceptualization, Methodology,
+Software, Formal analysis, Investigation, Data curation, Writing -- original
+draft, Writing -- review \& editing, Visualization, Supervision}
+
+\section*{Competing interests}
+\authorinput{competing interests of each author, or ``None declared.'' if true}
+
+\section*{Data availability}
+MIMIC-CXR, MIMIC-CXR-JPG and CheXpert Plus are available to credentialed
+researchers under data use agreements from PhysioNet and the Stanford Center
+for Artificial Intelligence in Medicine and Imaging, and are not
+redistributed.\cite{johnson2024cxrdata,johnson2024jpgdata,chambon2024} The
+machine-readable protocol, its amendment log, all analysis code, tests,
+executable commands and every aggregate result reported here are available at
+\url{https://github.com/mr-shakib/compound-shift-selective-reliability}
+(archived release: \authorinput{Zenodo DOI}). Row-level labels,
+predictions, model checkpoints and images cannot be shared under the data use
+agreements.
+
+\bibliographystyle{unsrt}
+{\raggedright\bibliography{references_jamia}}
+
+\end{document}

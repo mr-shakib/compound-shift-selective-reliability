@@ -1,0 +1,61 @@
+site,c2_seed,status,estimator,model,contrast,point_estimate,ci_low,ci_high,verdict,studies
+source,20260718,done,evaluable_study,M2,H4 (C2 - C1),0.0053188424,-0.0095427639,0.0200772819,inconclusive,14766
+source,20260718,done,evaluable_study,M2,C2 penalty (C2 - C0),0.1576014776,0.1424247972,0.1723237331,confirmed,14766
+source,20260718,done,evaluable_study,M3,H4 (C2 - C1),0.0783371829,0.0690932547,0.0865351348,confirmed,14766
+source,20260718,done,evaluable_study,M3,C2 penalty (C2 - C0),0.0601168785,0.0505215547,0.0698077746,confirmed,14766
+source,20260718,done,evaluable_study,M4,H4 (C2 - C1),0.0300572622,0.0214592875,0.0383288174,confirmed,14766
+source,20260718,done,evaluable_study,M4,C2 penalty (C2 - C0),0.0303766417,0.0220956850,0.0387359440,confirmed,14766
+source,20260718,done,original,M2,H4 (C2 - C1),0.0004197244,-0.0077487446,0.0078880664,inconclusive,14766
+source,20260718,done,original,M2,C2 penalty (C2 - C0),0.0840274639,0.0758886458,0.0919299512,confirmed,14766
+source,20260718,done,original,M3,H4 (C2 - C1),0.0474566844,0.0422430453,0.0523702498,confirmed,14766
+source,20260718,done,original,M3,C2 penalty (C2 - C0),0.0324020413,0.0267472607,0.0381754764,confirmed,14766
+source,20260718,done,original,M4,H4 (C2 - C1),0.0173261415,0.0125245461,0.0217231913,confirmed,14766
+source,20260718,done,original,M4,C2 penalty (C2 - C0),0.0148899902,0.0102729851,0.0195382109,confirmed,14766
+source,20260719,done,evaluable_study,M2,H4 (C2 - C1),-0.0140408414,-0.0282370588,0.0001614598,inconclusive,14766
+source,20260719,done,evaluable_study,M2,C2 penalty (C2 - C0),0.1382417938,0.1237925042,0.1522171554,confirmed,14766
+source,20260719,done,evaluable_study,M3,H4 (C2 - C1),0.0779488424,0.0684600072,0.0871577415,confirmed,14766
+source,20260719,done,evaluable_study,M3,C2 penalty (C2 - C0),0.0597285380,0.0493495245,0.0697564398,confirmed,14766
+source,20260719,done,evaluable_study,M4,H4 (C2 - C1),0.0274460577,0.0187963456,0.0355155507,confirmed,14766
+source,20260719,done,evaluable_study,M4,C2 penalty (C2 - C0),0.0277654372,0.0193449966,0.0366379586,confirmed,14766
+source,20260719,done,original,M2,H4 (C2 - C1),-0.0102913104,-0.0180036016,-0.0025990816,opposite_direction_not_material,14766
+source,20260719,done,original,M2,C2 penalty (C2 - C0),0.0733164291,0.0653639949,0.0812881080,confirmed,14766
+source,20260719,done,original,M3,H4 (C2 - C1),0.0476113203,0.0421203257,0.0531135354,confirmed,14766
+source,20260719,done,original,M3,C2 penalty (C2 - C0),0.0325566772,0.0264393848,0.0386267942,confirmed,14766
+source,20260719,done,original,M4,H4 (C2 - C1),0.0165119636,0.0119129021,0.0208058893,confirmed,14766
+source,20260719,done,original,M4,C2 penalty (C2 - C0),0.0140758122,0.0094338606,0.0188607239,confirmed,14766
+source,20260720,done,evaluable_study,M2,H4 (C2 - C1),-0.0069251741,-0.0207430565,0.0062138031,inconclusive,14766
+source,20260720,done,evaluable_study,M2,C2 penalty (C2 - C0),0.1453574611,0.1311700971,0.1595087983,confirmed,14766
+source,20260720,done,evaluable_study,M3,H4 (C2 - C1),0.0801464055,0.0706218007,0.0888844843,confirmed,14766
+source,20260720,done,evaluable_study,M3,C2 penalty (C2 - C0),0.0619261010,0.0519323327,0.0720353180,confirmed,14766
+source,20260720,done,evaluable_study,M4,H4 (C2 - C1),0.0335364297,0.0248139754,0.0416897086,confirmed,14766
+source,20260720,done,evaluable_study,M4,C2 penalty (C2 - C0),0.0338558092,0.0256083002,0.0422053432,confirmed,14766
+source,20260720,done,original,M2,H4 (C2 - C1),-0.0042134756,-0.0120740123,0.0030797990,inconclusive,14766
+source,20260720,done,original,M2,C2 penalty (C2 - C0),0.0793942639,0.0711441057,0.0873018857,confirmed,14766
+source,20260720,done,original,M3,H4 (C2 - C1),0.0495738709,0.0439100695,0.0548544206,confirmed,14766
+source,20260720,done,original,M3,C2 penalty (C2 - C0),0.0345192278,0.0284212537,0.0405910004,confirmed,14766
+source,20260720,done,original,M4,H4 (C2 - C1),0.0196151858,0.0151087807,0.0241020828,confirmed,14766
+source,20260720,done,original,M4,C2 penalty (C2 - C0),0.0171790344,0.0126408186,0.0217822835,confirmed,14766
+external,20260718,done,evaluable_study,M2,H4 (C2 - C1),0.0076249172,0.0049425823,0.0102124744,confirmed,132923
+external,20260718,done,evaluable_study,M2,C2 penalty (C2 - C0),0.0409681623,0.0375819989,0.0441516770,confirmed,132923
+external,20260718,done,evaluable_study,M3,H4 (C2 - C1),0.0262998546,0.0239745015,0.0285531052,confirmed,132923
+external,20260718,done,evaluable_study,M3,C2 penalty (C2 - C0),0.0128877742,0.0101972136,0.0154488618,confirmed,132923
+external,20260718,done,evaluable_study,M4,H4 (C2 - C1),-0.0077335358,-0.0100939804,-0.0054390336,opposite_direction_not_material,132923
+external,20260718,done,evaluable_study,M4,C2 penalty (C2 - C0),0.0014724192,-0.0005018004,0.0034597544,inconclusive,132923
+external,20260718,done,original,M2,H4 (C2 - C1),0.0061904605,0.0040147957,0.0082759915,confirmed,132923
+external,20260718,done,original,M2,C2 penalty (C2 - C0),0.0328713915,0.0301460608,0.0356173365,confirmed,132923
+external,20260718,done,original,M3,H4 (C2 - C1),0.0231334680,0.0211415162,0.0249913512,confirmed,132923
+external,20260718,done,original,M3,C2 penalty (C2 - C0),0.0105118988,0.0082833973,0.0126559762,confirmed,132923
+external,20260718,done,original,M4,H4 (C2 - C1),-0.0059928062,-0.0079593530,-0.0040763269,opposite_direction_not_material,132923
+external,20260718,done,original,M4,C2 penalty (C2 - C0),0.0012057996,-0.0004236777,0.0028905761,inconclusive,132923
+external,20260719,done,evaluable_study,M2,H4 (C2 - C1),0.0068364126,0.0042435735,0.0095396706,confirmed,132922
+external,20260719,done,evaluable_study,M2,C2 penalty (C2 - C0),0.0401811443,0.0369581555,0.0434420109,confirmed,132922
+external,20260719,done,evaluable_study,M3,H4 (C2 - C1),0.0252208998,0.0228300061,0.0274763948,confirmed,132922
+external,20260719,done,evaluable_study,M3,C2 penalty (C2 - C0),0.0118065975,0.0091733876,0.0142895840,confirmed,132922
+external,20260719,done,evaluable_study,M4,H4 (C2 - C1),-0.0063140023,-0.0086059856,-0.0039325969,opposite_direction_not_material,132922
+external,20260719,done,evaluable_study,M4,C2 penalty (C2 - C0),0.0028937146,0.0007940242,0.0051437191,confirmed,132922
+external,20260719,done,original,M2,H4 (C2 - C1),0.0055415197,0.0034028956,0.0077147798,confirmed,132922
+external,20260719,done,original,M2,C2 penalty (C2 - C0),0.0322236937,0.0295853720,0.0349204117,confirmed,132922
+external,20260719,done,original,M3,H4 (C2 - C1),0.0223782231,0.0204213806,0.0242389270,confirmed,132922
+external,20260719,done,original,M3,C2 penalty (C2 - C0),0.0097551277,0.0075735225,0.0118360655,confirmed,132922
+external,20260719,done,original,M4,H4 (C2 - C1),-0.0048671060,-0.0067969746,-0.0029239247,opposite_direction_not_material,132922
+external,20260719,done,original,M4,C2 penalty (C2 - C0),0.0023326814,0.0005940909,0.0041766813,confirmed,132922

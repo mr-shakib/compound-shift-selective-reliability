@@ -1,0 +1,24 @@
+\begin{tabular}{lrr}
+\toprule
+Step (source site) & Removed & Remaining\\
+\midrule
+All reports/studies & -- & 227,835\\
+No recognised section header & 66 & 227,769\\
+Findings and impression merged & 133 & 227,636\\
+No frontal (AP/PA) image & 9,688 & 217,948\\
+Official split assigned & 0 & 217,948\\
+Context not informative ($<3$ effective tokens) & 15,001 & 202,947\\
+No impression section & 29,375 & 173,572\\
+\midrule
+Tier & Patients / studies / frontal images & \\
+Model training & 49,959 / 146,253 / 162,823 & \\
+Threshold calibration & 3,000 / 9,233 / 10,264 & \\
+Prespecified evaluation (primary) & 5,000 / 14,766 / 16,456 & \\
+Official validate (not analysed) & 448 / 1,391 / 1,584 & \\
+Official test (not analysed) & 282 / 1,929 / 2,155 & \\
+\midrule
+External site (CheXpert Plus) & & \\
+Usable frontal images / studies / patients & 191,070 / 187,673 / 64,709 & \\
+Intervention cohort (N1 at $T=3$): images / studies / patients & 135,561 / 132,923 / 53,110 & \\
+\bottomrule
+\end{tabular}

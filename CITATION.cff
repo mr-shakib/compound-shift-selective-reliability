@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this protocol or code, please cite it as below."
+title: "C3E: compound-shift evaluation of selective reliability for multimodal chest-radiograph models (protocol, analysis code and aggregate results)"
+type: software
+license: MIT
+repository-code: "https://github.com/mr-shakib/compound-shift-selective-reliability"
+authors:
+  - family-names: Howlader
+    given-names: Shakib
+    orcid: "https://orcid.org/0009-0009-5318-2999"
+    affiliation: "Department of Computer Science and Engineering, Daffodil International University"
+  - family-names: Sayeem
+    given-names: Adnan Rahman
+    orcid: "https://orcid.org/0009-0008-0403-0617"
+    affiliation: "Department of Computer Science and Engineering, Daffodil International University"
+keywords:
+  - selective prediction
+  - distribution shift
+  - chest radiography
+  - multimodal learning
+  - MIMIC-CXR
+  - CheXpert Plus

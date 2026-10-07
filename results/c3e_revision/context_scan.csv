@@ -1,0 +1,11 @@
+site,pattern,studies,share
+source,report_section_header,14766,0.0000000000
+source,conclusion_language,14766,0.0045374509
+source,comparison_language,14766,0.0171339564
+source,query_language,14766,0.5976567791
+source,names_a_target_finding,14766,0.3555465258
+external,report_section_header,132922,0.0000000000
+external,conclusion_language,132922,0.0002332195
+external,comparison_language,132922,0.0006244264
+external,query_language,132922,0.1603421555
+external,names_a_target_finding,132922,0.1582431802

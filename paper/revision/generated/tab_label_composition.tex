@@ -1,0 +1,23 @@
+\begin{tabular}{llrrrrrr}
+\toprule
+Label source & Pathology & \multicolumn{3}{c}{Source (MIMIC-CXR)} & \multicolumn{3}{c}{External (CheXpert Plus)}\\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+ & & pos/neg & unc. & unm. & pos/neg & unc. & unm.\\
+\midrule
+Impression & Cardiomegaly & 2,220/1,013 & 550 & 10,983 & 18,343/8,340 & 2,268 & 103,972\\
+ & Edema & 1,946/1,452 & 688 & 10,680 & 31,922/12,038 & 7,683 & 81,280\\
+ & Consolidation & 658/551 & 273 & 13,284 & 8,369/16,748 & 16,224 & 91,582\\
+ & Atelectasis & 2,685/64 & 701 & 11,316 & 19,431/416 & 21,462 & 91,614\\
+ & Pleural Effusion & 3,287/1,302 & 413 & 9,764 & 56,047/20,069 & 4,204 & 52,603\\
+ & \emph{Studies with no labelled cell} & \multicolumn{3}{r}{6,968 of 14,766 (47.2\%)} & \multicolumn{3}{r}{24,821 of 132,923 (18.7\%)}\\
+ & \emph{Labelled-cell density; positive rate} & \multicolumn{3}{r}{20.6\%; 71.1\%} & \multicolumn{3}{r}{28.8\%; 70.0\%}\\
+\midrule
+Findings & Cardiomegaly & 2,065/2,926 & 313 & 3,989 & 7,277/6,337 & 1,037 & 118,272\\
+ & Edema & 822/1,629 & 423 & 6,419 & 8,799/2,564 & 1,778 & 119,782\\
+ & Consolidation & 271/3,428 & 263 & 5,331 & 2,538/3,878 & 4,118 & 122,389\\
+ & Atelectasis & 1,893/14 & 496 & 6,890 & 6,033/90 & 5,741 & 121,059\\
+ & Pleural Effusion & 1,834/5,823 & 285 & 1,351 & 16,994/6,264 & 1,338 & 108,327\\
+ & \emph{Studies with no labelled cell} & \multicolumn{3}{r}{553 of 9,293 (6.0\%)} & \multicolumn{3}{r}{100,617 of 132,923 (75.7\%)}\\
+ & \emph{Labelled-cell density; positive rate} & \multicolumn{3}{r}{44.6\%; 33.3\%} & \multicolumn{3}{r}{9.1\%; 68.5\%}\\
+\bottomrule
+\end{tabular}

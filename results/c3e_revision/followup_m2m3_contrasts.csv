@@ -1,0 +1,43 @@
+estimator,hypothesis,model,site,contrast,registered_contrast,status,point_estimate,ci_low,ci_high,ci_low_bonferroni6,ci_high_bonferroni6,p_two_sided_bootstrap,ci_side,reaches_materiality,interval_excludes_materiality,within_materiality_bounds,verdict,materiality_applied,verdict_with_stage10_materiality
+original,H1,M1,,external C0 - source C0,False,not_registered,0.0511126487,0.0450407096,0.0568222556,0.0428849910,0.0589778929,0.0009995002,hypothesised,True,True,False,confirmed,0.0200000000,
+original,H1,M2,,external C0 - source C0,False,not_registered,0.0668652896,0.0586399120,0.0748903743,0.0557763828,0.0768063158,0.0009995002,hypothesised,True,True,False,confirmed,0.0200000000,
+original,H1,M3,,external C0 - source C0,True,confirmatory,0.0145274912,0.0085967886,0.0207617839,0.0060651170,0.0225950105,0.0009995002,hypothesised,False,False,False,same_direction_not_material,0.0200000000,
+original,H1,M4,,external C0 - source C0,True,confirmatory,0.0246499466,0.0181951625,0.0314697346,0.0159917865,0.0332815083,0.0009995002,hypothesised,True,False,False,confirmed,0.0200000000,
+original,H2,M3,,interaction C1,True,confirmatory,0.0153512154,0.0108189622,0.0198159230,0.0089274991,0.0212565211,0.0009995002,hypothesised,False,False,True,same_direction_not_material,0.0200000000,
+original,H2,M3,,interaction C2,False,not_registered,-0.0179138704,-0.0231491910,-0.0124840990,-0.0251204893,-0.0108973903,0.0009995002,opposite,False,False,False,opposite_direction_not_material,0.0200000000,
+original,H2,M4,,interaction C1,True,confirmatory,0.0088465023,0.0041998580,0.0137456366,0.0029278392,0.0148506356,0.0009995002,hypothesised,False,False,True,same_direction_not_material,0.0200000000,
+original,H2,M4,,interaction C2,False,not_registered,-0.0062155793,-0.0108676693,-0.0014736844,-0.0126834629,-0.0000501203,0.0089955022,opposite,False,False,True,opposite_direction_not_material,0.0200000000,
+original,H3,M3,,transfer gap M3 - transfer gap M1,False,not_registered,-0.0365851575,-0.0414015083,-0.0318042227,-0.0429946695,-0.0302187705,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+original,H3,M4,,transfer gap M4 - transfer gap M1,False,not_registered,-0.0264627021,-0.0315554424,-0.0215740835,-0.0332168120,-0.0193072850,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+original,H4,M3,source,C2 - C1,True,secondary,0.0355746356,0.0310558628,0.0403986748,0.0294388259,0.0418952670,0.0009995002,hypothesised,,,,confirmed,,
+original,H4,M4,source,C2 - C1,True,secondary,0.0060255307,0.0019207363,0.0102164799,0.0008342432,0.0116161154,0.0029985007,hypothesised,,,,confirmed,,
+original,H4,M3,external,C2 - C1,True,secondary,0.0023095498,0.0005930907,0.0039941009,0.0000372953,0.0046057152,0.0079960020,hypothesised,,,,confirmed,,
+original,H4,M4,external,C2 - C1,True,secondary,-0.0090365509,-0.0108415671,-0.0071797135,-0.0114183745,-0.0065050668,0.0009995002,opposite,,,,opposite_direction_not_material,,
+evaluable_study,H1,M1,,external C0 - source C0,False,not_registered,-0.0082397305,-0.0194116733,0.0027202623,-0.0241498028,0.0057192268,0.1439280360,spans_zero,False,False,True,inconclusive,0.0200000000,
+evaluable_study,H1,M2,,external C0 - source C0,False,not_registered,-0.0278778838,-0.0411335141,-0.0147083032,-0.0451889657,-0.0101322470,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+evaluable_study,H1,M3,,external C0 - source C0,True,confirmatory,-0.0402384511,-0.0503296733,-0.0297881883,-0.0541075065,-0.0260647354,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+evaluable_study,H1,M4,,external C0 - source C0,True,confirmatory,-0.0468586383,-0.0586166781,-0.0350254237,-0.0614063987,-0.0311380619,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+evaluable_study,H2,M3,,interaction C1,True,confirmatory,0.0149965766,0.0072373015,0.0227953148,0.0041710711,0.0252550595,0.0009995002,hypothesised,False,False,False,same_direction_not_material,0.0200000000,
+evaluable_study,H2,M3,,interaction C2,False,not_registered,-0.0404011129,-0.0492355239,-0.0315094169,-0.0521427908,-0.0286785555,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+evaluable_study,H2,M4,,interaction C1,True,confirmatory,0.0026913910,-0.0049967521,0.0108943748,-0.0077232547,0.0126901955,0.5227386307,spans_zero,False,False,True,inconclusive,0.0200000000,
+evaluable_study,H2,M4,,interaction C2,False,not_registered,-0.0130217764,-0.0208695460,-0.0050414209,-0.0240952005,-0.0026162893,0.0009995002,opposite,False,False,False,opposite_direction_not_material,0.0200000000,
+evaluable_study,H3,M3,,transfer gap M3 - transfer gap M1,False,not_registered,-0.0319987206,-0.0404587626,-0.0237287018,-0.0430075607,-0.0205408522,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+evaluable_study,H3,M4,,transfer gap M4 - transfer gap M1,False,not_registered,-0.0386189078,-0.0472691209,-0.0302403800,-0.0499897382,-0.0270834607,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+evaluable_study,H4,M3,source,C2 - C1,True,secondary,0.0564940828,0.0484289321,0.0647473417,0.0459733252,0.0678557024,0.0009995002,hypothesised,,,,confirmed,,
+evaluable_study,H4,M4,source,C2 - C1,True,secondary,0.0044075035,-0.0028301800,0.0120662880,-0.0053880155,0.0138339117,0.2568715642,spans_zero,,,,inconclusive,,
+evaluable_study,H4,M3,external,C2 - C1,True,secondary,0.0010963933,-0.0009872256,0.0030899783,-0.0016465583,0.0037540702,0.3058470765,spans_zero,,,,inconclusive,,
+evaluable_study,H4,M4,external,C2 - C1,True,secondary,-0.0113056639,-0.0134164204,-0.0091627950,-0.0140902234,-0.0083637767,0.0009995002,opposite,,,,opposite_direction_not_material,,
+cell_micro,H1,M1,,external C0 - source C0,False,not_registered,-0.0005716662,-0.0106835356,0.0092044112,-0.0147875149,0.0125116489,0.9005497251,spans_zero,False,False,True,inconclusive,0.0200000000,
+cell_micro,H1,M2,,external C0 - source C0,False,not_registered,-0.0135715040,-0.0260177439,-0.0013970797,-0.0309044455,0.0027941087,0.0359820090,opposite,False,False,False,opposite_direction_not_material,0.0200000000,
+cell_micro,H1,M3,,external C0 - source C0,True,confirmatory,-0.0314292863,-0.0406753781,-0.0215616190,-0.0443563600,-0.0187390454,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+cell_micro,H1,M4,,external C0 - source C0,True,confirmatory,-0.0293628525,-0.0397968505,-0.0188430738,-0.0430527226,-0.0146569927,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+cell_micro,H2,M3,,interaction C1,True,confirmatory,0.0096256863,0.0030102893,0.0164466613,0.0004039002,0.0182934914,0.0089955022,hypothesised,False,False,True,same_direction_not_material,0.0200000000,
+cell_micro,H2,M3,,interaction C2,False,not_registered,-0.0391385562,-0.0471400968,-0.0311993653,-0.0502128402,-0.0285756016,0.0009995002,opposite,False,False,False,opposite_direction_material,0.0200000000,
+cell_micro,H2,M4,,interaction C1,True,confirmatory,-0.0019346726,-0.0086475321,0.0045786802,-0.0108525414,0.0065956587,0.5977011494,spans_zero,False,False,True,inconclusive,0.0200000000,
+cell_micro,H2,M4,,interaction C2,False,not_registered,-0.0085070195,-0.0151962452,-0.0018018366,-0.0177303305,0.0001135370,0.0109945027,opposite,False,False,True,opposite_direction_not_material,0.0200000000,
+cell_micro,H3,M3,,transfer gap M3 - transfer gap M1,False,not_registered,-0.0308576201,-0.0381207040,-0.0235970991,-0.0403210793,-0.0208269404,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+cell_micro,H3,M4,,transfer gap M4 - transfer gap M1,False,not_registered,-0.0287911862,-0.0363062211,-0.0214374774,-0.0384349424,-0.0190025398,0.0009995002,opposite,,,,opposite_direction_not_material,,opposite_direction_material
+cell_micro,H4,M3,source,C2 - C1,True,secondary,0.0578704790,0.0507433261,0.0653148483,0.0484622917,0.0679751558,0.0009995002,hypothesised,,,,confirmed,,
+cell_micro,H4,M4,source,C2 - C1,True,secondary,0.0048234648,-0.0014325600,0.0112317274,-0.0037927887,0.0130286013,0.1269365317,spans_zero,,,,inconclusive,,
+cell_micro,H4,M3,external,C2 - C1,True,secondary,0.0091062365,0.0071827296,0.0108483799,0.0063697441,0.0115744307,0.0009995002,hypothesised,,,,confirmed,,
+cell_micro,H4,M4,external,C2 - C1,True,secondary,-0.0017488820,-0.0036489377,0.0002165779,-0.0045565279,0.0008371213,0.0749625187,spans_zero,,,,inconclusive,,

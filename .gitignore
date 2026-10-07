@@ -165,3 +165,7 @@ paper/**/*.out
 paper/**/*.pdf
 paper/**/*.synctex.gz
 paper/**/*.toc
+
+# Submitting author's telephone number: needed on the JAMIA title page,
+# kept out of the public repository.
+paper/**/private_*.tex

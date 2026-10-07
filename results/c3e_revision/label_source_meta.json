@@ -1,0 +1,121 @@
+{
+ "external_decision_identity": {
+  "M1": {
+   "cells_with_different_decision_findings_vs_impression_thresholds": 44180,
+   "cells_with_different_decision_same_thresholds": 0,
+   "max_abs_prob_diff": 1.1920928955078125e-07,
+   "studies_with_different_acceptance_findings_vs_impression_cutoff": 1633,
+   "studies_with_different_acceptance_same_cutoff": 0
+  },
+  "M2": {
+   "cells_with_different_decision_findings_vs_impression_thresholds": 246554,
+   "cells_with_different_decision_same_thresholds": 0,
+   "max_abs_prob_diff": 0.0,
+   "studies_with_different_acceptance_findings_vs_impression_cutoff": 4518,
+   "studies_with_different_acceptance_same_cutoff": 0
+  },
+  "M3": {
+   "cells_with_different_decision_findings_vs_impression_thresholds": 60137,
+   "cells_with_different_decision_same_thresholds": 0,
+   "max_abs_prob_diff": 1.1920928955078125e-07,
+   "studies_with_different_acceptance_findings_vs_impression_cutoff": 4036,
+   "studies_with_different_acceptance_same_cutoff": 0
+  },
+  "M4": {
+   "cells_with_different_decision_findings_vs_impression_thresholds": 90314,
+   "cells_with_different_decision_same_thresholds": 0,
+   "max_abs_prob_diff": 5.960464477539063e-08,
+   "studies_with_different_acceptance_findings_vs_impression_cutoff": 178,
+   "studies_with_different_acceptance_same_cutoff": 0
+  }
+ },
+ "factors": {
+  "calibration_transform_exists": false,
+  "external_cohort": 132923,
+  "model_parameters_changed": false,
+  "source_cohort_findings": 9293,
+  "source_cohort_primary": 14766,
+  "source_findings_cohort_subset_of_primary": true
+ },
+ "thresholds": {
+  "cutoff_findings_0.80": {
+   "M1": 0.132058,
+   "M2": 0.100417,
+   "M3": 0.026101,
+   "M4": 0.118839
+  },
+  "cutoff_impression_0.80": {
+   "M1": 0.124614,
+   "M2": 0.080733,
+   "M3": 0.031176,
+   "M4": 0.119743
+  },
+  "findings": {
+   "M1": [
+    0.787,
+    0.458,
+    0.296,
+    0.98,
+    0.764
+   ],
+   "M2": [
+    0.932,
+    0.783,
+    0.519,
+    0.966,
+    0.944
+   ],
+   "M3": [
+    0.694,
+    0.656,
+    0.438,
+    0.988,
+    0.691
+   ],
+   "M4": [
+    0.881,
+    0.53,
+    0.232,
+    0.956,
+    0.948
+   ]
+  },
+  "impression": {
+   "M1": [
+    0.713,
+    0.52,
+    0.405,
+    0.988,
+    0.766
+   ],
+   "M2": [
+    0.611,
+    0.586,
+    0.692,
+    0.994,
+    0.648
+   ],
+   "M3": [
+    0.617,
+    0.575,
+    0.553,
+    0.986,
+    0.686
+   ],
+   "M4": [
+    0.633,
+    0.436,
+    0.584,
+    0.964,
+    0.798
+   ]
+  },
+  "target_order": [
+   "Cardiomegaly",
+   "Edema",
+   "Consolidation",
+   "Atelectasis",
+   "Pleural Effusion"
+  ]
+ }
+}

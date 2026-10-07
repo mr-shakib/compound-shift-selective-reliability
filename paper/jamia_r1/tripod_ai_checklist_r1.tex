@@ -1,0 +1,83 @@
+% TRIPOD+AI checklist for the JAMIA R1 manuscript (supplementary file).
+\documentclass[9pt,a4paper]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{booktabs,longtable,array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\met}{\textbf{Met}}
+\newcommand{\partl}{\textbf{Partial}}
+\newcommand{\notmet}{\textbf{Not met}}
+\newcommand{\na}{\textbf{N/A}}
+\begin{document}
+\noindent{\large\bfseries TRIPOD+AI checklist}\\[2pt]
+Collins GS, Moons KGM, Dhiman P, et al. TRIPOD+AI statement. BMJ.
+2024;385:e078378. Manuscript: \emph{Frozen selective prediction for multimodal
+chest-radiograph models across two hospitals: a preregistered compound-shift
+evaluation with label-dependent cross-site conclusions}. Locations refer to the
+main text (M) or Supplementary Sections (S). Item text abridged. This study
+evaluates existing models at a second site; development items are reported
+because models were developed at the source site.
+
+\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.05\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.42\linewidth}}
+\toprule
+\# & Item & Status & Location / note\\
+\midrule\endhead
+1 & Title identifies development/evaluation, population, outcome & \met & Title\\
+2 & Abstract & \met & Structured abstract (JAMIA headings)\\
+3a & Healthcare context and rationale & \met & M: Background and Significance\\
+3b & Target population, intended use, users & \met & M: Background; Objective (deferral of uncertain radiographs to a reader)\\
+3c & Known health inequalities & \partl & M: Limitations; S3 external demographic strata (exploratory only)\\
+4 & Objectives; development and/or evaluation & \met & M: Objective\\
+5a & Data sources for development and evaluation & \met & M: Data, cohorts and context; Table 1\\
+5b & Dates of data & \partl & Dataset versions reported; accrual windows not reported at study level by the publishers\\
+6a & Setting; number and location of centres & \met & M: Data, cohorts and context (two academic centres via released cohorts)\\
+6b & Eligibility criteria & \met & Table 1; S2\\
+6c & Treatments & \na & Diagnostic classification from one imaging study\\
+7 & Data preparation and quality checks & \met & S2 (preprocessing; checksum and decode checks; context scan)\\
+8a & Outcome definition and assessment & \met & M: Labels; Endpoint and the estimator defect\\
+8b & Outcome assessor qualifications & \na & Automated labeller (CheXbert); no human assessor. Expert adjudication proposed (S15)\\
+8c & Blinding of outcome assessment & \met & Labels generated independently of models; external labels as distributed\\
+9a & Choice of predictors & \met & M: Data, cohorts and context (frontal image; pre-diagnostic context only)\\
+9b & Predictor definitions and timing & \met & M: Data, cohorts and context; S2 (header-driven extraction; WET READ excluded)\\
+9c & Predictor assessor qualifications & \na & Programmatic extraction\\
+10 & Study size & \met & S2 (minimum detectable effect 0.021--0.027 at 80\% power)\\
+11 & Missing data & \met & M: Labels; Endpoint (unlabelled cells masked; label-less studies' treatment is the central finding); Table 1\\
+12a & Use of data; partitioning & \met & M: Data, cohorts and context (patient-disjoint tiers)\\
+12b & Predictor handling & \met & S2\\
+12c & Model type, building, tuning, internal validation & \met & M: Models and frozen policy; S2 (all settings, checkpoints, both seeds)\\
+12d & Heterogeneity across clusters & \met & M: Hypotheses and statistical analysis (patient-clustered bootstrap); view strata (S3)\\
+12e & Performance measures & \met & M: Endpoint; Hypotheses and statistical analysis\\
+12f & Model updating & \na & None by design (frozen policy); recalibration not evaluated (M: Discussion)\\
+12g & How predictions were calculated at evaluation & \met & M: Models and frozen policy\\
+13 & Class imbalance & \met & Balanced-accuracy thresholds; no resampling (M: Models and frozen policy)\\
+14 & Fairness approaches & \partl & No fairness method applied; exploratory external subgroup coverage and risk (S3)\\
+15 & Model output; thresholds & \met & M: Models and frozen policy; S2\\
+16 & Differences between development and evaluation data & \met & M: Results, What the labels cover; Figure 1; Table 3\\
+17 & Ethical approval & \partl & \textcolor{red!70!black}{Author to state ethics determination (M: Design, protocol and reporting)}\\
+18a & Funding & \partl & \textcolor{red!70!black}{Author to complete Funding statement}\\
+18b & Conflicts of interest & \partl & \textcolor{red!70!black}{Author to complete Competing interests}\\
+18c & Protocol access & \met & Data availability; S1 (machine-readable registry and amendment log)\\
+18d & Registration & \met & S1 (registered in the project repository before data access; no independent time-stamped registry, stated)\\
+18e & Data availability & \met & Data availability (credentialed datasets)\\
+18f & Code availability & \partl & Data availability; \textcolor{red!70!black}{repository URL to be added}\\
+19 & Patient and public involvement & \partl & \textcolor{red!70!black}{Author to state (none expected: secondary analysis of de-identified data)}\\
+20a & Participant flow; outcome numbers & \met & Table 1; S3 label composition\\
+20b & Characteristics by data source & \partl & Label and context composition by site (Figure 1, S3); demographics external only (S3)\\
+20c & Predictor distributions vs development data & \met & M: Data, cohorts and context (context scan); S2\\
+21 & Numbers in each analysis & \met & Tables 1--4; S3--S5\\
+22 & Full model specification and access & \partl & Architectures and settings fully specified (S2); weights not released under the data use agreements\\
+23a & Performance with CIs, including subgroups & \met & Tables 2--4; Figures 2, 5; S3, S5, S6\\
+23b & Heterogeneity across clusters & \met & Figure 2 (view, label handling); S3 (strata)\\
+24 & Model updating results & \na & None performed\\
+25 & Interpretation & \met & M: Discussion\\
+26 & Limitations & \met & M: Limitations\\
+27a & Handling poor-quality or unavailable inputs & \met & Context interventions C1/C2 (M: Results, Context interventions within each site)\\
+27b & User interaction and expertise & \partl & Deferral workflow described; required reader expertise not specified\\
+27c & Future research and applicability & \met & M: Discussion; S15 (adjudication)\\
+\bottomrule
+\end{longtable}
+\end{document}

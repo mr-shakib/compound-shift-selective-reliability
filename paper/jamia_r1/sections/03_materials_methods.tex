@@ -1,0 +1,144 @@
+\section*{Materials and Methods}
+
+\subsection*{Design, protocol and reporting}
+This retrospective evaluation followed a machine-readable protocol registered
+on 18 July 2026, before any MIMIC data were accessed, with five dated
+amendments before any external result existed. External point estimates were
+first inspected on 7 August 2026. Analysis decisions taken after that point,
+and every analysis added in a revision audit on 6--7 October 2026, are labelled
+post hoc (\ssec{ssec:protocol}). Original estimates are retained beside
+corrected ones. Reporting follows TRIPOD+AI where applicable.\cite{collins2024}
+
+This is a secondary analysis of existing de-identified data; no patients were
+contacted and no data were collected for it. MIMIC-CXR and MIMIC-CXR-JPG were
+accessed through PhysioNet credentialing, which required completion of
+human-subjects research training and signature of the PhysioNet Credentialed
+Health Data Use Agreement. The Beth Israel Deaconess Medical Center
+Institutional Review Board approved the creation of MIMIC-CXR and waived
+individual patient consent.\cite{johnson2019cxr} CheXpert Plus was obtained
+from the Stanford Center for Artificial Intelligence in Medicine and Imaging
+under its research use agreement. No additional institutional ethics review was
+sought.
+
+\subsection*{Data, cohorts and context}
+The source was MIMIC-CXR-JPG v2.1.0 with free-text reports from
+MIMIC-CXR.\cite{johnson2019jpgpaper,johnson2024jpgdata,johnson2019cxr,johnson2024cxrdata,pollard2026}
+The external site was CheXpert Plus,\cite{chambon2024} used for evaluation only.
+\Cref{tab:cohort} gives the cohort construction. Source studies were split by
+patient into model-training, calibration (9,233 studies) and evaluation
+(14,766 studies; 5,000 patients) tiers.
+
+Permitted context was the INDICATION and HISTORY report sections at the source
+and the published clinical-history fields externally. Extraction was
+header-driven: 7.70\% of source reports contain a preliminary interpretation
+(WET READ) that a position-based rule would ingest. No extracted context
+contained a report-section header. Context named a target finding, usually as a
+suspected or known condition, in \ScanTargetSrc{} of source and
+\ScanTargetExt{} of external studies. A study was informative (N1) when its
+context had at least three alphanumeric tokens after removing
+de-identification placeholders. Interventions applied to N1 studies: C0
+unchanged; C1 context replaced by a placeholder; C2 context replaced by another
+patient's, by deterministic rotation within split and length strata. The audit
+found that C2 was applied per image, not per study, so some multi-image
+studies received context from several donors (\ssec{ssec:c2}).
+
+\begin{table}[t]
+\centering\footnotesize
+\caption{Cohort construction (source exclusions are sequential; tiers are
+patient-disjoint).}
+\label{tab:cohort}
+\begin{adjustbox}{max width=\linewidth}
+\input{../revision/generated/tab_cohort}
+\end{adjustbox}
+\end{table}
+
+\subsection*{Labels}
+Targets were cardiomegaly, edema, consolidation, atelectasis and pleural
+effusion. Source labels came from a port of CheXbert\cite{smit2020} with a
+pinned checkpoint, applied separately to impression (primary) and findings
+(registered sensitivity) sections. External labels are the CheXbert labels
+distributed with CheXpert Plus; their generation settings are undocumented.
+Positive and negative cells were supervised. Uncertain and unmentioned cells
+were masked and never mapped to negative. A source study entered a label
+cohort only if it had that report section, whereas external studies were
+retained whatever sections they had.
+
+\subsection*{Models and frozen policy}
+M1 is DenseNet-121 (ImageNet-initialised, $224\times224$); M2 is
+BERT-base-uncased (128 tokens). M3 averages M1 and M2 probabilities. M4 fuses
+pooled image and text features through a two-layer perceptron, trained end to
+end. Models were trained on the model-training tier with masked binary
+cross-entropy over labelled cells (AdamW; batch 32; early stopping on
+patient-disjoint internal validation). Study probabilities are means over
+frontal images. Per-pathology thresholds maximise balanced accuracy on
+calibration-tier labelled cells. Study confidence is
+$g_i=\min_j|2p_{ij}-1|$, and the abstention cutoff is the 20th percentile of
+$g$ on the calibration tier, targeting 80\% coverage. Thresholds and cutoffs
+were frozen and applied unchanged at both evaluation sites.
+
+\subsection*{Endpoint and the estimator defect}
+For study $i$, let $n_i$ be its number of labelled cells, $w_i$ the number of
+wrong decisions among them, and $a_i$ its acceptance. The registered endpoint is
+the mean study-level Hamming error among accepted studies. The original
+implementation computed $R_{\text{orig}}=\sum_i a_i w_i/\max(n_i,1)/\sum_i a_i$,
+which counts accepted studies with $n_i=0$ as correct. The code's own
+documentation states the opposite intent. We treat this as a verified defect
+and report the corrected estimator, which takes the mean over studies whose
+error is defined:
+\begin{equation}
+R_{\text{eval}}=\frac{\sum_i a_i\,\mathbb{1}[n_i>0]\,w_i/n_i}{\sum_i a_i\,\mathbb{1}[n_i>0]},
+\qquad R_{\text{orig}}=R_{\text{eval}}\cdot\Pr(n_i>0\mid a_i=1).
+\end{equation}
+The original estimator therefore scales error by the evaluable share of
+accepted studies, and any cross-site difference in that share appears as a
+difference in risk. $R_{\text{eval}}$ is the minimal correction. It applies the
+registered definition to studies whose error is defined and changes nothing
+else, and the identity above can be checked from published aggregates.
+Alternative aggregations are reported as sensitivity analyses rather than
+substitutes. $R_{\text{eval}}$ is an error rate over labelled cells, not
+a clinical five-finding error rate. Coverage is reported over all studies.
+
+\subsection*{Hypotheses and statistical analysis}
+With $R^{s}_{m}(c)$ the selective risk at site $s$ for model $m$ under
+condition $c$, the registered hypotheses were as follows.
+\begin{itemize}
+  \item H1 (confirmatory, M3 and M4): the transfer gap
+        $R^{E}_{m}(\mathrm{C0})-R^{S}_{m}(\mathrm{C0})>0$.
+  \item H2 (confirmatory): the interaction
+        $[R^{E}(\mathrm{C1})-R^{E}(\mathrm{C0})]-[R^{S}(\mathrm{C1})-R^{S}(\mathrm{C0})]>0$.
+  \item H3 (confirmatory): H2 for each multimodal model minus H2 for M1.
+  \item H4 (secondary): $R_{m}(\mathrm{C2})-R_{m}(\mathrm{C1})\ge0$ within each
+        site.
+\end{itemize}
+Registered sensitivity analyses were coverage targets of 70\% and 90\%,
+informativeness thresholds of $T=5$ and $T=10$, and findings-derived labels.
+H1 and H2 are confirmed when the 95\% interval lies above zero and the
+estimate is at least 0.02. The 0.02 materiality was registered without clinical
+justification and is a convention. H4 has no materiality: its pre-results
+implementation requires only an interval above zero. M1 ignores text, so the
+registered H3 equals H2. The H3 reported earlier, the M3 or M4 transfer gap
+minus M1's, was defined after inspection and is reported as post hoc.
+
+Intervals are 95\% percentile intervals from 2,000 patient-clustered bootstrap
+replicates (seed 20260718), paired within site and independent between sites.
+They condition on the fitted models, the realised calibration sample and the
+C2 realisation. Post hoc analyses include:
+\begin{itemize}
+  \item alternative estimators: cell-pooled, pathology-macro and
+        pathology-specific with Holm adjustment;
+  \item label handling: uncertain counted as positive or as negative, and
+        unmentioned counted as negative;
+  \item a controlled label-source decomposition;
+  \item per-pathology operating characteristics;
+  \item failure-detection AUROC;
+  \item comparator selective scores fitted on the source calibration tier only
+        (temperature-scaled margin, decision-aware expected loss and
+        split-conformal singleton acceptance);
+  \item calibration-sample resampling;
+  \item extra C2 permutations;
+  \item a second training seed for all four models;
+  \item view and external demographic strata.
+\end{itemize}
+Nothing was fitted on external data. Every originally reported estimate was
+reproduced exactly from cached predictions, and every frozen threshold from fresh
+calibration-tier inference (\ssec{ssec:repro}).

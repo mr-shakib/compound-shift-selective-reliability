@@ -1,0 +1,394 @@
+\section{Results}
+\label{sec:results}
+
+Unless stated otherwise, estimates are at the frozen 80\% cutoff with
+impression-derived labels and $T=3$. Intervals are 95\% patient-clustered
+percentile intervals. ``Original'' denotes the estimator used in the previous
+draft and ``corrected'' the evaluable-study estimator (\cref{sec:endpoint}).
+
+\subsection{Cohorts and what the labels cover}
+\label{sec:res-labels}
+The source evaluation cohort comprised 14,766 studies (16,456 images, 5,000
+patients), all informative by construction. The external cohort comprised
+\ExtStudies{} studies (\ExtImages{} images, \ExtPatients{} patients), of which
+\ExtNOne{} were informative (N1), \ExtNTwo{} low-information (N2) and \ExtNThree{}
+absent (N3). The N1 subset (\ExtNOneImages{} images, \ExtNOnePatients{}
+patients) is the external intervention cohort.
+
+Label coverage differed sharply between sites (\cref{tab:labels},
+\cref{fig:labels}). Under impression-derived labels, \NoLabSrcImpression{}
+(\NoLabNSrcImpression{}) of source studies and \NoLabExtImpression{}
+(\NoLabNExtImpression{}) of external studies had no positive or negative label
+for any of the five targets. Labelled-cell density was \DensSrcImpression{}
+versus \DensExtImpression{}, and the positive rate among labelled cells
+\PosSrcImpression{} versus \PosExtImpression{}. Similar aggregate positive rates
+concealed different compositions. The external site carried far more uncertain
+labels: for atelectasis, \ExtAtelUnc{} uncertain against \ExtAtelPos{} positive.
+It also had a different case mix: counting unmentioned as negative, effusion
+prevalence was \SrcEffUnmNeg{} at the source and \ExtEffUnmNeg{} externally, and
+edema \SrcEdemaUnmNeg{} and \ExtEdemaUnmNeg{}. Atelectasis cells were almost all
+positive at both sites (\SrcAtelPosRate{} and \ExtAtelPosRate{}), so error on
+atelectasis is close to a false-negative rate. Under findings-derived labels the
+asymmetry reverses. The source cohort is restricted to studies with a findings
+section and \NoLabSrcFindings{} of them have no labelled target, whereas the
+external cohort retains every study and \NoLabExtFindings{} have none. Where
+both report sections label the same cell, the two label sets agree in
+\AgreeMinSrc{}--\AgreeMaxSrc{} of cells at the source and
+\AgreeMinExt{}--\AgreeMaxExt{} externally. The two endpoints therefore differ
+mainly in \emph{which} cells carry a label, not in what they say when both do.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{Label composition of the evaluation cohorts (studies; impression- and
+findings-derived CheXbert labels). pos/neg: labelled positive/negative;
+unc.: uncertain; unm.: unmentioned. The source findings cohort is restricted to
+studies with a findings section; the external cohort is the same 132,923 N1
+studies under both sources.}
+\label{tab:labels}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_label_composition}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig2_label_composition.pdf}
+\caption{Share of evaluation-cohort studies whose label for each target is
+positive, negative, uncertain or unmentioned, by site and report section.
+Values are in \cref{tab:labels}.}
+\label{fig:labels}
+\end{figure}
+
+\subsection{The estimator defect and its correction}
+\label{sec:res-defect}
+Every original Stage 10 estimate was reproduced exactly from the cached
+predictions. The original estimator counts each accepted study without a
+labelled target as error-free, so its value is the error among evaluable
+accepted studies multiplied by the evaluable fraction of accepted studies
+(\cref{sec:endpoint}). That fraction is about 0.5 at the source and 0.8
+externally, so the original estimator deflated source risk roughly twice as
+much as external risk (\cref{tab:levels}). For M4 under intact context, the
+original risks were \RiskOrigSrcMFour{} (source) and \RiskOrigExtMFour{}
+(external); among evaluable studies they were \RiskEvalSrcMFour{} and
+\RiskEvalExtMFour{}.
+
+\begin{table}[t]
+\centering\small
+\caption{Selective error at the frozen 80\% cutoff under the original estimator
+(label-less studies counted correct) and the corrected evaluable-study
+estimator, with realised coverage over all eligible studies.}
+\label{tab:levels}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_levels}
+\end{adjustbox}
+\end{table}
+
+\subsection{Registered hypotheses}
+\label{sec:res-hyp}
+\Cref{tab:hyp} gives every Stage 10 contrast under both estimators with the
+registered verdict rule. Under the corrected estimator, H1 was not confirmed
+for either multimodal model: \HOneMThreeEval{} for M3 and \HOneMFourEval{} for
+M4. Both intervals lie inside $(-0.02,0.02)$, so they exclude a material
+increase at the realised calibration sample and model weights. Under the
+original estimator the same contrasts were \HOneMThreeOrig{} and
+\HOneMFourOrig{}, the original confirmation. H2 (C1) was not confirmed by
+either estimator: \HTwoMThreeCOneEval{} for M3 and \HTwoMFourCOneEval{} for M4.
+The registered H3 is identical to H2-C1 and is likewise not confirmed. The post
+hoc transfer-gap version of H3 was negative for both models under both
+estimators. Under the corrected estimator its magnitude is below materiality
+(\HThreeMThreeEval{} and \HThreeMFourEval{}), so the ``reversal at
+materiality'' of the previous draft does not survive correction.
+
+Under its registered direction-only rule, H4 was supported for M3 at both sites
+and for M4 at the source. For M4 externally, misaligned context gave lower
+error than absent context (\HFourMFourexternalEval{}).
+
+\begin{table}[t]
+\centering\footnotesize
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_hypotheses}
+\end{adjustbox}
+\caption{All Stage 10 contrasts under the original and corrected estimators.
+V: verdict under the registered rule (H1, H2: interval above zero and point
+$\ge0.02$; H3: no materiality registered; H4: interval above zero). C
+confirmed; S same direction, below materiality; I inconclusive (interval
+includes zero); O opposite direction (below materiality, or no materiality
+registered); O* opposite direction with magnitude $\ge0.02$. For H3 the bracket gives the verdict with the 0.02
+materiality that the Stage 10 code applied. Rows marked not registered were
+computed by the Stage 10 code but are not registered hypotheses.}
+\label{tab:hyp}
+\end{table}
+
+\subsection{The cross-site contrast is not robust to defensible endpoint choices}
+\label{sec:res-sensitivity}
+\Cref{fig:spec} and \cref{tab:sens} show H1 under 15 specifications. Among
+estimators that exclude label-less studies, the M4 transfer gap ranged from
+\SensUncPosHOneMFour{} with uncertain labels counted as positive to
+\SensUnmNegHOneMFour{} with unmentioned labels counted as negative. It was
+\SensMacroHOneMFour{} under pathology-macro aggregation and
+\SensFindHOneMFour{} with findings labels. Under the second training seed it was
+\SensSeedHOneMFour{}, against \HOneMFourEval{} for the primary seed. The
+original estimator gave \SensSeedOrigHOneMFour{} for that seed, which is why the
+earlier replicate appeared to agree. For M3, retraining M2 under the second
+seed (M3 averages M1 and M2) moved the corrected gap from \HOneMThreeEval{} to
+\SensSeedHOneMThree{}. For M3, estimates ranged from
+\SensTTenHOneMThreePt{} ($T=10$) to \SensUnmNegHOneMThreePt{} (unmentioned
+counted as negative). No single factor dominated. Depending on the model, each
+of the following moved the estimate by more than its own interval width:
+aggregation (M1: \SensEvalHOneMOnePt{} evaluable-study against
+\SensMacroHOneMOnePt{} pathology-macro), label handling (all models), label
+source (M1 and M3) and training seed (M3 and M4).
+
+The label-handling and aggregation specifications share the same predictions,
+thresholds and cutoffs. Only which cells count as labelled, and how cells are
+pooled, changes between them, and these choices alone decide the sign of the
+cross-site contrast. Treating unmentioned cells
+as negative brings the external site's lower specificity into view
+(\cref{sec:res-operating}). The primary handling hides it, because labelled
+external cells are mostly positive. Counting uncertain cells as positive does
+the reverse for the same reason.
+
+The pathology-specific contrasts that the original SAP made primary
+(supplement) were heterogeneous. For M4 the primary labels gave cardiomegaly
+\PathMFourCard{} and atelectasis \PathMFourAtel{}, while counting unmentioned as
+negative made every pathology positive (\PathMFourUnmMin{} to
+\PathMFourUnmMax{}). Restricted to AP-only studies, M4's
+transfer gap was \ViewAPMFour{}; restricted to PA-only studies, \ViewPAMFour{}.
+AP-only studies made up \APShareSrc{} of the source cohort and \APShareExt{} of
+the external one, so view mix also enters the aggregate contrast.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig1_h1_specifications.pdf}
+\caption{H1 transfer gap (external minus source selective error, 95\% CI) for
+each model under 15 specifications. Label-handling and aggregation rows share
+the primary predictions, thresholds and cutoffs. Coverage rows change the
+cutoff, $T$ rows the cohort, findings rows the labels, cohort and thresholds, and
+seed rows the models. Square markers use the original estimator, which counts studies
+without a labelled target as correct. Dashed lines mark $\pm0.02$. Values are
+in \cref{tab:sens} and the supplement.}
+\label{fig:spec}
+\end{figure}
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{H1 and the post hoc transfer-gap H3 for the multimodal models across
+specifications (point estimate and 95\% CI). Label-handling and aggregation rows
+hold the primary predictions, thresholds and cutoffs fixed; the other rows change
+the cutoff (coverage), the cohort ($T$), the labels, cohort and thresholds
+(findings) or the models (seed).}
+\label{tab:sens}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_sensitivity}
+\end{adjustbox}
+\end{table}
+
+\subsection{Controlled label-source decomposition}
+\label{sec:res-label-source}
+The original findings-label sensitivity (S1) changed the label set, the
+source cohort (14,766 to 9,293 studies), the thresholds and cutoffs (re-selected
+on findings calibration labels), and the C2 donor realisation, all at once.
+Model parameters did not change. External probabilities agreed between the two
+runs to within \SOneMaxProbDiff{}. With S1's re-selected thresholds, however,
+M1's external decisions differed in \SOneMOneCells{} cells and its acceptance in
+\SOneMOneStudies{} studies, and across models \SOneCellsChanged{} cells and
+\SOneStudiesChanged{} studies changed. The previous draft's argument that ``only
+the labels differ'' for the image-only control was therefore incorrect.
+\Cref{tab:ls} changes one factor at a time.
+
+Swapping labels alone (A0$\to$A1) on the same studies, with identical
+decisions and accepted sets, moved the original-estimator M3 contrast from
+\LSAZeroMThreeOrig{} to \LSAOneMThreeOrig{}. Restricting the source cohort
+(A1$\to$A2) moved it further, to \LSATwoMThreeOrig{}, because it removes
+label-less source studies that the original estimator counted as correct.
+Re-selecting thresholds (A2$\to$A3) reproduced the originally reported
+\LSAThreeMThreeOrig{}. Under the corrected estimator the cohort restriction has
+exactly no effect, because the removed studies are not evaluable under findings
+labels. The remaining movement is shared between labels (A0$\to$A1:
+\LSAZeroMThreeEval{} to \LSAOneMThreeEval{} for M3, and \LSAZeroMFourEval{} to
+\LSAOneMFourEval{} for M4) and thresholds (A2$\to$A3: to \LSAThreeMThreeEval{} and
+\LSAThreeMFourEval{}). On cells labelled under both sources (A1c), impression and
+findings labels gave nearly the same contrasts: \LSAOnecIMThreeEval{} and
+\LSAOnecFMThreeEval{} for M3. Under the corrected estimator, the findings-label
+result does not reverse the primary; for M3 it points in the hypothesised
+direction. The originally reported reversal under S1 was produced by the estimator defect
+interacting with the asymmetric cohort definition, not by the label sets
+measuring opposite things.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{Controlled label-source decomposition of H1 (point estimates; intervals
+in the supplement). Evaluable studies: share of each cohort with at least one
+labelled target under that step's labels. Under the corrected estimator, A2
+equals A1 because the studies removed by the cohort restriction are not
+evaluable under findings labels.}
+\label{tab:ls}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_label_source}
+\end{adjustbox}
+\end{table}
+
+\subsection{Frozen thresholds and per-pathology operating points}
+\label{sec:res-operating}
+Aggregate error hid a shift in operating points (\cref{tab:operating},
+\cref{fig:operating}). For M4 among accepted studies, cardiomegaly specificity
+fell from \MFourCardSpecSrc{} at the source to \MFourCardSpecExt{} externally
+while sensitivity rose from \MFourCardSensSrc{} to \MFourCardSensExt{}. The
+model called cardiomegaly in \MFourCardPosSrc{} of accepted studies at the
+source and \MFourCardPosExt{} externally. Specificity also fell for effusion
+(\MFourEffSpecSrc{} to \MFourEffSpecExt{}) and edema (\MFourEdemaSpecSrc{} to
+\MFourEdemaSpecExt{}). Negative labels are explicit mentions and therefore a
+selected subset, so these specificities carry verification bias. The direction
+held when unmentioned cells were counted as negative (supplement). A frozen
+threshold transferred a decision rule, not an operating point.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{Per-pathology operating characteristics among accepted studies (C0),
+labelled cells only. Pos.\ call: share of accepted studies in which the model
+called the finding positive.}
+\label{tab:operating}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_operating}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig4_operating_points.pdf}
+\caption{M4 sensitivity and specificity among accepted studies at the source
+(circles) and external site (squares), labelled cells only. Values in
+\cref{tab:operating}.}
+\label{fig:operating}
+\end{figure}
+
+\subsection{Coverage, the confidence score and alternative policies}
+\label{sec:res-selective}
+With context intact, realised coverage stayed within \CovDriftMaxCZero{} of the
+80\% target for every model at both sites, and within \SeedCovDriftMax{} under
+the second seed. Under intervention it moved: M2 under C1 accepted every study
+at both sites (\MTwoCOneCovSrc{} and \MTwoCOneCovExt{}), because a constant
+placeholder makes its output constant and every study ties at the same
+confidence. M3 under C2 fell to \MThreeCTwoCovSrc{} and \MThreeCTwoCovExt{}.
+Coverage held while per-pathology operating points shifted
+(\cref{sec:res-operating}), so coverage monitoring alone would not reveal that
+shift. Whether selective \emph{error} degraded is the question the labels could
+not settle (\cref{sec:res-sensitivity}).
+
+The frozen confidence score ranked study-level correctness only weakly:
+failure-detection AUROC was \FailAUROCFrozenMin{}--\FailAUROCFrozenMax{} across
+models and sites (\cref{fig:rc}, \cref{tab:comparators}). Three comparators
+were fitted on the source calibration tier only. A per-pathology
+temperature-scaled margin left the policy nearly unchanged. A decision-aware
+expected-loss score, built from Platt-calibrated probabilities of error for the
+decisions actually made, ranked errors better (AUROC
+\FailAUROCELMin{}--\FailAUROCELMax{}) and lowered risk at both sites. Its
+operating point transported worse: M4's external coverage was \ELMFourExtCov{}
+against an 80\% calibration target. Split-conformal singleton acceptance with
+one miscoverage level could not reach 80\% calibration coverage
+(\ConfAccMin{}--\ConfAccMax{}), because near-uniformly positive atelectasis
+labels make that pathology's sets rarely singleton. Its acceptance rate also
+moved at the external site.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig3_risk_coverage.pdf}
+\caption{Risk--coverage curves over evaluable studies (C0), ranking by the
+frozen confidence score. Markers show the frozen 80\% operating point at its
+realised coverage among evaluable studies.}
+\label{fig:rc}
+\end{figure}
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{Alternative selective policies (post hoc), all fitted on the source
+calibration tier and applied unchanged. Failure AUROC: discrimination of
+studies with no error versus any error, evaluable studies. H1 corrected:
+evaluable-study transfer gap.}
+\label{tab:comparators}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_comparators}
+\end{adjustbox}
+\end{table}
+
+\subsection{Context interventions within each site}
+\label{sec:res-context}
+For M3, misaligned context (C2) gave higher error than absent context (C1) at
+the source under every estimator, label variant, coverage, informativeness
+threshold, label source, C2 permutation and both training seeds
+(\HFourMThreesourceEval{} for the primary seed, \RepTwoHFourMThreesourceeval{}
+for the second). At the external site it did so under every specification for
+the primary seed (\HFourMThreeexternalEval{}), and an alternative C2 donor
+permutation left it essentially unchanged (range \PermHFourMThreeExtRange{}
+across the two permutations). Under the second training seed the
+corrected estimate was \RepTwoHFourMThreeexternaleval{}, inconclusive, and the
+original estimator gave \RepTwoHFourMThreeexternalorig{}. For M4 the effect was positive at the
+source (\HFourMFoursourceEval{}) in all primary-seed specifications, but the
+interval included zero under the second seed. Externally its sign depended on
+label handling. Removing or replacing context mostly changed predictions rather
+than selection (\cref{tab:context}). Even so, the accepted sets under C0 and
+under intervention overlapped only partially (Jaccard
+\JaccardMin{}--\JaccardMax{}), so paired conditions do not evaluate the same
+accepted studies. The two orderings of the selection/prediction split
+disagreed by up to \OrderGapMM{} for the multimodal models (\OrderGapMTwo{} for M2), so no unique
+additive split exists. The C2
+interaction was negative for both multimodal models under the primary labels
+(\HTwoMThreeCTwoEval{} and \HTwoMFourCTwoEval{}), meaning misalignment cost less
+externally. This is consistent with the shorter external contexts (mean
+\CTwoTokensExt{} versus \CTwoTokensSrc{} effective tokens), of which C2 changed
+the target-term content in \CTwoTermDiffExt{} of external rows against
+\CTwoTermDiffSrc{} at the source. The C2 interaction is not a registered
+hypothesis, and its sign reversed when unmentioned cells were counted as
+negative.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{Selection versus prediction under context interventions (corrected
+estimator). Policy effect $=R_c(A_c)-R_0(A_0)$; prediction on C0 set
+$=R_c(A_0)-R_0(A_0)$; selection (o1) $=R_c(A_c)-R_c(A_0)$; selection (o2)
+$=R_0(A_c)-R_0(A_0)$; Jaccard overlap of $A_0$ and $A_c$. Intervals in the
+supplement.}
+\label{tab:context}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_context}
+\end{adjustbox}
+\end{table}
+
+\subsection{Sources of uncertainty the evaluation bootstrap omits}
+\label{sec:res-uncertainty}
+Resampling calibration patients and re-applying the frozen selection rule moved
+the corrected H1 estimates with a standard deviation \CalRatioMin{}--\CalRatioMax{}
+times the evaluation-bootstrap standard deviation (\cref{tab:uncertainty}). For
+M4 the calibration standard deviation was \CalSDMFour{} against \EvalSDMFour{}, and
+per-pathology thresholds varied with standard deviation up to \ThrSDMaxMFour{}.
+The training seed moved the corrected H1 of both multimodal models by about
+0.04 (\cref{sec:res-sensitivity}). The reported intervals, which condition on
+one calibration sample and one training run, therefore understate total
+uncertainty substantially for cross-site contrasts.
+
+\begin{table}[t]
+\centering\scriptsize
+\caption{H1 variability from resampling evaluation patients (bootstrap SD,
+approximated from the 95\% interval) and from resampling calibration patients
+with the frozen selection rule re-applied (200 replicates).}
+\label{tab:uncertainty}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_uncertainty}
+\end{adjustbox}
+\end{table}
+
+\subsection{Integrity checks and exploratory strata}
+\label{sec:res-c2}
+The previous draft reported 6 source and 34 external studies ``retaining their
+own context'' under C2. Replaying the assignment, verified to reproduce it
+exactly, showed that every one of these rows received identical text donated by
+a \emph{different} patient. No recipient received context from its own patient
+(\CTwoSamePatSrc{} and \CTwoSamePatExt{} same-patient donors). The count was a
+count of identical boilerplate, not of constraint violations. Image-only
+predictions were identical across conditions at both sites.
+
+Among external demographic groups (exploratory; no source demographics were
+available), M4's coverage differed by at most \AgeCovDispMFour{} across age bands
+and \InsCovDispMFour{} across insurance categories. M3's coverage differed by \AgeCovDispMThree{}
+across age bands, which exceeds the 0.05 drift materiality (supplement). These
+are single-site, post hoc descriptions with no cross-site comparison.

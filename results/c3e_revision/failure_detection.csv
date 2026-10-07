@@ -1,0 +1,97 @@
+site,model,condition,level,pathology,score,auroc_correct_vs_any_error,n,error_prevalence
+source,M1,C0,study,all,frozen_min_abs_2p_minus_1,0.6157505365,7798,0.3512439087
+source,M1,C0,study,all,min_threshold_margin,0.5837457902,7798,0.3512439087
+source,M1,C0,cell,Cardiomegaly,abs_2p_minus_1,0.8017664809,3233,0.1540364986
+source,M1,C0,cell,Cardiomegaly,threshold_margin,0.8061599231,3233,0.1540364986
+source,M1,C0,cell,Edema,abs_2p_minus_1,0.7815058757,3398,0.1718658034
+source,M1,C0,cell,Edema,threshold_margin,0.7806734430,3398,0.1718658034
+source,M1,C0,cell,Consolidation,abs_2p_minus_1,0.7286027759,1209,0.1513647643
+source,M1,C0,cell,Consolidation,threshold_margin,0.7463916318,1209,0.1513647643
+source,M1,C0,cell,Atelectasis,abs_2p_minus_1,0.9702081665,2749,0.4543470353
+source,M1,C0,cell,Atelectasis,threshold_margin,0.4944873232,2749,0.4543470353
+source,M1,C0,cell,Pleural Effusion,abs_2p_minus_1,0.8654484029,4589,0.1534103290
+source,M1,C0,cell,Pleural Effusion,threshold_margin,0.8026613870,4589,0.1534103290
+source,M2,C0,study,all,frozen_min_abs_2p_minus_1,0.6461680434,7798,0.4897409592
+source,M2,C0,study,all,min_threshold_margin,0.5682399368,7798,0.4897409592
+source,M2,C0,cell,Cardiomegaly,abs_2p_minus_1,0.7478055326,3233,0.3287967832
+source,M2,C0,cell,Cardiomegaly,threshold_margin,0.6867690347,3233,0.3287967832
+source,M2,C0,cell,Edema,abs_2p_minus_1,0.6846105910,3398,0.3228369629
+source,M2,C0,cell,Edema,threshold_margin,0.6592567854,3398,0.3228369629
+source,M2,C0,cell,Consolidation,abs_2p_minus_1,0.7281844099,1209,0.2291149711
+source,M2,C0,cell,Consolidation,threshold_margin,0.7157349592,1209,0.2291149711
+source,M2,C0,cell,Atelectasis,abs_2p_minus_1,0.9675398230,2749,0.6031284103
+source,M2,C0,cell,Atelectasis,threshold_margin,0.3958102758,2749,0.6031284103
+source,M2,C0,cell,Pleural Effusion,abs_2p_minus_1,0.7354762442,4589,0.2390499019
+source,M2,C0,cell,Pleural Effusion,threshold_margin,0.6864492195,4589,0.2390499019
+source,M3,C0,study,all,frozen_min_abs_2p_minus_1,0.6320801307,7798,0.3277763529
+source,M3,C0,study,all,min_threshold_margin,0.6079003910,7798,0.3277763529
+source,M3,C0,cell,Cardiomegaly,abs_2p_minus_1,0.7856295150,3233,0.1586761522
+source,M3,C0,cell,Cardiomegaly,threshold_margin,0.7861949604,3233,0.1586761522
+source,M3,C0,cell,Edema,abs_2p_minus_1,0.7728305316,3398,0.1880517952
+source,M3,C0,cell,Edema,threshold_margin,0.7630182853,3398,0.1880517952
+source,M3,C0,cell,Consolidation,abs_2p_minus_1,0.8063896205,1209,0.1687344913
+source,M3,C0,cell,Consolidation,threshold_margin,0.8031899327,1209,0.1687344913
+source,M3,C0,cell,Atelectasis,abs_2p_minus_1,0.9752618639,2749,0.3637686431
+source,M3,C0,cell,Atelectasis,threshold_margin,0.5396981132,2749,0.3637686431
+source,M3,C0,cell,Pleural Effusion,abs_2p_minus_1,0.8312570706,4589,0.1555894530
+source,M3,C0,cell,Pleural Effusion,threshold_margin,0.8085249842,4589,0.1555894530
+source,M4,C0,study,all,frozen_min_abs_2p_minus_1,0.6247219240,7798,0.2575019236
+source,M4,C0,study,all,min_threshold_margin,0.6177569515,7798,0.2575019236
+source,M4,C0,cell,Cardiomegaly,abs_2p_minus_1,0.8424737916,3233,0.1518713269
+source,M4,C0,cell,Cardiomegaly,threshold_margin,0.8218754503,3233,0.1518713269
+source,M4,C0,cell,Edema,abs_2p_minus_1,0.7945118116,3398,0.1798116539
+source,M4,C0,cell,Edema,threshold_margin,0.8070830375,3398,0.1798116539
+source,M4,C0,cell,Consolidation,abs_2p_minus_1,0.7834040297,1209,0.1521918941
+source,M4,C0,cell,Consolidation,threshold_margin,0.7649416755,1209,0.1521918941
+source,M4,C0,cell,Atelectasis,abs_2p_minus_1,0.9642759074,2749,0.1269552565
+source,M4,C0,cell,Atelectasis,threshold_margin,0.8252799666,2749,0.1269552565
+source,M4,C0,cell,Pleural Effusion,abs_2p_minus_1,0.8720704410,4589,0.1431684463
+source,M4,C0,cell,Pleural Effusion,threshold_margin,0.8008811516,4589,0.1431684463
+external,M1,C0,study,all,frozen_min_abs_2p_minus_1,0.6314682890,108102,0.3541377588
+external,M1,C0,study,all,min_threshold_margin,0.5535897273,108102,0.3541377588
+external,M1,C0,cell,Cardiomegaly,abs_2p_minus_1,0.8073463870,26683,0.1150170521
+external,M1,C0,cell,Cardiomegaly,threshold_margin,0.8395167065,26683,0.1150170521
+external,M1,C0,cell,Edema,abs_2p_minus_1,0.7068645787,43960,0.2835304823
+external,M1,C0,cell,Edema,threshold_margin,0.6798652089,43960,0.2835304823
+external,M1,C0,cell,Consolidation,abs_2p_minus_1,0.7963867221,25117,0.1082135605
+external,M1,C0,cell,Consolidation,threshold_margin,0.7812409485,25117,0.1082135605
+external,M1,C0,cell,Atelectasis,abs_2p_minus_1,0.9525202344,19847,0.6584874288
+external,M1,C0,cell,Atelectasis,threshold_margin,0.3357191219,19847,0.6584874288
+external,M1,C0,cell,Pleural Effusion,abs_2p_minus_1,0.9165493446,76116,0.1854537811
+external,M1,C0,cell,Pleural Effusion,threshold_margin,0.7710782451,76116,0.1854537811
+external,M2,C0,study,all,frozen_min_abs_2p_minus_1,0.6466388729,108102,0.4255610442
+external,M2,C0,study,all,min_threshold_margin,0.5728727712,108102,0.4255610442
+external,M2,C0,cell,Cardiomegaly,abs_2p_minus_1,0.5895282456,26683,0.3409661582
+external,M2,C0,cell,Cardiomegaly,threshold_margin,0.5700661542,26683,0.3409661582
+external,M2,C0,cell,Edema,abs_2p_minus_1,0.6535310723,43960,0.3109872611
+external,M2,C0,cell,Edema,threshold_margin,0.6235977611,43960,0.3109872611
+external,M2,C0,cell,Consolidation,abs_2p_minus_1,0.4679018618,25117,0.3353903731
+external,M2,C0,cell,Consolidation,threshold_margin,0.6280122492,25117,0.3353903731
+external,M2,C0,cell,Atelectasis,abs_2p_minus_1,0.9798387990,19847,0.4724139668
+external,M2,C0,cell,Atelectasis,threshold_margin,0.4183405704,19847,0.4724139668
+external,M2,C0,cell,Pleural Effusion,abs_2p_minus_1,0.6709840113,76116,0.3037337748
+external,M2,C0,cell,Pleural Effusion,threshold_margin,0.6441993870,76116,0.3037337748
+external,M3,C0,study,all,frozen_min_abs_2p_minus_1,0.6476432267,108102,0.3034448946
+external,M3,C0,study,all,min_threshold_margin,0.6088022897,108102,0.3034448946
+external,M3,C0,cell,Cardiomegaly,abs_2p_minus_1,0.6702202630,26683,0.1437244688
+external,M3,C0,cell,Cardiomegaly,threshold_margin,0.7388390917,26683,0.1437244688
+external,M3,C0,cell,Edema,abs_2p_minus_1,0.7880510102,43960,0.2329617834
+external,M3,C0,cell,Edema,threshold_margin,0.7319832871,43960,0.2329617834
+external,M3,C0,cell,Consolidation,abs_2p_minus_1,0.7087279400,25117,0.1315841860
+external,M3,C0,cell,Consolidation,threshold_margin,0.7381857909,25117,0.1315841860
+external,M3,C0,cell,Atelectasis,abs_2p_minus_1,0.9690972384,19847,0.5017382980
+external,M3,C0,cell,Atelectasis,threshold_margin,0.4758652332,19847,0.5017382980
+external,M3,C0,cell,Pleural Effusion,abs_2p_minus_1,0.7808245112,76116,0.1493378528
+external,M3,C0,cell,Pleural Effusion,threshold_margin,0.8233677501,76116,0.1493378528
+external,M4,C0,study,all,frozen_min_abs_2p_minus_1,0.6033020842,108102,0.2334924423
+external,M4,C0,study,all,min_threshold_margin,0.6313908279,108102,0.2334924423
+external,M4,C0,cell,Cardiomegaly,abs_2p_minus_1,0.7744015232,26683,0.1885470150
+external,M4,C0,cell,Cardiomegaly,threshold_margin,0.8079244267,26683,0.1885470150
+external,M4,C0,cell,Edema,abs_2p_minus_1,0.7460002951,43960,0.1926069154
+external,M4,C0,cell,Edema,threshold_margin,0.7627016073,43960,0.1926069154
+external,M4,C0,cell,Consolidation,abs_2p_minus_1,0.7878991662,25117,0.1363220130
+external,M4,C0,cell,Consolidation,threshold_margin,0.7938660806,25117,0.1363220130
+external,M4,C0,cell,Atelectasis,abs_2p_minus_1,0.9680914868,19847,0.1101929763
+external,M4,C0,cell,Atelectasis,threshold_margin,0.8324980931,19847,0.1101929763
+external,M4,C0,cell,Pleural Effusion,abs_2p_minus_1,0.7960472337,76116,0.1331257554
+external,M4,C0,cell,Pleural Effusion,threshold_margin,0.8401930409,76116,0.1331257554

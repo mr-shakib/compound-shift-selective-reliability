@@ -1,0 +1,174 @@
+[
+ {
+  "conformal_alpha": 0.16,
+  "conformal_calibration_acceptance": 0.4695115347124445,
+  "conformal_q": {
+   "Atelectasis": 0.0298,
+   "Cardiomegaly": 0.5002,
+   "Consolidation": 0.5388,
+   "Edema": 0.5611,
+   "Pleural Effusion": 0.3789
+  },
+  "cutoff_expected_loss": -0.38965126872062683,
+  "cutoff_temp_margin": 0.10595036162389924,
+  "model": "M1",
+  "platt_a_b": {
+   "Atelectasis": [
+    1.3425,
+    -1.0848
+   ],
+   "Cardiomegaly": [
+    1.0112,
+    -0.435
+   ],
+   "Consolidation": [
+    0.8247,
+    0.2475
+   ],
+   "Edema": [
+    0.8781,
+    0.0814
+   ],
+   "Pleural Effusion": [
+    0.7594,
+    0.0947
+   ]
+  },
+  "temperature": {
+   "Atelectasis": 0.953,
+   "Cardiomegaly": 1.099,
+   "Consolidation": 1.2343,
+   "Edema": 1.1296,
+   "Pleural Effusion": 1.2976
+  }
+ },
+ {
+  "conformal_alpha": 0.27,
+  "conformal_calibration_acceptance": 0.5908155529080472,
+  "conformal_q": {
+   "Atelectasis": 0.0137,
+   "Cardiomegaly": 0.5307,
+   "Consolidation": 0.5012,
+   "Edema": 0.5277,
+   "Pleural Effusion": 0.3861
+  },
+  "cutoff_expected_loss": -0.47053784132003784,
+  "cutoff_temp_margin": 0.053429360789654656,
+  "model": "M2",
+  "platt_a_b": {
+   "Atelectasis": [
+    0.5746,
+    1.5563
+   ],
+   "Cardiomegaly": [
+    0.6789,
+    0.3452
+   ],
+   "Consolidation": [
+    0.5941,
+    -0.188
+   ],
+   "Edema": [
+    0.6439,
+    0.0824
+   ],
+   "Pleural Effusion": [
+    0.5185,
+    0.4462
+   ]
+  },
+  "temperature": {
+   "Atelectasis": 1.0697,
+   "Cardiomegaly": 1.281,
+   "Consolidation": 1.7698,
+   "Edema": 1.5192,
+   "Pleural Effusion": 1.5822
+  }
+ },
+ {
+  "conformal_alpha": 0.16,
+  "conformal_calibration_acceptance": 0.5268060218780461,
+  "conformal_q": {
+   "Atelectasis": 0.0244,
+   "Cardiomegaly": 0.5011,
+   "Consolidation": 0.5103,
+   "Edema": 0.5249,
+   "Pleural Effusion": 0.4683
+  },
+  "cutoff_expected_loss": -0.44025924801826477,
+  "cutoff_temp_margin": 0.041607512009467246,
+  "model": "M3",
+  "platt_a_b": {
+   "Atelectasis": [
+    1.2127,
+    -0.7688
+   ],
+   "Cardiomegaly": [
+    1.7988,
+    -0.3923
+   ],
+   "Consolidation": [
+    1.1172,
+    -0.114
+   ],
+   "Edema": [
+    1.5757,
+    -0.1711
+   ],
+   "Pleural Effusion": [
+    1.2662,
+    -0.213
+   ]
+  },
+  "temperature": {
+   "Atelectasis": 0.9842,
+   "Cardiomegaly": 0.6242,
+   "Consolidation": 0.9033,
+   "Edema": 0.6572,
+   "Pleural Effusion": 0.8429
+  }
+ },
+ {
+  "conformal_alpha": 0.15,
+  "conformal_calibration_acceptance": 0.566229827791617,
+  "conformal_q": {
+   "Atelectasis": 0.0313,
+   "Cardiomegaly": 0.4933,
+   "Consolidation": 0.5478,
+   "Edema": 0.5755,
+   "Pleural Effusion": 0.3967
+  },
+  "cutoff_expected_loss": -0.3106517195701599,
+  "cutoff_temp_margin": 0.08999098741046141,
+  "model": "M4",
+  "platt_a_b": {
+   "Atelectasis": [
+    0.6778,
+    1.2248
+   ],
+   "Cardiomegaly": [
+    0.7872,
+    0.1918
+   ],
+   "Consolidation": [
+    0.7052,
+    0.091
+   ],
+   "Edema": [
+    0.7898,
+    0.4073
+   ],
+   "Pleural Effusion": [
+    0.6566,
+    0.1626
+   ]
+  },
+  "temperature": {
+   "Atelectasis": 1.0125,
+   "Cardiomegaly": 1.2448,
+   "Consolidation": 1.4092,
+   "Edema": 1.2603,
+   "Pleural Effusion": 1.4738
+  }
+ }
+]

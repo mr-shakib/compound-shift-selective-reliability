@@ -1,0 +1,17 @@
+\begin{tabular}{llrrrrrr}
+\toprule
+ & & \multicolumn{2}{c}{Coverage (C0)} & \multicolumn{2}{c}{Failure AUROC} & & \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Model & Policy & Src & Ext & Src & Ext & H1 corrected (95\% CI) & Ext.\ coverage C1\\
+\midrule
+M3 & Frozen (|2p$-$1|) & 0.798 & 0.774 & 0.632 & 0.648 & $-$0.0042 ($-$0.014, +0.006) & 0.828\\
+ & Temperature-scaled margin & 0.798 & 0.772 & 0.633 & 0.652 & $-$0.0042 ($-$0.015, +0.006) & 0.827\\
+ & Expected-loss (decision-aware) & 0.797 & 0.733 & 0.738 & 0.746 & $-$0.0166 ($-$0.026, $-$0.007) & 0.777\\
+ & Split-conformal singletons & 0.515 & 0.552 & 0.643 & 0.697 & $-$0.0205 ($-$0.029, $-$0.013) & 0.572\\
+\addlinespace
+M4 & Frozen (|2p$-$1|) & 0.800 & 0.795 & 0.625 & 0.603 & $-$0.0018 ($-$0.011, +0.006) & 0.764\\
+ & Temperature-scaled margin & 0.800 & 0.796 & 0.627 & 0.604 & $-$0.0018 ($-$0.011, +0.006) & 0.762\\
+ & Expected-loss (decision-aware) & 0.800 & 0.855 & 0.704 & 0.687 & +0.0056 ($-$0.002, +0.013) & 0.937\\
+ & Split-conformal singletons & 0.559 & 0.693 & 0.644 & 0.664 & +0.0290 (+0.021, +0.037) & 0.701\\
+\bottomrule
+\end{tabular}

@@ -1,5 +1,21 @@
 # Venue Selection Plan
 
+> **Decision 2026-10-07 (supersedes everything below):** target **JAMIA,
+> Research and Applications**, with the **Journal of Biomedical Informatics**
+> as fallback. The author now requires **$0 to publish**, which excludes npj
+> Digital Medicine (~$4,290 article fee). Revision R1 reversed the paper's
+> headline: the transport failure was an estimator artifact. The paper is now an
+> evaluation-methodology contribution, squarely informatics. Checked 2026-10-07:
+>
+> - **JAMIA:** IF 7.1, 4,000 words, 4 tables and 6 figures, no submission or
+>   page charges, preprints allowed.
+> - **Journal of Biomedical Informatics:** IF 4.5, ≤6,000 words, $0 on the
+>   subscription route.
+>
+> The submission build is `paper/jamia_r1/`; see its `SUBMISSION_PACKAGE.md`.
+> `paper/jamia/` and `paper/npjdm/` carry superseded conclusions and must not
+> be submitted.
+
 Target venue for the C3E manuscript, the evidence behind the choice, and the
 work that submission requires.
 

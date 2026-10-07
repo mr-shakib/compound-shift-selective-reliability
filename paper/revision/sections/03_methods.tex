@@ -1,0 +1,319 @@
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Design, reporting and protocol status}
+This is a retrospective, pre-deployment evaluation of fixed models at two
+sites. A machine-readable protocol (registry
+\texttt{protocols/C3E6\_stage2}, version 0.1.0) was frozen on 18 July 2026,
+before any MIMIC data were accessed. Five dated amendments followed (versions
+0.2.0--0.4.2, 28 July to 4 August 2026). All of them came before any external
+result existed, and the last came after the image-only model had been trained
+and its internal validation AUROC seen. External point estimates were first
+inspected on 7 August 2026 (08:15, UTC+6). Several analysis decisions were
+taken after that moment and are identified as post hoc in
+\cref{tab:status} and in the protocol history at the end of the paper. The
+audit and every analysis labelled \emph{Revision R1} were carried out on 6
+October 2026. We follow TRIPOD+AI reporting where it applies to an evaluation
+of existing models.
+
+\subsection{Sites, data and cohorts}
+The source site was MIMIC-CXR-JPG v2.1.0~\cite{johnson2019mimiccxrjpg,johnson2019mimiccxr}
+(Beth Israel Deaconess Medical Center). The external site was CheXpert
+Plus~\cite{chambon2024chexpertplus} (Stanford). It was used only for evaluation;
+the registry prohibits its use for architecture, early-stopping, temperature,
+threshold, confidence-score, abstention-cutoff, text-cleaning or context-rule
+selection. \Cref{tab:cohort} gives the source exclusion waterfall, the
+patient-disjoint tiers and the external cohort, all taken from the committed
+cohort artifacts.
+
+Report sections were extracted with a curated header vocabulary rather than by
+position. 66 reports had no recognised header and were excluded. 134 reports
+merged findings and impression into one section; 133 further studies were
+removed for this reason in the sequential waterfall, so 199 studies were removed
+in total, not the 200 stated in the previous draft. The prespecified
+evaluation tier (5,000 patients) and the calibration tier (3,000 patients) were
+assigned from the official training split using patient identifiers and a
+fixed seed alone. All tiers are patient-disjoint, and the official validate and
+test splits were not analysed. At the external site, one study has two frontal
+images whose permitted-context fields differ: one image qualifies as
+informative and one does not. The study is therefore counted in two natural
+states, and only its informative image enters the intervention cohort.
+One external image matches its published checksum but does not decode and was
+excluded.
+
+\begin{table}[t]
+\centering\small
+\caption{Cohort construction. Source rows are sequential exclusions from the
+committed Stage 3C waterfall; tiers are from the Stage 3E partition; external
+counts are from the Stage 9b artifact.}
+\label{tab:cohort}
+\begin{adjustbox}{max width=\linewidth}
+\input{generated/tab_cohort}
+\end{adjustbox}
+\end{table}
+
+\subsection{Pre-diagnostic context}
+Permitted context at the source was the INDICATION and HISTORY sections, with
+registered synonyms. At the external site it was the published
+\texttt{section\_clinical\_history} and \texttt{section\_history} fields,
+concatenated. 17,551 source reports (7.70\%) contain a WET READ (preliminary
+interpretation) section, and 181 place a pre-diagnostic section after a
+diagnostic one. Header-driven extraction keeps both out of the context field;
+post-diagnostic sections (WET READ, provisional findings, recommendation,
+notification, addendum, comment) are never extracted. Section headers do not
+prove that the text existed before the image was read. We therefore inspected
+extracted context. No extracted context at either site contained a
+report-section header (\ScanHeaderSrc{} and \ScanHeaderExt{}). Conclusion-style phrases
+(e.g.\ ``consistent with'', ``unchanged from'') occurred in \ScanConclSrc{} and
+\ScanConclExt{}, and comparison language in \ScanComparSrc{} and
+\ScanComparExt{}. Context named one of the target findings or a close synonym
+in \ScanTargetSrc{} of source and \ScanTargetExt{} of external studies, often as
+a suspected or known condition (``evaluate progression of right effusion'').
+That is genuinely pre-diagnostic for the current study but label-informative,
+which is why M2 is reported as a shortcut control. Report text was inspected only in the protected environment and
+appears in no artifact.
+
+\subsection{Context states and interventions}
+An \emph{effective token} is a whitespace-delimited token containing an
+alphanumeric character after de-identification placeholder runs are removed. A
+study is informative (N1) if its context has at least $T$ effective tokens
+($T=3$ primary, registered sensitivities $T=5,10$), low-information (N2) if it
+has between 1 and $T-1$, and absent (N3) if it has none. The rule was fixed on
+the source and applied unchanged externally. Interventions apply to N1
+studies: C0 leaves context unchanged; C1 replaces it with the token
+\texttt{[NO\_CONTEXT]}; C2 replaces it with another patient's context. The C2
+replacement is a deterministic rotation within strata defined by split and
+context-length bin (bins 0--4, 5--9, 10--19, 20--39, 40--79, $\ge$80 effective
+tokens), seed 20260718. Within each stratum it walks forward past donors from
+the same patient.
+
+Two implementation facts were established by the audit
+(\cref{sec:res-c2}) and are stated here so the interventions are described as
+run. First, C2 was applied to \emph{image} rows, not studies, so images of one
+study can receive context from different donor studies. This happened for
+\CTwoMultiDonorSrc{} of \CTwoMultiImgSrc{} multi-image source studies and
+\CTwoMultiDonorExt{} of \CTwoMultiImgExt{} external ones. Second, the C2 donor
+realisation depends on the cohort being permuted. Changing the cohort, as the
+label-source and $T$ sensitivities do, changes every recipient's donor.
+
+\subsection{Labels}
+The targets were cardiomegaly, edema, consolidation, atelectasis and pleural
+effusion. Source labels were generated by a port of CheXbert~\cite{smit2020chexbert}
+(checkpoint SHA-256 \texttt{6550703c\ldots0fde1} from
+\texttt{StanfordAIMI/RRG\_scorers}; upstream commit \texttt{6d22a96})
+applied separately to the impression and findings sections. The port's fidelity
+check covered 4 public sample reports (56 cells, all matching). External labels
+are the CheXbert labels distributed with CheXpert Plus; the checkpoint and
+pre-processing used to produce them are not documented in the release, and we
+did not regenerate them. The registry fixes impression-derived labels as
+primary and findings-derived labels as a mandatory sensitivity (S1), and
+forbids full-report labels because the full report contains the context
+fields.
+
+Values are positive (1), negative (0), uncertain ($-1$) or unmentioned (blank).
+Only positive and negative cells carry supervision or contribute to error.
+Uncertain and unmentioned cells are masked; neither is mapped to negative.
+Source labels are study-level. External labels are image-level, and a study
+takes the first observed (0/1) value across its frontal images. A source study
+enters the impression cohort only if its report has an impression section, and
+the findings cohort only if it has a findings section. External studies are
+retained whatever sections they have, with missing labels masked. This asymmetry
+is central to \cref{sec:res-label-source}.
+
+\subsection{Models and training}
+M1 is DenseNet-121 (ImageNet-initialised) with five sigmoid outputs. M2 is
+BERT-base-uncased (128 tokens, CLS pooling, fine-tuned) with five sigmoid
+outputs. M3 averages the M1 and M2 probabilities and has no trainable
+parameters. M4 concatenates the pooled DenseNet-121 features (1,024) with the BERT
+CLS embedding (768), followed by Linear(1792, 512), ReLU, dropout 0.2 and
+Linear(512, 5), trained end to end. Images were converted to greyscale, resized
+once to $224\times224$ by bilinear interpolation without preserving aspect
+ratio, stored as JPEG (quality 95), replicated to three channels and normalised
+with ImageNet statistics. The pipeline was identical at both sites, and no
+augmentation was used.
+
+Training used the model-train tier only (146,253 studies, 49,959 patients). A
+patient-disjoint 5\% internal-validation split (2,498 patients, 7,919 images,
+fixed seed) was used for early stopping. The image is the training unit. The
+loss is masked binary cross-entropy,
+\begin{equation}
+\mathcal{L}=\frac{\sum_{b\in\mathcal{B}}\sum_{j=1}^{5} m_{bj}\,
+\ell\!\left(z_{bj},y_{bj}\right)}{\max\!\left(1,\sum_{b\in\mathcal{B}}\sum_{j} m_{bj}\right)},
+\end{equation}
+over the images $b$ of a batch, with logit $z$, label $y$ and mask $m$. It is a
+micro-average over labelled cells with no class or study weights. Images whose
+five cells are all unlabelled contribute nothing. The optimiser was AdamW
+(learning rate $10^{-4}$ for image and fusion parameters and $2\times10^{-5}$
+for the text encoder, weight decay $10^{-4}$), with batch size 32 in fp32, at
+most 15 epochs, and early stopping on internal-validation macro AUROC with
+patience 3. The selected checkpoints were M1 epoch 3 (AUROC 0.877), M2 epoch 3
+(0.763) and M4 epoch 4 (0.888). Under the second training seed (20260719), with
+identical settings, the selected checkpoints were M1 epoch 3 (0.874), M4 epoch 1
+(0.887) and M2 epoch 2 (0.768); the replicate M3 averages the replicate M1 and
+M2. The committed Stage 6b audit artifact misreports
+the M2 training curve by splicing epochs from a discarded run; the checkpoint
+and its selection are unaffected (supplement).
+
+\subsection{The frozen selective policy}
+Study probabilities $p_{ij}$ are means over a study's frontal images. For
+pathology $j$, the decision threshold $t_j$ maximises balanced accuracy over a
+grid of 999 values, $k/1000$ for $k=1,\ldots,999$, on supervised
+calibration-tier cells; ties go to the lowest threshold. The decision is
+$\hat y_{ij}=\mathbb{1}[p_{ij}\ge t_j]$. Study confidence is
+$g_i=\min_j|2p_{ij}-1|$, and the abstention cutoff $\tau$ is the 20th percentile
+of $g$ over calibration studies (linear interpolation). A study is accepted when
+$g_i\ge\tau$, so ties at the cutoff are accepted and coverage can exceed the
+target, as with M2 under C1. All thresholds and cutoffs were selected on the
+calibration tier (9,233 studies) and applied unchanged to the source evaluation
+tier and the external site. Re-running calibration-tier inference reproduced
+every frozen threshold and cutoff exactly (supplement). The confidence $g$ is
+centred at $p=0.5$, whereas decisions are made at $t_j$, which ranged from
+0.41 to 0.99 across models and pathologies. Whether $g$ ranks the correctness of the actual decisions is
+therefore an empirical question (\cref{sec:res-selective}).
+
+\subsection{Endpoint}
+\label{sec:endpoint}
+For study $i$ let $n_i=\sum_j m_{ij}$ be its number of labelled cells,
+$w_i=\sum_j m_{ij}\mathbb{1}[\hat y_{ij}\ne y_{ij}]$ its number of wrong
+labelled cells, and $a_i=\mathbb{1}[g_i\ge\tau]$ its acceptance. The registered
+primary metric is $\mathrm{MET001}=\operatorname{mean}(L_i\mid g_i\ge\tau)$, with
+$L_i$ the study's five-label Hamming error over supervised cells. The
+original implementation computed
+\begin{equation}
+R_{\text{orig}}=\frac{\sum_i a_i\,w_i/\max(n_i,1)}{\sum_i a_i}.
+\end{equation}
+A study with $n_i=0$ therefore contributes error 0 to the numerator and 1 to
+the denominator, so it is counted as correctly classified. The code's own
+documentation states the opposite intent (``unsupervised cells are excluded
+rather than counted correct''). We treat this as a verified implementation
+defect and correct it by taking the registered mean over studies whose $L_i$
+is defined:
+\begin{equation}
+R_{\text{eval}}=\frac{\sum_i a_i\,\mathbb{1}[n_i>0]\,w_i/n_i}{\sum_i a_i\,\mathbb{1}[n_i>0]},
+\qquad R_{\text{orig}} = R_{\text{eval}}\cdot\Pr(n_i>0\mid a_i=1).
+\end{equation}
+The identity shows that the original estimator multiplies the error among
+evaluable accepted studies by the fraction of accepted studies that are
+evaluable. A cross-site difference in that fraction therefore appears as a
+difference in risk. $R_{\text{eval}}$ is reported as the corrected primary and
+$R_{\text{orig}}$ is retained. As sensitivity analyses we also report
+cell-pooled risk, $\sum_i a_iw_i/\sum_i a_in_i$; pathology-macro risk, the
+unweighted mean of the five per-pathology error rates over labelled accepted
+cells; and pathology-specific risks, which the original SAP made the primary
+reporting unit. Coverage is reported over all eligible studies, which is the
+quantity a deployed policy controls, and over evaluable studies.
+$R_{\text{eval}}$ is an error rate over cells that a labeller chose to label in
+accepted studies. It is not a fully observed five-disease clinical error rate,
+and evaluable studies are a selected subset whose composition differs between
+sites.
+
+\subsection{Hypotheses and decision rules}
+Write $R^{s}_{m}(c)$ for selective risk at site $s\in\{S,E\}$ for model $m$
+under condition $c$, at the frozen 80\% cutoff. The registered hypotheses
+(\texttt{hypothesis\_registry.yaml}, 18 July 2026) are:
+\begin{align*}
+\text{H1 (confirmatory, } m\in\{\text{M3,M4}\}\text{):}\quad
+&\Delta_m = R^{E}_{m}(\text{C0})-R^{S}_{m}(\text{C0}) > 0,\\
+\text{H2 (confirmatory):}\quad
+&\Omega_m = \bigl[R^{E}_{m}(\text{C1})-R^{E}_{m}(\text{C0})\bigr]-\bigl[R^{S}_{m}(\text{C1})-R^{S}_{m}(\text{C0})\bigr] > 0,\\
+\text{H3 (confirmatory):}\quad
+&\Omega_{m}-\Omega_{\text{M1}} > 0,\\
+\text{H4 (secondary, each site):}\quad
+&R_{m}(\text{C2})-R_{m}(\text{C1}) \ge 0 .
+\end{align*}
+H1 and H2 are confirmed when the 95\% interval lies above zero \emph{and} the
+point estimate is at least 0.02 (registry \texttt{failure\_criteria}). The
+registry gives H3 no materiality and gives H4 a non-negative direction with no
+materiality. The pre-results implementation of H4 (commit \texttt{b6052a7}, 6
+August 2026) declares it supported when the interval lies above zero. The
+previous draft's statement that every hypothesis needed a 0.02 point estimate
+was therefore wrong for H4. The H4 verdicts it reported, including
+``confirmed'' for M4 at the source with \HFourMFoursourceOrigPt{}, were correct under H4's own
+registered rule.
+
+Two registered estimands were not implemented as written. M1 ignores text, so
+$\Omega_{\text{M1}}\equiv 0$ and the registered H3 is algebraically identical to
+H2 for the same model. The analysis code written on 7 August 2026, after the
+external point estimates had been inspected, instead defined H3 as
+$\Delta_m-\Delta_{\text{M1}}$ and applied the 0.02 materiality. That
+operationalisation is reported here as post hoc. The same code also computed
+an interaction under C2 that H2 does not register, and we report it as
+descriptive. We report every contrast with one verdict function that
+distinguishes five outcomes: confirmed; same direction but not material;
+inconclusive (interval includes zero); opposite direction, not material; and
+opposite direction, material. Separately, it records whether the interval
+itself clears materiality and whether it lies inside $(-0.02,0.02)$. A point
+estimate above 0.02 with an interval excluding zero does not show that the true
+effect exceeds 0.02.
+
+The 0.02 materiality threshold was registered without an external clinical
+justification. We regard it as a convention, not a clinically validated
+minimum important difference. Requiring the point estimate to reach it has an
+elementary consequence. For an approximately normal estimate with standard
+error $s$, the probability of confirmation when the true effect equals $\delta$
+is $\Pr\{Z\ge\max(0,1.96-\delta/s)\}\le 1/2$, with equality once $\delta\ge
+1.96s$. This is the familiar 50\% power at a decision boundary, not a new
+methodological result. The study's power analysis was accordingly
+based on the minimum detectable effect (0.021--0.027 at 80\% power on the
+evaluation partition, under the registered grid of base risks, intra-patient
+correlations and coverages), not on materiality.
+
+\subsection{Statistical inference}
+Intervals are 95\% percentile intervals from 2,000 patient-clustered bootstrap
+replicates with seed 20260718. Within-site contrasts resample a site's patients
+once per replicate and read every condition and model on that draw (paired).
+Cross-site contrasts resample the two sites independently. H3 reads both models
+from the same within-site draw. The revision reimplemented the bootstrap as
+patient-weighted sums and replays the original random draws exactly: every
+point estimate and interval in the original Stage 10 artifacts (primary, S1,
+$T=5$, $T=10$, seed replicate; 63 rows) was reproduced exactly at the six-decimal precision of the artifacts.
+
+The intervals condition on the fitted models, on the thresholds and cutoffs
+selected from the one realised calibration sample, and on the C2 donor
+realisation. They do not reflect training variability or calibration-sample
+variability. We quantified the latter by resampling calibration patients (200
+replicates), re-applying the frozen selection rule and recomputing the
+estimates (\cref{sec:res-uncertainty}). Training variability is addressed only
+by the replicate seed.
+
+The registry specifies Holm correction across pathologies, and the original
+SAP defines multiplicity families per hypothesis across the five
+pathologies. The previous draft stated that per-pathology secondary analyses
+used Holm correction, but no per-pathology analysis had been run. The Stage 10
+code applied Holm to the four H4 bootstrap $p$-values, all of which were at the
+bootstrap floor. The aggregate confirmatory contrasts (H1, H2-C1 and H3 for two
+models) had no multiplicity adjustment. As a post hoc sensitivity we report
+Bonferroni-adjusted intervals (level $1-0.05/6$) for those six contrasts, and
+Holm-adjusted $p$-values across pathologies for the pathology-specific
+contrasts.
+
+\subsection{Post hoc analyses (Revision R1, 6 October 2026)}
+\Cref{tab:status} lists every analysis with its status. Post hoc analyses are
+exploratory and none is described as confirmatory. They were chosen to
+answer specific validity questions: what the endpoint measures; whether the
+label-source result reflects labels, cohort or thresholds; whether the
+confidence score ranks errors; how selection and prediction changes combine
+under interventions; whether the C2 constraints held; and how sensitive the
+cross-site estimate is to defensible choices. No threshold, cutoff or score was
+fitted on external data. Comparator selective scores were fitted on the source
+calibration tier only.
+
+\begin{table}[t]
+\centering\small
+\caption{Status of every reported analysis. ``Pre-results'' means specified and
+implemented before the external point estimates were inspected on 7 August 2026.}
+\label{tab:status}
+\begin{tabular}{p{0.52\linewidth}p{0.4\linewidth}}
+\toprule
+Analysis & Status\\
+\midrule
+H1, H2 (C1), H4 contrasts; decision rule; bootstrap & registered 18 July; rule and bootstrap code pre-results (6 Aug); contrast code 7 Aug, after inspection\\
+H3 as transfer-gap difference; H2 under C2 & defined in code after inspection (post hoc operationalisation; descriptive)\\
+Coverage 70\%/90\%; $T=5$, $T=10$; findings labels (S1) & registered sensitivities; S1 implementation choices (re-selected thresholds, restricted source cohort) made after inspection\\
+Second training seed (M1, M4) & decided 8 Aug, after inspection (not prespecified)\\
+Estimator correction (evaluable-study) & correction of a verified defect (R1)\\
+Label variants, aggregations, per-pathology contrasts, AURC/AUGRC, failure-detection AUROC & R1 post hoc (AURC, AUGRC, failure AUROC and pathology-level reporting were registered metrics or SAP requirements that had not been computed)\\
+Controlled label-source decomposition; context selection/prediction split; C2 audit; calibration-sample uncertainty; comparator policies; view and demographic strata; additional C2 permutations; M2/M3 replicate & R1 post hoc, exploratory\\
+\bottomrule
+\end{tabular}
+\end{table}

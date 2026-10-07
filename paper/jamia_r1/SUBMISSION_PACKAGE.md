@@ -1,0 +1,106 @@
+# JAMIA submission package (Revision R1)
+
+Target: **Journal of the American Medical Informatics Association (JAMIA)**,
+article type **Research and Applications**. Submission is free on the
+subscription route (no submission, page or colour charges); open access would
+cost an article fee and is optional. JAMIA allows preprints, so posting to
+medRxiv or arXiv makes the paper free to read without paying for open access.
+
+Requirements were checked against the
+[JAMIA General Instructions](https://academic.oup.com/jamia/pages/General_Instructions)
+on 2026-10-07.
+
+## Compliance (run `./budget.sh` → `python3 budget.py`)
+
+| Requirement | Limit | This build |
+|---|---|---|
+| Body words (Background → Conclusion) | 4,000 | **3,051** |
+| Structured abstract (5 headings) | 250 words | **231** |
+| Tables | 4 | **4** |
+| Figures (with alt text under each legend) | 6 | **5** (5 alt texts) |
+| References | unlimited, numbered in order | 18, Vancouver/Medline |
+| Double spacing, line numbers | required / allowed | yes |
+| Background and Significance section + sections matching abstract | required | yes |
+| Data availability statement | required | drafted (needs repository URL) |
+| CRediT contributions | required | **author input** |
+| AI-use disclosure (cover letter and Methods or Acknowledgments) | required | drafted in both (needs your confirmation of earlier stages) |
+| LaTeX source with compiled PDF | accepted | yes |
+
+## Files to upload
+
+| JAMIA file designation | File |
+|---|---|
+| Manuscript (PDF compiled from LaTeX) | `main_jamia_r1.pdf` |
+| LaTeX source | `main_jamia_r1.tex`, `sections/*.tex`, `references_jamia.bib`, `main_jamia_r1.bbl`, `wordcount.tex`, `../revision/generated/numbers.tex`, the four `../revision/generated/tab_*.tex` tables used (`tab_cohort`, `tab_hypotheses`, `tab_label_source`, `tab_uncertainty`) |
+| Figures (separate files) | `figures_for_upload/Figure1–5.pdf` (vector) or `.png` (600 dpi) |
+| Supplementary File | `supplement_jamia_r1.pdf` |
+| Supplementary File (reporting checklist) | `tripod_ai_checklist_r1.pdf` |
+| Cover letter | `cover_letter.pdf` |
+
+Upload the figures in the order in which they are cited:
+
+1. Label composition
+2. H1 across specifications
+3. Operating points
+4. Risk–coverage
+5. Within-site H4
+
+The PDF already embeds each figure with its legend and alt text. Some systems
+also ask for the alt text in a form field; copy it from the figure legends.
+
+## Metadata to paste into the submission system
+
+- **Title:** Frozen selective prediction for multimodal chest-radiograph
+  models across two hospitals: a preregistered compound-shift evaluation with
+  label-dependent cross-site conclusions
+- **Keywords (MeSH):** Radiography, Thoracic; Machine Learning; Diagnosis,
+  Computer-Assisted; Data Accuracy; Reproducibility of Results
+- **Abstract:** copy from page 2 of `main_jamia_r1.pdf`. The five headings are
+  already in place.
+
+## What only you can supply
+
+Supplied by the author on 2026-10-07 and filled in: degrees, department,
+address, email, telephone, ORCID iDs, ethics (PhysioNet credentialing; no
+additional institutional review), funding (none), AI use (ChatGPT, Codex and
+Claude), repository URL, no prior submission, no preprint, not under
+consideration elsewhere, and co-author approval.
+
+The telephone number lives in `private_phone.tex`, which is gitignored so it
+never reaches the public repository. The title page reads it when the file
+exists; on another machine it prints "withheld from the public repository".
+
+Still open (red `[AUTHOR INPUT REQUIRED]` markers):
+
+1. **Competing interests** for both authors (or "None declared").
+2. **CRediT contributions** for both authors.
+3. **Further acknowledgments**, including the supervisor if not an author.
+4. **Zenodo DOI** of the archived GitHub release.
+5. **Cover letter:** any other paper by the authors that reports this study.
+6. **AI-use wording:** confirm the tool list, and that no images, report text
+   or row-level records were ever entered into ChatGPT or Codex.
+
+## Verification items before you press submit
+
+- Aperstein et al. is cited from arXiv. You supplied a *Scientific Reports*
+  DOI (10.1038/s41598-026-66294-7) whose publisher page could not be retrieved.
+  If you can open it, replace the reference with the journal version.
+- The MIMIC-CXR report archive is cited as MIMIC-CXR v2.1.0. The local
+  checksum manifest does not state its version, so confirm the release you
+  downloaded.
+- JAMIA prefers published or in-press references. Three dataset or method
+  preprints are cited (MIMIC-CXR-JPG and CheXpert Plus are required dataset
+  citations; Aperstein et al. as above).
+- Read the ChatGPT review you plan to run against `main_jamia_r1.pdf`, and ask
+  me to check any issue it raises against the data before changing text.
+
+## Rebuild
+
+```bash
+cd <project root>/paper/jamia_r1
+./build.sh          # budget → supplement → manuscript → checklist → cover letter → figure files
+```
+
+Every number in the manuscript is generated by `python -m c3e.revision.report`
+from `results/c3e_revision/`. To change a number, change the analysis, not the
+text.

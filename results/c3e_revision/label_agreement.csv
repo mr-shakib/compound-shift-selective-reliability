@@ -1,0 +1,11 @@
+site,pathology,cells_labelled_both,agreement,imp_pos_find_neg,imp_neg_find_pos,labelled_impression_only,labelled_findings_only,studies_in_cohort,studies_with_any_findings_label_value
+source,Cardiomegaly,623,0.9518459069,19,11,2610,4368,14766,8857
+source,Edema,884,0.9649321267,23,8,2514,1567,14766,8857
+source,Consolidation,394,0.9847715736,5,1,815,3305,14766,8857
+source,Atelectasis,885,0.9864406780,1,11,1864,1022,14766,8857
+source,Pleural Effusion,1390,0.9791366906,21,8,3199,6267,14766,8857
+external,Cardiomegaly,3193,0.9774506733,64,8,23490,10421,132923,33971
+external,Edema,8812,0.9791193827,104,80,35148,2551,132923,33971
+external,Consolidation,3491,0.9894013177,16,21,21626,2925,132923,33971
+external,Atelectasis,3018,0.9970178926,5,4,16829,3105,132923,33971
+external,Pleural Effusion,14222,0.9875544930,83,94,61894,9036,132923,33971

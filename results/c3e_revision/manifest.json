@@ -1,0 +1,190 @@
+{
+ "artifacts": [
+  {
+   "byte_size": 602,
+   "name": "alignment_checks.csv",
+   "sha256": "591e2c2f24d295e292e44ae0b65d54b91658278c0697a763fe4e6eafa560b283"
+  },
+  {
+   "byte_size": 904,
+   "name": "c2_audit.csv",
+   "sha256": "e5788036daa2766d9c51dcd2be5612442321ba643789c575473f97077f350e38"
+  },
+  {
+   "byte_size": 1126,
+   "name": "calibration_uncertainty.csv",
+   "sha256": "7dbca10bd06188a9fb292263ac8e9d247f30309eaf4e0c433e7f71660492e082"
+  },
+  {
+   "byte_size": 3119,
+   "name": "comparator_fits.json",
+   "sha256": "15f8a07cecd4b9b7d2ee8353dead0918bdf79954f0b5718ea2b71f4ac151d60c"
+  },
+  {
+   "byte_size": 2679,
+   "name": "comparator_ranking.csv",
+   "sha256": "b0ec48d4bccf3022c311cdd474a274aab99b3fed103df92f4d979b3684e97a3b"
+  },
+  {
+   "byte_size": 15181,
+   "name": "comparators.csv",
+   "sha256": "052b6748b5fb3fb2c87b589d9a15c2a94d849d4cfaae5c7f19d0901229b5c4ca"
+  },
+  {
+   "byte_size": 26369,
+   "name": "context_decomposition.csv",
+   "sha256": "b3974f2eaf191f8326fe078251a4e1b3e3b7856664950a3461b2ccd6e1f57958"
+  },
+  {
+   "byte_size": 502,
+   "name": "context_scan.csv",
+   "sha256": "33faf685a8e5de0c170a70c19ee10819a84bd8b0ca4b89cf7e4d252922d106e4"
+  },
+  {
+   "byte_size": 10682,
+   "name": "coverage_gap.csv",
+   "sha256": "b20acf2c3fd1c315fd231e381953743060967c0259fc00da04e718af763a9938"
+  },
+  {
+   "byte_size": 4296,
+   "name": "external_demographic_disparity.csv",
+   "sha256": "38a49a127c7436f7bc8993bdc8ca4ce801f94b4427d10324464b5150b2d61223"
+  },
+  {
+   "byte_size": 8237,
+   "name": "external_demographics.csv",
+   "sha256": "da4d8d90bc52bd7246bff52f249a89a2b19b5742da1ea4e1d78edbf8337f2e83"
+  },
+  {
+   "byte_size": 7673,
+   "name": "failure_detection.csv",
+   "sha256": "10670a9fbb7c4d702f1e4d34750b6d9f4fb343b7a51be402eceb8feef54912bd"
+  },
+  {
+   "byte_size": 6829,
+   "name": "followup_c2_permutations.csv",
+   "sha256": "d893af5b6631f2327aa9a4aea9feeac7b942f5b87760a95d2c0535e7bb0ecc69"
+  },
+  {
+   "byte_size": 8524,
+   "name": "followup_m2m3_contrasts.csv",
+   "sha256": "8467de91cc15d805b4648ab1e10c6b6c28bdea9fb5fea930fdd9d61d4521ea4d"
+  },
+  {
+   "byte_size": 956,
+   "name": "followup_m2m3_coverage_gap.csv",
+   "sha256": "dfaa355e2470ec4a06b55e78dd1b769d0854f3eb830d965f2313b229889ecb43"
+  },
+  {
+   "byte_size": 6635,
+   "name": "followup_m2m3_levels.csv",
+   "sha256": "8ef9d1fa45d4da7a6ca08e91f32bb11ad850c3cff76fcc157a89186a308cf5c6"
+  },
+  {
+   "byte_size": 374,
+   "name": "followup_m2m3_selection.json",
+   "sha256": "3726f5706cdc057608f052792019e5ff0248e10d176613055676a2e8456c2ebe"
+  },
+  {
+   "byte_size": 29,
+   "name": "followup_m2m3_status.csv",
+   "sha256": "9b0a534d73e69f1d7ae0458c0cfc7074bc4ee4c7070fb6821ffb9d7dea781cbd"
+  },
+  {
+   "byte_size": 113453,
+   "name": "hypotheses.csv",
+   "sha256": "5be29a78446d613ef01674e9eff20a530aad1f40a98b3030770c9c6a297171e5"
+  },
+  {
+   "byte_size": 842,
+   "name": "label_agreement.csv",
+   "sha256": "21af0de4c776079be06a1a3f16e622686cf7186345de4c3c7aef42bcc47b6188"
+  },
+  {
+   "byte_size": 6836,
+   "name": "label_audit_by_pathology.csv",
+   "sha256": "2c4bd6127154aef2a3a21d530cb7c1d02e9e283bc0d594397ce4181f694b943e"
+  },
+  {
+   "byte_size": 1434,
+   "name": "label_audit_by_study.csv",
+   "sha256": "0643c197ec0d921ac0ab744e6fe5005bea71b84ce4b9ab848f00b592e7dea469"
+  },
+  {
+   "byte_size": 172930,
+   "name": "label_source_contrasts.csv",
+   "sha256": "199097dceb3544839ec7af325521d0d9044610c280737ba73f6c6b47f71da5ab"
+  },
+  {
+   "byte_size": 88026,
+   "name": "label_source_levels.csv",
+   "sha256": "61a8609fe744d96c4773cc28abb2bb44221d2c5a0aa11d9670ad0e67846a309d"
+  },
+  {
+   "byte_size": 2524,
+   "name": "label_source_meta.json",
+   "sha256": "ab86059126aa0fd03875e0f60720cda436e8f7d4b661f02ddae7755ffd4b9304"
+  },
+  {
+   "byte_size": 102298,
+   "name": "levels.csv",
+   "sha256": "a50a1b03fc5e838abd6f26b571519ba7867ac374f8479b45429a449fc0899944"
+  },
+  {
+   "byte_size": 21895,
+   "name": "operating_characteristics.csv",
+   "sha256": "cf5135ca741efcae46f70e3d5fcfeda8c976b765e1268a4e62410d07b4394169"
+  },
+  {
+   "byte_size": 50581,
+   "name": "pathology_contrasts.csv",
+   "sha256": "4b77dcf6ff6edb9f7e55fe2e9aa9a05a970c4622fb5c5ccc0120c1f86297883c"
+  },
+  {
+   "byte_size": 79939,
+   "name": "rc_curves.csv",
+   "sha256": "6483ac137e04d6efb2e1067b3a02dbdc28433b646eab17eaeeb1acc1fc3cd8d1"
+  },
+  {
+   "byte_size": 196,
+   "name": "stage10_reproduction.csv",
+   "sha256": "b5cdf6a2261cc3eece2013b528320c59935e9986e268079c126076d9e219e4f6"
+  },
+  {
+   "byte_size": 6048,
+   "name": "stage6_runs_from_logs.json",
+   "sha256": "b93ff1fb00f53906f98227894ec6b35fce2b9baf188c80fa152e61deee5aaa31"
+  },
+  {
+   "byte_size": 335,
+   "name": "stage7_reproduction.csv",
+   "sha256": "3939e7ac926e8de773e0ab1038ac9953438a441c81fd27d6157963b5a7b818e7"
+  },
+  {
+   "byte_size": 1815,
+   "name": "threshold_free.csv",
+   "sha256": "a5684836d75a20ac0fccdfe01041146fe121bd4b478d4959b8bafc0bfdcf9867"
+  },
+  {
+   "byte_size": 2172,
+   "name": "view_strata.csv",
+   "sha256": "de9db94bc05d26e712d991f140ac3ec5aa8847015ba11016d072a26334c2f44e"
+  }
+ ],
+ "declarations": [
+  "REVISION R1 (2026-10-06): POST HOC, AFTER EXTERNAL RESULTS WERE INSPECTED",
+  "FROZEN STAGE 7 THRESHOLDS CONSUMED UNCHANGED",
+  "NO THRESHOLD, CUTOFF OR SCORE FITTED ON EXTERNAL DATA",
+  "COMPARATOR SCORES FITTED ON THE SOURCE CALIBRATION TIER ONLY",
+  "PATIENT-CLUSTERED BOOTSTRAP, 2000 REPLICATES, SEED 20260718, STAGE 10 DRAW ORDER",
+  "ORIGINAL ESTIMATES RETAINED BESIDE CORRECTED ONES",
+  "NO IDENTIFIERS EMITTED TO RESULTS"
+ ],
+ "environment": {
+  "numpy": "2.5.1",
+  "pandas": "3.0.3",
+  "platform": "Linux-x86_64",
+  "python": "3.14.4"
+ },
+ "stage": "C3-E6 Revision R1"
+}

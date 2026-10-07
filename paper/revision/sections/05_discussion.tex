@@ -1,0 +1,146 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Principal findings}
+The preregistered transport-failure hypothesis was not confirmed once a
+verified estimator defect was corrected. The original analysis counted every
+accepted study whose report mentioned none of the five targets as correctly
+classified. Such studies were about half of the source cohort and a fifth of
+the external one, so the originally reported transfer gaps of about 0.04--0.05 for the
+multimodal models measured the difference in label availability between the two
+report corpora rather than a change in model error. Over studies with at least
+one labelled target, the multimodal transfer gaps were close to zero. Their
+intervals excluded a material increase, conditional on the realised calibration
+sample and training run (\cref{sec:res-uncertainty}).
+
+That near-zero estimate is itself fragile. With predictions and frozen
+thresholds held fixed, plausible choices about uncertain and unmentioned
+labels, the report section used for labels, aggregation across pathologies, the
+training seed and the view stratum each moved the cross-site contrast by more
+than its interval width, and several changed its sign. The originally reported
+findings-label ``reversal'' was produced mainly by the same defect acting on an
+asymmetric cohort definition. Where both report sections label the same cell
+they agree in more than 95\% of cases. Under the primary label handling, the
+cross-site contrast is therefore not identified well enough to support a claim
+in either direction.
+
+Three results were more stable. Frozen per-pathology thresholds transferred a
+decision rule but not an operating point: at the external site the feature-fusion
+model called cardiomegaly, effusion and edema far more often, and its
+specificity fell, under both label handlings examined. Realised coverage stayed
+close to target with context intact, under both training seeds. Misaligned
+context was worse than absent context for the late-fusion model at the source
+under every specification and both seeds. Externally it held for the first seed
+only.
+
+\subsection{What the endpoint measured}
+The selective-risk endpoint is an error rate over the cells a report labeller
+chose to label, in the studies a policy accepted. Three distinct mechanisms can
+change it between hospitals, and the data separate them only partly.
+\emph{Case mix} differs: with unmentioned counted as negative, effusion and
+edema are roughly twice as prevalent externally. \emph{Documentation practice}
+differs. Source impressions omit all five targets in about half of studies, and
+external impressions carry many more uncertain mentions. The findings section
+records explicit negatives at the source but is absent from most external
+studies. \emph{Labeller error} may differ too. The two sites were labelled by
+CheXbert, but the external labels were produced by the dataset's publishers
+with undocumented settings, and agreement between report labels and image
+findings is imperfect~\cite{jain2021visualchexbert,rafferty2025limitations}.
+Similar aggregate positive rates (\PosSrcImpression{} and \PosExtImpression{})
+did not establish comparable labels, and different prevalence alone would not
+have shown different disease definitions. What the controlled analysis does
+establish is that selective missingness, meaning which cells and studies carry
+a label at all, was the dominant driver of the originally reported cross-site contrast
+and remains a first-order driver after correction.
+
+\subsection{Implications for cross-site benchmarking}
+The defect is easy to make and invisible in aggregate output. Any per-study
+loss averaged over observed labels needs a convention for studies with none,
+and a guard against division by zero silently chose one here. We suggest
+the following checks for any cross-site evaluation built on report-derived
+labels. Report, per site, the fraction of studies and of accepted studies
+with at least one labelled target. Define and test the estimator's treatment
+of unlabelled studies. Fix uncertain- and unmentioned-label handling in
+advance and report the alternatives. Report pathology-specific operating
+characteristics, not only aggregate error. Verify the unit at which a context
+intervention is applied, and replay it to confirm its constraints. Quantify
+calibration-sample uncertainty alongside the evaluation bootstrap. Where a
+cross-site sign matters, obtain a reference standard that is dense and
+comparable at both sites.
+
+\subsection{Implications for deployment}
+On this evidence a frozen threshold should not be assumed to keep its
+operating point at a new hospital, even when its coverage holds. We did not
+evaluate target-site recalibration: the protocol prohibits external tuning,
+and recalibration answers a different question, whether a method can be
+re-tuned rather than whether a shipped policy transports. We therefore make
+no claim about whether recalibration would hide or restore any particular
+failure. A decision-aware confidence score ranked errors better than the frozen
+margin but held its coverage less well across sites. Better ranking at the
+source did not make the operating point more transportable.
+
+\subsection{Limitations}
+\label{sec:limitations}
+\emph{Labels.} All labels are automatic and report-derived. No expert
+reference standard was available, and the endpoint is not a clinical
+five-disease error rate. The external labels' generation settings are
+undocumented. The decisive limitation for cross-site claims is that neither
+label source is dense and comparable at both sites. We provide a blinded
+adjudication protocol (supplement) as the route to resolving it; no
+adjudication has been performed.
+
+\emph{Post hoc analyses.} The estimator correction and every analysis labelled
+R1 were done after the external results had been inspected. The correction
+fixes a verified defect, but it reverses the original conclusion, and readers
+should weigh it with that history in mind. Both estimators are reported. The
+H3 operationalisation, the S1 implementation choices and the second training
+seed were also decided after inspection.
+
+\emph{Uncertainty.} Reported intervals condition on one calibration sample,
+one C2 realisation and one training run per model. Two training seeds were
+examined for every model. Calibration-sample
+variability was \CalRatioMin{}--\CalRatioMax{} times the evaluation-bootstrap variability for the
+corrected contrasts. Two seeds cannot establish that any result is
+seed-independent. The second seed changed both multimodal models' corrected
+transfer gaps by about 0.04, and removed M3's external context effect.
+
+\emph{Interventions.} C2 was applied per image, and its donors depend on the
+cohort being permuted. Removing context synthetically (C1) is not the same as
+context that is naturally missing. The informativeness rule measures length,
+not clinical content.
+
+\emph{Scope.} One pair of hospitals in one direction. No compatible third
+site with pre-diagnostic text and comparable labels was available to us.
+Reverse transfer would require training on the external site, which the
+protocol does not authorise. Demographic analyses are external-only and
+exploratory because source demographics were not acquired. Images differ in
+compression history at origin, although preprocessing was identical.
+
+\emph{Protocol.} Two planning documents were written on 18 July 2026 before
+any data access: a prose hypothesis registry and statistical analysis plan,
+and the machine-readable registry that governed execution. The prose plan led
+with AURC and pathology-specific reporting and required AP/PA, one-image,
+concordant-study and uncertain-label sensitivities, and it was never formally
+retired. The machine-readable registry required temperature-scaled and
+split-conformal baselines and listed AUGRC as a primary threshold-free metric.
+None of these was run before the results were known. Several are reported here
+post hoc; the one-image-per-study and concordant-study sensitivities remain
+unrun, because they need image-level predictions that were not cached.
+
+\subsection{Future work}
+The most informative next step is expert adjudication of a stratified sample
+of studies at both sites, against which the label-handling alternatives can be
+calibrated. A third institution with pre-diagnostic text would turn one
+difference into a distribution. An informativeness rule based on clinical
+content rather than length would make the context interaction interpretable.
+Further training seeds for all four models would bound training variability.
+
+\section{Conclusion}
+A selective policy frozen at one hospital kept its coverage at another, but
+its per-pathology operating points moved. Whether its selective error rose
+could not be determined from report-derived labels whose availability differs
+between the hospitals. The original conclusion that it rose was an artifact
+of counting label-less studies as correct. A compound-shift protocol can
+isolate context effects within a site, but cross-site risk claims require a
+label endpoint that is comparable across sites. That requirement should be
+established before such claims are made.

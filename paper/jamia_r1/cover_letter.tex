@@ -1,0 +1,67 @@
+\documentclass[11pt,a4paper]{letter}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{microtype}
+\newcommand{\authorinput}[1]{\textcolor{red!70!black}{\textbf{[AUTHOR INPUT REQUIRED: #1]}}}
+\signature{Shakib Howlader\\ on behalf of both authors\\ Department of Computer Science and Engineering\\ Daffodil International University, Dhaka-1216, Bangladesh\\ howlader15-6029@diu.edu.bd}
+\address{}
+\begin{document}
+\begin{letter}{The Editor-in-Chief\\ Journal of the American Medical Informatics Association}
+\opening{Dear Editor,}
+
+We submit our manuscript, ``Frozen selective prediction for multimodal
+chest-radiograph models across two hospitals: a preregistered compound-shift
+evaluation with label-dependent cross-site conclusions'', for consideration as
+a Research and Applications article.
+
+Selective-prediction systems defer uncertain chest radiographs to a human
+reader using thresholds chosen at the developing hospital. Whether such a
+frozen policy keeps its error rate and referral rate at another hospital is an
+informatics question about deployed artifacts, not only about models. We
+evaluated this under a protocol registered before data access, using
+MIMIC-CXR-JPG and CheXpert Plus and crossing institutional shift with
+controlled changes to pre-diagnostic clinical context.
+
+The paper's central result is methodological and, we believe, of direct
+interest to JAMIA readers. An audit carried out after the first external
+results showed that the apparent cross-site degradation came from the
+selective-risk estimator. Studies whose report labelled none of the target
+findings were counted as correct, and such studies were far more common at one
+hospital than the other. After correction, the cross-site contrast was not
+identified. Defensible choices about uncertain and unmentioned report labels,
+together with the training seed, moved it from below zero to well above.
+Holding predictions and thresholds fixed, we show which choices drive the sign
+and why. We also report what remained stable: frozen thresholds kept coverage
+but not per-pathology operating points, and some within-site context effects
+were robust. We report the original and corrected estimates side by side, date
+every post hoc decision, and provide a blinded adjudication protocol as the
+route to a decisive answer.
+
+The manuscript contains \input{wordcount.tex}\unskip{} words in the body, a
+\input{abstractcount.tex}\unskip-word structured abstract, four tables and five figures, with a supplementary file and a
+TRIPOD+AI checklist. All results are aggregate; no patient-level data are
+included.
+
+\textbf{Related work and prior review.} This work has not been submitted to
+any other journal, and no preprint has been posted. \authorinput{state any
+other paper by the authors, published or under review, that reports this
+study; or that there is none}.
+
+\textbf{Use of AI.} The authors used ChatGPT and Codex (OpenAI) and Claude
+(Anthropic) to help plan the study, write and review analysis code, and draft
+and edit text. During the revision, Claude was also used to audit the analysis,
+run analyses through locally executed code, generate tables and figures, and
+verify references. No images, report text or row-level records were entered
+into any AI tool. The authors reviewed all outputs and take full responsibility
+for the work. This is also disclosed in the Acknowledgments.
+
+\textbf{Declarations.} This manuscript is not under consideration elsewhere and
+has not been published previously. Both authors approved the submission.
+Competing interests and funding are declared in the manuscript.
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}

@@ -1,0 +1,69 @@
+\section{Related work}
+\label{sec:related}
+
+Every work cited was checked on 6 October 2026 against its official page.
+Where only an abstract or index record could be read, the bibliography says so.
+
+\paragraph{Selective prediction and failure detection under shift.}
+Liang, Peng and Sun generalise selective classification to reject label- and
+covariate-shifted inputs as well as ambiguous in-distribution ones, using
+margin-based scores, on non-clinical image and text
+benchmarks~\cite{liang2024selective}.
+Evaluation practice for failure detection has itself been examined. Jaeger and
+colleagues evaluated confidence-scoring methods across failure sources under one
+protocol and found that a simple softmax-response baseline performed best
+overall~\cite{jaeger2023call}. Traub and colleagues
+argued that AURC over-weights low-coverage regions and proposed the area under
+the generalised risk--coverage curve (AUGRC)~\cite{traub2024augrc}. In medical
+imaging, Bernhardt and colleagues reported that none of the advanced
+confidence-scoring methods they benchmarked consistently beat the softmax
+baseline for in-domain misclassification detection~\cite{bernhardt2022failure}.
+A 2026 preprint benchmarks confidence scores across eight medical imaging tasks
+under realistic shifts~\cite{steinmetz2026failure}. These studies characterise
+how well confidence ranks errors. They do not take a selective policy frozen at
+one hospital to another while manipulating clinical context, and they do not
+ask how report-derived label availability enters the risk being transported.
+
+\paragraph{Rejection for multi-label chest radiographs.}
+Aperstein and colleagues add entropy- and confidence-interval-based rejection
+to a DenseNet-121 multi-pathology classifier. They tune rejection thresholds by
+quantile calibration and report accuracy--coverage trade-offs on PadChest, NIH
+ChestX-ray14 and MIMIC-CXR~\cite{aperstein2025rejection}. From the material we
+could read, evaluation is within dataset and no clinical text is used; we could
+not establish whether thresholds were transferred between datasets.
+
+\paragraph{Clinical context as an input.}
+Indication text improves chest-radiograph classification on MIMIC-CXR when
+fused with images through a BERT-based multimodal
+transformer~\cite{jacenkow2022indication}. Attention refinement with clinical
+history~\cite{yang2025mcxnet}, and fusion of clinical indications and vital
+signs with multi-view images~\cite{sloan2025clinically}, also report gains on
+single-source benchmark splits. Missing-modality architectures treat absent
+inputs as an engineering problem~\cite{wang2025missing,wang2025moehealth}.
+None of these evaluates a second institution under a frozen abstention policy.
+
+\paragraph{Cross-institution generalisation and label validity.}
+Cohen and colleagues argued that cross-dataset failure of chest-radiograph
+models reflects shift in labels more than in images~\cite{cohen2020limits}.
+Multi-centre benchmarking continues to identify cross-centre generalisation as
+open~\cite{cxrlt2026}. Model rankings for acquisition-parameter robustness can
+reverse on external data~\cite{farquhar2026acquisition}. Report-derived labels
+are imperfect proxies for image findings. Radiologists labelling reports
+disagree substantially with radiologists labelling the corresponding
+images~\cite{jain2021visualchexbert}, and an expert audit found frequent
+disagreement with the public labels of MIMIC-CXR and
+CheXpert~\cite{rafferty2025limitations}. Using the same labeller at two sites,
+here CheXbert~\cite{smit2020chexbert}, does not imply equal labelling accuracy
+or equal label availability at both. The present results show how much the
+second of these, availability, can matter.
+
+\paragraph{Gap addressed.}
+We found no study that evaluates a selective policy frozen at one hospital, at
+a second hospital, while manipulating pre-diagnostic clinical context under
+preregistered rules. We also found none that isolates, with predictions and
+thresholds held fixed, how label availability and handling determine the
+transported selective risk. The components we use are established: patient-clustered
+bootstrap, margin-based confidence, temperature scaling, split conformal
+prediction, and AURC and AUGRC. The contribution is their combination into a
+protocol and the evidence about what such a protocol can and cannot identify
+with report-derived labels.

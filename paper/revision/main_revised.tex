@@ -1,0 +1,134 @@
+% C3E Revision R1 (2026-10-06). Full-length revised manuscript.
+%
+% The original submission draft (paper/main.tex, built 2026-08-21) is preserved
+% unchanged. Every number below is either a macro from generated/numbers.tex or
+% a table from generated/, both written by `python -m c3e.revision.report` from
+% results/c3e_revision/ (itself written by `python -m c3e.revision.runner`).
+%
+% Build:  latexmk -pdf main_revised.tex
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage{adjustbox}
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\newcommand{\authorinput}[1]{\textcolor{red!70!black}{\textbf{[AUTHOR INPUT REQUIRED: #1]}}}
+\input{generated/numbers}
+
+\title{Frozen selective prediction for multimodal chest-radiograph models
+across two hospitals: a preregistered compound-shift evaluation with
+label-dependent cross-site conclusions}
+
+\author{Shakib Howlader}
+\author{Adnan Rahman Sayeem}
+\affil{Daffodil International University}
+\date{Revision R1 --- 6 October 2026 (supersedes the draft of 21 August 2026)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent\textbf{Objective.} To test whether a selective-prediction policy for
+chest radiographs, frozen at the hospital where it was developed, keeps its
+error rate and coverage at a second hospital when pre-diagnostic clinical
+context is intact, removed or misaligned, and to establish what the cross-site
+estimate measures.
+
+\noindent\textbf{Methods.} Retrospective evaluation under a machine-readable
+protocol frozen on 18 July 2026, before any data were accessed. Image-only (M1),
+text-only (M2), probability-averaging (M3) and feature-fusion (M4) models were
+trained on MIMIC-CXR-JPG. Per-pathology thresholds and an abstention cutoff
+targeting 80\% coverage were selected on a source calibration tier and applied
+unchanged to CheXpert Plus. Labels for five pathologies came from CheXbert run
+on the impression section. The endpoint was selective five-label error over
+labelled cells, with patient-clustered bootstrap intervals. After the external
+results had been inspected, we audited the pipeline, corrected a verified
+defect, and ran analyses that are labelled post hoc throughout.
+
+\noindent\textbf{Results.} The original estimator counted studies with no
+labelled target as error-free. Such studies made up \NoLabSrcImpression{} of
+the source evaluation cohort and \NoLabExtImpression{} of the external one,
+which produced the originally reported transfer gaps of \HOneMThreeOrigPt{} (M3) and
+\HOneMFourOrigPt{} (M4). Over studies with at least one labelled target the
+gaps were \HOneMThreeEval{} and \HOneMFourEval{}, so the preregistered
+transport-failure hypothesis was not confirmed. The cross-site contrast was not
+robustly identified. For M4 it ranged from \SensUncPosHOneMFourPt{} to
+\SensUnmNegHOneMFourPt{} across defensible handling of uncertain and
+unmentioned labels, and it differed between PA-only and AP-only studies. A
+second training seed shifted the corrected gaps of both multimodal models by
+about $-0.04$, to \SensSeedHOneMThreePt{} (M3) and \SensSeedHOneMFourPt{} (M4). Variability from the
+calibration sample was \CalRatioMin{} to \CalRatioMax{} times the
+evaluation-bootstrap variability. Frozen
+thresholds did not preserve per-pathology operating points: M4 cardiomegaly
+specificity was \MFourCardSpecSrc{} at the source and \MFourCardSpecExt{}
+externally. Realised coverage stayed within 0.05 of target with context intact.
+Misaligned context increased M3 error relative to absent context at the source
+under every specification and both training seeds. At the external site the
+effect held for the first seed but was near zero under the second.
+
+\noindent\textbf{Conclusions.} When report-derived labels are available at
+different rates in two hospitals, the sign of a cross-site selective-risk gap
+depends on analysis choices that this protocol did not fix.
+Cross-site claims require a reference standard that is dense and comparable at
+both sites. Within-site context effects were more stable, at least at the
+source site, but were not fully robust to the training seed.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+
+\section*{Protocol history and preregistration}
+\input{sections/07_protocol_history}
+
+\section*{Data and code availability}
+MIMIC-CXR-JPG v2.1.0 and CheXpert Plus are available to credentialed
+researchers from PhysioNet and Stanford AIMI respectively; neither is
+redistributed. The protocol registry, all analysis code (including the
+revision package \texttt{c3e.revision}), executable commands, tests, and every
+aggregate artifact cited here are in the project repository
+\authorinput{public repository URL and archived release DOI}. Row-level labels,
+predictions, checkpoints and images remain in the protected data environment
+required by the data use agreements.
+
+\section*{Ethics}
+\authorinput{state the ethics determination for secondary analysis of these
+de-identified, credentialed-access datasets (e.g. institutional review or
+exemption, and the PhysioNet and Stanford AIMI data use agreements under which
+the authors accessed the data). No statement is supplied here because none has
+been verified.}
+
+\section*{Funding}
+\authorinput{funding sources, or a statement that there was none}
+
+\section*{Competing interests}
+\authorinput{competing interests of each author}
+
+\section*{Author contributions}
+\authorinput{contributions of each author (e.g. CRediT roles); the repository
+history does not establish individual contributions}
+
+\section*{Acknowledgements}
+\authorinput{optional}
+
+\bibliographystyle{unsrt}
+\bibliography{references_revised}
+
+\end{document}

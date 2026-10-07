@@ -1,0 +1,44 @@
+\section*{Background and Significance}
+
+A selective classifier issues a decision only when its confidence clears a
+cutoff and refers the remaining cases to a human reader. For chest
+radiographs, the per-finding decision thresholds and the abstention cutoff are
+normally chosen on data from the developing hospital. If the system is deployed
+elsewhere unchanged, the operational question is whether that frozen policy
+still delivers the error rate and referral rate it was calibrated for.
+Re-fitting thresholds at the new site answers a different question: whether the
+method can be re-tuned.
+
+Multimodal models add a second shift. Models that read the clinical indication
+or history alongside the image depend on text whose availability and content
+reflect local documentation. Institutional and contextual shift therefore
+travel together, and an evaluation that varies only one cannot estimate how
+they combine.
+
+Each component has been studied separately. Selective classification has been
+extended to distribution shift on non-clinical benchmarks.\cite{liang2024}
+Failure-detection evaluation practice has been examined, finding simple
+confidence baselines hard to beat and proposing the area under the generalised
+risk--coverage curve (AUGRC).\cite{jaeger2023,traub2024,bernhardt2022}
+Rejection mechanisms have been added to multi-label chest-radiograph
+classifiers evaluated within datasets.\cite{aperstein2025} Clinical indication
+and history improve chest-radiograph classification within a single
+source,\cite{jacenkow2022,yang2025} and missing modalities have been treated as
+an architectural problem.\cite{wang2025} Cross-dataset failure of
+chest-radiograph models has been attributed to shift in labels more than in
+images,\cite{cohen2020} and report-derived labels are imperfect proxies for
+image findings.\cite{jain2021} Using the same labeller, such as
+CheXbert,\cite{smit2020} at two sites does not guarantee equal labelling
+accuracy or equal label availability.
+
+We found no study that carries a frozen selective policy to a second hospital
+while manipulating pre-diagnostic context under preregistered rules. We also
+found none that isolates, with predictions and thresholds held fixed, how label
+availability and handling determine the transported risk. This paper does
+both. It reports a preregistered compound-shift evaluation, then an audit,
+carried out after the external results were seen, which found that the
+originally reported cross-site degradation was an artifact of the selective-risk
+estimator. The significance is methodological and practical. Cross-site
+selective-risk benchmarks built on report-derived labels can reach opposite
+conclusions under defensible analysis choices, and we show how to detect and
+bound this.

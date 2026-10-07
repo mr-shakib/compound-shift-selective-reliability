@@ -1,0 +1,22 @@
+{
+ "M2": {
+  "cutoff_0.80": 0.067507,
+  "thresholds": {
+   "Atelectasis": 0.973,
+   "Cardiomegaly": 0.618,
+   "Consolidation": 0.527,
+   "Edema": 0.5,
+   "Pleural Effusion": 0.7
+  }
+ },
+ "M3": {
+  "cutoff_0.80": 0.033551,
+  "thresholds": {
+   "Atelectasis": 0.971,
+   "Cardiomegaly": 0.555,
+   "Consolidation": 0.536,
+   "Edema": 0.53,
+   "Pleural Effusion": 0.591
+  }
+ }
+}

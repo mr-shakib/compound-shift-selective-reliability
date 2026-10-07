@@ -1,0 +1,61 @@
+\section{Introduction}
+\label{sec:intro}
+
+A selective classifier returns a decision only when its confidence clears a
+cutoff and refers the remaining cases to a human reader. The cutoff fixes an
+operating point, a coverage, and with it the workload the system places on
+radiology. In practice the cutoff, like the per-finding decision thresholds, is
+chosen on data from the hospital where the system was developed. If the
+system is then deployed elsewhere unchanged, the operational question is
+whether that frozen policy still delivers the error rate and the referral rate
+it was calibrated for. Re-fitting the cutoff at the new site answers a related
+but different question: whether the method can be re-tuned.
+
+Multimodal chest-radiograph models add a second source of shift. Models that
+read the clinical indication or history alongside the image depend on text
+whose availability and content reflect local documentation practice. A model
+that relies on that text at one site may meet thinner, absent or differently
+written context at the next. Institutional and contextual shift therefore
+travel together, and an evaluation that varies only one of them cannot
+estimate how they combine.
+
+We designed and preregistered an evaluation that crosses the two. A source
+hospital (MIMIC-CXR-JPG) was used for development and for freezing the policy,
+and an external hospital (CheXpert Plus) for evaluation only. At each site
+pre-diagnostic context was left intact, removed, or replaced with another
+patient's. The policy was transferred without refitting.
+
+This revision reports that evaluation together with an audit carried out after
+the external results had been inspected, and the audit changed the principal
+conclusion. The selective-risk estimator used in the original analysis counted
+studies whose report mentioned none of the five target pathologies as
+correctly classified. Such studies were far more common at the source than at
+the external site, and this produced the reported cross-site degradation.
+Correcting the defect removes that degradation under the primary label
+handling. The corrected cross-site
+contrast is not stable either: it moves by more than its own interval across
+defensible choices about uncertain and unmentioned labels, aggregation, label
+source, training seed and view stratum. We therefore report the study as two
+linked contributions:
+\begin{itemize}
+  \item a \emph{compound-shift evaluation protocol}, specified as a reusable
+        machine-readable registry with frozen thresholds, controlled context
+        interventions and explicit invariants (\cref{sec:methods}), together
+        with its worked application; and
+  \item a \emph{controlled demonstration that the cross-site verdict is
+        endpoint-dependent}. Holding studies, predictions, thresholds and
+        cutoffs fixed and changing one factor at a time, we show which
+        analysis choices drive the sign of the transfer estimate and why
+        (\cref{sec:res-label-source}).
+\end{itemize}
+Within-site findings about context interventions are reported alongside. For
+the late-fusion model at the source site they held across every specification
+and both training seeds. At the external site they did not survive the second
+seed.
+
+We claim no new architecture or uncertainty method; the backbones are
+conventional and held fixed. This is not a prospective, clinical or regulatory
+validation, and the labels are automatic report-derived labels, not an expert
+reference standard (\cref{sec:limitations}). Every analysis added after the
+external results were seen is marked as post hoc, dated, and reported
+alongside the original estimates, which are retained.

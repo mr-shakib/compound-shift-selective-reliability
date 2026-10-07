@@ -1,0 +1,88 @@
+\section*{Discussion}
+
+The preregistered transport-failure hypothesis was not confirmed once a
+verified estimator defect was corrected. The original analysis counted accepted
+studies whose report mentioned none of the five targets as correctly
+classified. These studies made up about half of the source cohort and a fifth
+of the external one, so the originally reported transfer gaps measured a difference in
+label availability between two report corpora rather than a change in model
+error. The near-zero corrected gaps are themselves fragile: label handling,
+label source, aggregation, view and training seed each moved them by more than
+their intervals, in both directions. The original question, whether a frozen
+selective policy's error rises at a new hospital, cannot be answered with these
+labels.
+
+Three findings were more stable. First, frozen thresholds kept coverage but not
+operating points: external specificity fell for several findings under both
+label handlings examined. A deployment monitoring coverage alone would not
+detect such a shift. Second, misaligned context harmed late fusion more than
+absent context at the source under every specification, permutation and seed.
+The same effect at the external site did not survive the second seed. Third,
+better error ranking at the source, from a decision-aware score, did not make
+the operating point more transportable.
+
+\subsection*{Is the correction outcome-driven?}
+The correction was made after the external results were known, and it reverses
+the preregistered primary result, so it deserves scrutiny. Four features argue
+against an outcome-driven choice. First, the defect contradicts the
+implementation's own documented intent, and the corrected estimator applies the
+registered definition without other changes. Second, the original estimator is
+an exact multiple of the corrected one, and the multiplier, the evaluable share
+of accepted studies, is reported for both sites. Third, the correction removes
+a confirmed hypothesis rather than creating one. Fourth, no alternative
+aggregation or label handling restores a robust transfer failure: the sign
+depends on the choice. We report both estimators and every alternative so that
+readers can weigh this history.
+
+\subsection*{What the endpoint measures}
+Selective error over report-derived labels is an error rate over the cells a
+labeller chose to label, in the studies a policy accepted. Three mechanisms can
+change it between hospitals. Case mix differed, with effusion and edema roughly
+twice as prevalent externally when unmentioned findings counted as negative.
+Documentation differed: source impressions often omit all targets, external
+impressions carry more uncertain mentions, and findings sections are absent
+from most external studies. Labeller accuracy may also differ, because report
+labels are imperfect image proxies and the external labelling settings are
+undocumented.\cite{jain2021} Matching aggregate positive rates therefore did
+not establish comparable labels. The controlled analysis shows that selective
+missingness, meaning which cells carry a label at all, drove the originally reported
+contrast and remains a first-order driver after correction. This sharpens an
+earlier argument that cross-dataset failure of chest-radiograph models reflects
+label shift.\cite{cohen2020} Here, label shift is not a competing explanation
+for model behaviour but a property of the measurement itself. It is strong
+enough to set the sign of a selective-risk comparison while predictions and
+thresholds are held fixed.
+
+\subsection*{Implications for evaluation practice}
+The defect is easy to make and invisible in aggregate output. Any per-study
+loss averaged over observed labels needs an explicit rule for studies with
+none; here a guard against division by zero silently chose one. For cross-site
+evaluations built on report-derived labels, we recommend six practices:
+\begin{itemize}
+  \item report, per site, the share of studies and of accepted studies with at
+        least one labelled target;
+  \item test how the estimator treats unlabelled studies;
+  \item fix and report the handling of uncertain and unmentioned labels;
+  \item report pathology-specific operating characteristics;
+  \item replay context interventions to confirm their unit and constraints;
+  \item quantify calibration-sample uncertainty alongside the evaluation
+        bootstrap.
+\end{itemize}
+Where the sign of a cross-site contrast matters, a reference standard that is
+dense and comparable at both sites is needed. We did not evaluate target-site
+recalibration, which the protocol prohibits. It answers a different question,
+whether a method can be re-tuned, and we make no claim about its effect.
+
+\subsection*{Limitations}
+All labels are automatic and report-derived. No expert reference standard was
+available; a blinded adjudication protocol is provided (\ssec{ssec:adjud}). The
+estimator correction and all revision analyses followed inspection of external
+results. The correction fixes a verified defect but reverses the original conclusion, and both estimates are reported. Intervals condition on one
+calibration sample and one C2 realisation. Two training seeds cannot establish
+seed-independence, and the second seed changed several estimates materially.
+C2 was applied per image; synthetic context removal differs from naturally
+missing context; and the informativeness rule measures length, not content.
+The evaluation covers one pair of hospitals in one direction. Demographic
+analyses are external-only and exploratory. Two pre-data planning documents
+existed; the prose plan's one-image-per-study and concordant-study
+sensitivities were not run.

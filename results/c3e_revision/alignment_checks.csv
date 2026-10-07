@@ -1,0 +1,11 @@
+rows,patients_match,labels_match,mask_match,restored_lost_images,site,label_source,threshold,cache_suffix
+14766,True,True,True,0,source,impression,3,
+9293,True,True,True,0,source,findings,3,
+132923,True,True,True,1,external,impression,3,
+132923,True,True,True,1,external,findings,3,
+13600,True,True,True,0,source,impression,5,__T5
+8381,True,True,True,0,source,impression,10,__T10
+111040,True,True,True,1,external,impression,5,__T5
+23146,True,True,True,1,external,impression,10,__T10
+14766,True,True,True,0,source,impression,3,__seed20260719
+132922,True,True,True,0,external,impression,3,__seed20260719
