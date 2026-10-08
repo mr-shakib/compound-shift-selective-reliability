@@ -53,10 +53,10 @@ def main() -> int:
     abstract = main_tex.split("% ABSTRACT-START")[1].split("% ABSTRACT-END")[0]
     abstract = re.sub(r"\\textbf\{(Objective|Materials and Methods|Results|Discussion|Conclusion):\}", "", abstract)
     ab = words(plain(abstract, mac))
-    all_tex = "".join(f.read_text() for f in secs)
+    all_tex = main_tex + "".join(f.read_text() for f in secs)
     tables = len(re.findall(r"\\begin\{table\}", all_tex))
     figures = len(re.findall(r"\\begin\{figure\}", all_tex))
-    holes = len(re.findall(r"\\authorinput\{", main_tex + all_tex))
+    holes = len(re.findall(r"\\authorinput\{", all_tex))
     alt = len(re.findall(r"\\alttext\{", all_tex))
     (HERE / "wordcount.tex").write_text(f"{body:,}\n")
     (HERE / "abstractcount.tex").write_text(f"{ab}\n")

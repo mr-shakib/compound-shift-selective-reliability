@@ -16,19 +16,6 @@ external cohort. Where both sections labelled a cell, impression and findings
 labels agreed in \AgreeMinSrc{}--\AgreeMaxExt{} of cells. The two endpoints
 differ mainly in which cells carry a label.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig2_label_composition.pdf}
-\caption{Share of evaluation studies whose label for each target is positive,
-negative, uncertain or unmentioned, by site and report section.}
-\label{fig:labels}
-\alttext{Two panels of horizontal stacked bars, one for impression-derived and
-one for findings-derived labels. Each bar is one target pathology at one site,
-divided into positive, negative, uncertain and unmentioned shares. Unmentioned
-labels dominate most bars; external findings-derived labels are almost
-entirely unmentioned.}
-\end{figure}
-
 \subsection*{Registered hypotheses after correction}
 \Cref{tab:hyp} reports every originally computed contrast under both
 estimators. The original estimator confirmed H1: \HOneMThreeOrig{} for late
@@ -40,7 +27,7 @@ registered H3, which equals H2. The post hoc transfer-gap H3 was negative for
 both models; corrected, its magnitude fell below 0.02, so the previously
 reported ``reversal at materiality'' does not survive.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering\footnotesize
 \caption{Contrasts under the original and corrected (evaluable-study)
 estimators, with verdicts (V) under the registered rule. C, confirmed; S, same
@@ -69,23 +56,6 @@ and \APShareExt{} of external studies. Pathology-specific gaps for M4 were
 heterogeneous under the primary labels: \PathMFourCard{} for cardiomegaly and
 \PathMFourAtel{} for atelectasis (\ssec{ssec:path}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig1_h1_specifications.pdf}
-\caption{Transfer gap (H1) for each model under 15 specifications. Squares use
-the original estimator. Label-handling and aggregation rows share predictions,
-thresholds and cutoffs; coverage rows change the cutoff, $T$ rows the cohort,
-findings rows the labels, cohort and thresholds, and seed rows the models.
-Dashed lines mark $\pm$0.02.}
-\label{fig:spec}
-\alttext{Four panels, one per model, each a forest plot of the external-minus-source
-selective-error difference with 95\% intervals for 15 analysis
-specifications. Original-estimator points lie well to the right of zero for the
-primary labels and well to the left for findings labels. Corrected estimates
-cluster near zero but range from about $-0.05$ to $+0.13$ across label handling
-and training seed.}
-\end{figure}
-
 \subsection*{Controlled label-source decomposition}
 The original findings-label sensitivity changed four things at once: labels,
 source cohort, thresholds and C2 donors. Its reported reversal of H1 reproduces
@@ -101,7 +71,7 @@ same contrasts (steps A1c). Re-selecting thresholds on findings labels also
 changed external decisions in \SOneCellsChanged{} cells, so the earlier
 argument that ``only the labels differ'' did not hold.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering\footnotesize
 \caption{Controlled label-source decomposition of H1 (point estimates;
 intervals in the supplement). Evaluable: share of studies with at least one
@@ -131,30 +101,6 @@ expected-loss score fitted on the source calibration tier ranked errors better
 (\FailAUROCELMin{}--\FailAUROCELMax{}). Its coverage transported worse, reaching
 \ELMFourExtCov{} externally for M4 (\stab{stab:comparators}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig4_operating_points.pdf}
-\caption{M4 sensitivity and specificity among accepted studies at the source
-(circles) and external site (squares), labelled cells only.}
-\label{fig:operating}
-\alttext{Dot plot with one row per pathology and paired source and external
-markers, for sensitivity (left) and specificity (right). Sensitivity changes
-less than specificity. Specificity drops markedly at the external site for cardiomegaly, edema
-and pleural effusion.}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig3_risk_coverage.pdf}
-\caption{Risk--coverage curves over evaluable studies (C0) at each site,
-ranked by the frozen confidence score. Markers show the frozen operating point.}
-\label{fig:rc}
-\alttext{Two line charts, source and external, of selective error against
-coverage for four models. Error rises with coverage for every model; feature
-fusion is lowest and the text-only model highest at both sites. Operating-point
-markers sit near 80\% coverage.}
-\end{figure}
-
 \subsection*{Context interventions within each site}
 For M3, misaligned context gave higher error than absent context at the source
 under every specification, C2 permutation and both training seeds
@@ -166,20 +112,6 @@ depended on label handling. Interventions acted mainly through changed
 predictions. Even so, accepted sets under C0 and intervention overlapped only
 partially (Jaccard \JaccardMin{}--\JaccardMax{}; \stab{stab:context}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig5_h4_within_site.pdf}
-\caption{Within-site effect of misaligned versus absent context (H4) for M3
-and M4 across specifications, C2 permutations and training seeds (corrected
-estimator unless stated).}
-\label{fig:h4}
-\alttext{Two forest-plot panels, source and external, with paired intervals for
-M3 and M4 across specifications. At the source, M3 intervals lie above zero in
-every row. At the external site, M3 intervals lie above zero except under the
-second training seed, and M4 intervals fall on both sides of zero depending on
-label handling.}
-\end{figure}
-
 \subsection*{Uncertainty beyond the evaluation bootstrap}
 Resampling calibration patients and re-applying the frozen selection rule
 moved corrected H1 estimates with standard deviations
@@ -190,7 +122,7 @@ per-pathology threshold standard deviations reached \ThrSDMaxMFour{}. The
 reported intervals therefore understate total uncertainty for cross-site
 contrasts.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering\footnotesize
 \caption{H1 variability from resampling evaluation patients (bootstrap SD,
 approximated from the 95\% interval) and from resampling calibration patients

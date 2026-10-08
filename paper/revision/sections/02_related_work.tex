@@ -25,12 +25,13 @@ one hospital to another while manipulating clinical context, and they do not
 ask how report-derived label availability enters the risk being transported.
 
 \paragraph{Rejection for multi-label chest radiographs.}
-Aperstein and colleagues add entropy- and confidence-interval-based rejection
-to a DenseNet-121 multi-pathology classifier. They tune rejection thresholds by
-quantile calibration and report accuracy--coverage trade-offs on PadChest, NIH
-ChestX-ray14 and MIMIC-CXR~\cite{aperstein2025rejection}. From the material we
-could read, evaluation is within dataset and no clinical text is used; we could
-not establish whether thresholds were transferred between datasets.
+Aperstein and colleagues add per-pathology entropy-based rejection to a
+DenseNet-121 multi-pathology classifier and tune rejection thresholds by
+quantile calibration. They evaluate on NIH ChestX-ray14, MIMIC-CXR and PadChest
+within dataset, cross-dataset on a source excluded from training, and under
+leave-one-dataset-out shift in both directions~\cite{aperstein2025rejection}.
+The model uses images only. From the published abstract we could not establish
+whether rejection thresholds were carried unchanged between datasets.
 
 \paragraph{Clinical context as an input.}
 Indication text improves chest-radiograph classification on MIMIC-CXR when

@@ -9,8 +9,10 @@
 %   body <= 4,000 words (Background and Significance .. Conclusion; excludes
 %   title page, abstract, references, figures, tables); structured abstract
 %   <= 250 words (Objective / Materials and Methods / Results / Discussion /
-%   Conclusion); <= 4 tables; <= 6 figures (also uploaded separately, each with
-%   alt text under its legend); references unlimited, numbered in order;
+%   Conclusion); <= 4 tables, placed where first cited; <= 6 figures, uploaded
+%   as separate files, with legends at the end of the manuscript and alt text
+%   under each legend; references unlimited, numbered in order, cited in square
+%   brackets immediately after punctuation, listed in JAMIA style;
 %   double-spaced; LaTeX accepted with compiled PDF; data availability
 %   statement required; CRediT contributions; AI use disclosed in the cover
 %   letter and in Methods or Acknowledgements.
@@ -26,25 +28,24 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
-\usepackage{graphicx}
 \usepackage{adjustbox}
 \usepackage{array}
 \usepackage{xcolor}
-\usepackage[super]{cite}
+\usepackage[noadjust]{cite}  % JAMIA: [n] directly after punctuation, no space
 \usepackage{setspace}
 \usepackage[modulo]{lineno}
 \usepackage{caption}
+\usepackage{float}
 \usepackage{microtype}
 \usepackage{xr-hyper}
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
-\captionsetup{font=small,labelfont=bf}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
 \setlength{\emergencystretch}{3em}
 \doublespacing
 \linenumbers
 
 \externaldocument[S-]{supplement_jamia_r1}
-\graphicspath{{../revision/figures/}}
 \input{../revision/generated/numbers}
 
 \newcommand{\authorinput}[1]{\textcolor{red!70!black}{\textbf{[AUTHOR INPUT REQUIRED: #1]}}}
@@ -67,7 +68,9 @@ evaluation with label-dependent cross-site conclusions\par}
 \noindent Shakib Howlader, BSc,\textsuperscript{1}
 \url{https://orcid.org/0009-0009-5318-2999}\\
 Adnan Rahman Sayeem, BSc,\textsuperscript{1}
-\url{https://orcid.org/0009-0008-0403-0617}
+\url{https://orcid.org/0009-0008-0403-0617}\\
+Shahadat Hossain, MSc,\textsuperscript{1}
+\url{https://orcid.org/0000-0003-4545-2898}
 
 \vspace{0.8em}
 \noindent\textsuperscript{1}Department of Computer Science and Engineering,
@@ -146,11 +149,10 @@ different rates, cross-site selective-risk comparisons are not identified.
 We thank the creators of MIMIC-CXR, MIMIC-CXR-JPG and PhysioNet, and of CheXpert
 Plus at the Stanford Center for Artificial Intelligence in Medicine and Imaging,
 for making the data available.\cite{johnson2019cxr,johnson2024cxrdata,johnson2019jpgpaper,johnson2024jpgdata,pollard2026,chambon2024}
-\authorinput{any further acknowledgments}
 
 \noindent\textit{Use of generative AI.} The authors used generative AI
-assistants throughout this project: ChatGPT and Codex (OpenAI) and Claude
-(Anthropic) helped plan the study, write and review analysis code, and draft
+assistants throughout this project: ChatGPT (OpenAI), including its Codex
+coding agent, and Claude (Anthropic) helped plan the study, write and review analysis code, and draft
 and edit text. During the revision, Claude was also used to audit the analysis,
 run analyses through code executed on the authors' machine, generate tables and
 figures, and verify references. No images, report text, or patient-, study- or
@@ -164,12 +166,14 @@ This research received no specific grant from any funding agency in the public,
 commercial, or not-for-profit sectors.
 
 \section*{Author contributions}
-\authorinput{CRediT roles for each author, e.g. Conceptualization, Methodology,
-Software, Formal analysis, Investigation, Data curation, Writing -- original
-draft, Writing -- review \& editing, Visualization, Supervision}
+Shakib Howlader: Conceptualization, Methodology, Software, Formal analysis,
+Investigation, Data curation, Visualization, Project administration, Writing --
+original draft, Writing -- review \& editing. Adnan Rahman Sayeem: Validation,
+Writing -- review \& editing. Shahadat Hossain: Supervision, Writing -- review \&
+editing.
 
 \section*{Competing interests}
-\authorinput{competing interests of each author, or ``None declared.'' if true}
+None declared.
 
 \section*{Data availability}
 MIMIC-CXR, MIMIC-CXR-JPG and CheXpert Plus are available to credentialed
@@ -179,11 +183,75 @@ redistributed.\cite{johnson2024cxrdata,johnson2024jpgdata,chambon2024} The
 machine-readable protocol, its amendment log, all analysis code, tests,
 executable commands and every aggregate result reported here are available at
 \url{https://github.com/mr-shakib/compound-shift-selective-reliability}
-(archived release: \authorinput{Zenodo DOI}). Row-level labels,
+(archived release: \url{https://doi.org/10.5281/zenodo.23213133}).\cite{howlader2026zenodo} Row-level labels,
 predictions, model checkpoints and images cannot be shared under the data use
 agreements.
 
 \bibliographystyle{unsrt}
 {\raggedright\bibliography{references_jamia}}
+
+% ------------------------------------------------------------------ figure legends
+% JAMIA: figures are uploaded as separate files (figures_for_upload/); legends go at the
+% end of the manuscript, each with its alt text directly underneath, preceded by "Alt text:".
+\clearpage
+\section*{Figure legends}
+
+\begin{figure}[H]
+\caption{Share of evaluation studies whose label for each target is positive,
+negative, uncertain or unmentioned, by site and report section.}
+\label{fig:labels}
+\alttext{Two panels of horizontal stacked bars, one for impression-derived and
+one for findings-derived labels. Each bar is one target pathology at one site,
+divided into positive, negative, uncertain and unmentioned shares. Unmentioned
+labels dominate most bars; external findings-derived labels are almost
+entirely unmentioned.}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Transfer gap (H1) for each model under 15 specifications. Squares use
+the original estimator. Label-handling and aggregation rows share predictions,
+thresholds and cutoffs; coverage rows change the cutoff, $T$ rows the cohort,
+findings rows the labels, cohort and thresholds, and seed rows the models.
+Dashed lines mark $\pm$0.02.}
+\label{fig:spec}
+\alttext{Four panels, one per model, each a forest plot of the external-minus-source
+selective-error difference with 95\% intervals for 15 analysis
+specifications. Original-estimator points lie well to the right of zero for the
+primary labels and well to the left for findings labels. Corrected estimates
+cluster near zero but range from about $-0.05$ to $+0.13$ across label handling
+and training seed.}
+\end{figure}
+
+\begin{figure}[H]
+\caption{M4 sensitivity and specificity among accepted studies at the source
+(circles) and external site (squares), labelled cells only.}
+\label{fig:operating}
+\alttext{Dot plot with one row per pathology and paired source and external
+markers, for sensitivity (left) and specificity (right). Sensitivity changes
+less than specificity. Specificity drops markedly at the external site for cardiomegaly, edema
+and pleural effusion.}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Risk--coverage curves over evaluable studies (C0) at each site,
+ranked by the frozen confidence score. Markers show the frozen operating point.}
+\label{fig:rc}
+\alttext{Two line charts, source and external, of selective error against
+coverage for four models. Error rises with coverage for every model; feature
+fusion is lowest and the text-only model highest at both sites. Operating-point
+markers sit near 80\% coverage.}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Within-site effect of misaligned versus absent context (H4) for M3
+and M4 across specifications, C2 permutations and training seeds (corrected
+estimator unless stated).}
+\label{fig:h4}
+\alttext{Two forest-plot panels, source and external, with paired intervals for
+M3 and M4 across specifications. At the source, M3 intervals lie above zero in
+every row. At the external site, M3 intervals lie above zero except under the
+second training seed, and M4 intervals fall on both sides of zero depending on
+label handling.}
+\end{figure}
 
 \end{document}
