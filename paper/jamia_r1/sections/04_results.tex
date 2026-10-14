@@ -132,20 +132,15 @@ moved corrected H1 estimates with standard deviations
 \CalRatioMin{}--\CalRatioMax{} times the evaluation-bootstrap standard
 deviations (\cref{tab:unc}). For M4 the calibration standard deviation was
 \CalSDMFour{} against \EvalSDMFour{} from the evaluation bootstrap, and
-per-pathology threshold standard deviations reached \ThrSDMaxMFour{}. Across
-\SeedsN{} training runs, the corrected H1 ranged from \SeedHOneMThreeMin{} to
-\SeedHOneMThreeMax{} for M3 and from \SeedHOneMFourMin{} to \SeedHOneMFourMax{}
-for M4 (between-seed SD \SeedSDHOneMThree{} and \SeedSDHOneMFour{};
-\stab{stab:seeds}). The reported intervals therefore understate total
-uncertainty for cross-site contrasts, and training variation is its largest
-measured source.
+per-pathology threshold standard deviations reached \ThrSDMaxMFour{}. The
+reported intervals therefore understate total uncertainty for cross-site
+contrasts.
 
 \begin{table}[H]
 \centering\footnotesize
 \caption{H1 variability from resampling evaluation patients (bootstrap SD,
-approximated from the 95\% interval), from resampling calibration patients with
-the frozen selection rule re-applied (200 replicates), and across training
-runs (\SeedsN{} seeds, thresholds re-selected by the frozen rule for each).}
+approximated from the 95\% interval) and from resampling calibration patients
+with the frozen selection rule re-applied (200 replicates).}
 \label{tab:unc}
 \begin{adjustbox}{max width=\linewidth}
 \input{../revision/generated/tab_uncertainty}

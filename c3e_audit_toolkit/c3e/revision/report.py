@@ -424,17 +424,14 @@ class Gen:
         cu = self.csv("calibration_uncertainty")
         e = self.H(est="evaluable_study")
         o = self.H(est="original")
-        sm = self.csv("seed_summary")
-        sa = sm[(sm.train_seed.astype(str) == "all") & (sm.hypothesis == "H1")]
-        lines = [r"\begin{tabular}{llrrrrr}", r"\toprule",
-                 r"Model & Estimator & H1 & SD (evaluation bootstrap) & SD (calibration resample) & Calibration 2.5--97.5\% & SD (training seeds)\\", r"\midrule"]
+        lines = [r"\begin{tabular}{llrrrr}", r"\toprule",
+                 r"Model & Estimator & H1 & SD (evaluation bootstrap) & SD (calibration resample) & Calibration 2.5--97.5\%\\", r"\midrule"]
         for m in ("M1", "M2", "M3", "M4"):
             for est, df in (("original", o), ("evaluable_study", e)):
                 x = df[(df.hypothesis == "H1") & (df.model == m)].iloc[0]
                 c = cu[(cu.model == m) & (cu.estimator == est)].iloc[0]
                 sd_eval = (x.ci_high - x.ci_low) / 3.92
-                g = sa[(sa.model == m) & (sa.estimator == est)].iloc[0]
-                lines.append(f"{m if est == 'original' else ''} & {'original' if est == 'original' else 'evaluable-study'} & {f(x.point_estimate)} & {sd_eval:.4f} & {c.h1_sd_calibration:.4f} & {ci(c.h1_q025, c.h1_q975)} & {g.sd_between_seeds:.4f}\\\\")
+                lines.append(f"{m if est == 'original' else ''} & {'original' if est == 'original' else 'evaluable-study'} & {f(x.point_estimate)} & {sd_eval:.4f} & {c.h1_sd_calibration:.4f} & {ci(c.h1_q025, c.h1_q975)}\\\\")
         lines += [r"\bottomrule", r"\end{tabular}"]
         self.write("tab_uncertainty", "\n".join(lines))
         ratios = []
@@ -557,69 +554,6 @@ class Gen:
         atel = d[(d.model == "M1") & (d.pathology == "Atelectasis")].iloc[0]
         self.mac("AtelNegSrc", n(atel.n_neg_source))
         self.mac("AtelNegExt", n(atel.n_neg_external))
-
-    def t_seeds(self):
-        """Post hoc: training-seed replicates; seeds still running are shown as pending."""
-        sm, st = self.csv("seed_summary"), self.csv("seed_status")
-        dd = self.csv("seed_discrimination")
-        pdisc = self.csv("discrimination")
-        pdisc = pdisc[pdisc.pathology == "macro"]
-        per = sm[sm.train_seed.astype(str) != "all"].copy()
-        per["train_seed"] = per.train_seed.astype(int)
-        per["site"] = per.site.fillna("")
-        agg = sm[sm.train_seed.astype(str) == "all"].copy()
-        agg["site"] = agg.site.fillna("")
-        seeds = [20260718, 20260719] + [int(x) for x in st.train_seed]
-        done = [20260718, 20260719] + [int(x) for x in st[st.status == "done"].train_seed]
-
-        def cell(h, m, est, seed, site=""):
-            x = per[(per.hypothesis == h) & (per.model == m) & (per.estimator == est)
-                    & (per.site == site) & (per.train_seed == seed)]
-            return f"{f(x.iloc[0].point_estimate)} {ci(x.iloc[0].ci_low, x.iloc[0].ci_high)}" if len(x) else "pending"
-
-        def auc(m, seed):
-            if seed == 20260718:
-                x = pdisc[pdisc.model == m].iloc[0]
-                return f"{x.auroc_source:.3f}/{x.auroc_external:.3f}"
-            x = dd[(dd.model == m) & (dd.train_seed == seed)]
-            return f"{x.iloc[0].auroc_macro_source:.3f}/{x.iloc[0].auroc_macro_external:.3f}" if len(x) else "pending"
-
-        cols = [("H1", "M3", "evaluable_study", ""), ("H1", "M4", "evaluable_study", ""),
-                ("H1", "M4", "original", ""), ("H4", "M3", "evaluable_study", "external")]
-        lines = [r"\begin{tabular}{llllllll}", r"\toprule",
-                 r"Training seed & H1 M3 & H1 M4 & H1 M4 (original) & H4 M3 external & AUROC M1 & AUROC M2 & AUROC M4\\",
-                 r"\midrule"]
-        for sd in seeds:
-            tag = f"{sd}" + (" (primary)" if sd == 20260718 else "")
-            lines.append(f"{tag} & " + " & ".join(cell(h, m, est, sd, site) for h, m, est, site in cols)
-                         + " & " + " & ".join(auc(m, sd) for m in ("M1", "M2", "M4")) + "\\\\")
-        lines.append(r"\midrule")
-        row_mean, row_rng = ["Mean (SD)"], ["Range"]
-        for h, m, est, site in cols:
-            g = agg[(agg.hypothesis == h) & (agg.model == m) & (agg.estimator == est) & (agg.site == site)].iloc[0]
-            row_mean.append(f"{f(g['mean'])} ({g.sd_between_seeds:.4f})")
-            row_rng.append(f"{f(g['min'])} to {f(g['max'])}")
-        lines.append(" & ".join(row_mean) + " & & & \\\\")
-        lines.append(" & ".join(row_rng) + " & & & \\\\")
-        lines += [r"\bottomrule", r"\end{tabular}"]
-        self.write("supp_seeds", "\n".join(lines))
-
-        words = {2: "two", 3: "three", 4: "four", 5: "five"}
-        self.mac("SeedsN", words.get(len(done), str(len(done))))
-        for m, w in (("M3", "MThree"), ("M4", "MFour")):
-            g = agg[(agg.hypothesis == "H1") & (agg.model == m) & (agg.estimator == "evaluable_study")].iloc[0]
-            self.mac(f"SeedHOne{w}Min", f(g["min"]))
-            self.mac(f"SeedHOne{w}Max", f(g["max"]))
-            self.mac(f"SeedSDHOne{w}", f"{g.sd_between_seeds:.3f}")
-        g = agg[(agg.hypothesis == "H4") & (agg.model == "M3") & (agg.site == "external")
-                & (agg.estimator == "evaluable_study")].iloc[0]
-        self.mac("SeedHFourMThreeExtPos", f"{int(g.n_ci_above_zero)} of {int(g.n_seeds)}")
-        g = agg[(agg.hypothesis == "H4") & (agg.model == "M3") & (agg.site == "source")
-                & (agg.estimator == "evaluable_study")].iloc[0]
-        self.mac("SeedHFourMThreeSrcPos", f"{int(g.n_ci_above_zero)} of {int(g.n_seeds)}")
-        m2 = [float(pdisc[pdisc.model == "M2"].iloc[0].auroc_external)] + \
-            [float(x) for x in dd[dd.model == "M2"].auroc_macro_external]
-        self.mac("SeedAucMTwoExtMax", f"{max(m2):.3f}")
 
     def t_multiplicity(self):
         lines = [r"\begin{tabular}{lllrrr}", r"\toprule",
@@ -1131,7 +1065,6 @@ class Gen:
         self.t_pathology()
         self.t_multiplicity()
         self.t_discrimination()
-        self.t_seeds()
         self.s_tables()
         self.s_gpu_status()
         self.figures(sens)

@@ -236,17 +236,6 @@ def a_discrimination(root: Path) -> dict[str, Any]:
     return {"discrimination": discrimination(load_site(root, "source"), load_site(root, "external"))}
 
 
-def a_seeds(root: Path) -> dict[str, Any]:
-    from . import seeds as SD
-    r = SD.replicates(root)
-    h = pd.read_csv(root / OUT / "hypotheses.csv")
-    primary = h[(h.analysis == "primary") & (h.label_variant == "primary")]
-    second = pd.read_csv(root / OUT / "followup_m2m3_contrasts.csv")
-    r["seed_summary"] = SD.summary(primary, second, pd.DataFrame(r["seed_contrasts"]))
-    r["seed_discrimination"] = SD.second_seed_discrimination(root) + r["seed_discrimination"]
-    return r
-
-
 def a_expert_valid(root: Path) -> dict[str, Any]:
     from .expert_valid import analyse
     return analyse(root)
@@ -361,7 +350,7 @@ def a_stage6_curves(root: Path) -> dict[str, Any]:
 ANALYSES = {
     "alignment": a_alignment, "hypotheses": a_hypotheses, "pathology": a_pathology, "label_source": a_label_source,
     "label_audit": a_label_audit, "selective": a_selective, "discrimination": a_discrimination,
-    "seeds": a_seeds, "expert_valid": a_expert_valid,
+    "expert_valid": a_expert_valid,
     "context": a_context, "c2": a_c2,
     "subgroups": a_subgroups, "comparators": a_comparators, "stage6_curves": a_stage6_curves,
     "calibration_uncertainty": a_calibration_uncertainty, "followup": a_followup, "context_scan": a_context_scan,
@@ -372,13 +361,10 @@ def write(root: Path, results: dict[str, Any]) -> None:
     out = root / OUT
     out.mkdir(parents=True, exist_ok=True)
     json_only = {"comparator_fits", "label_source_meta", "stage6_runs_from_logs",
-                 "followup_m2m3_selection", "seed_selection"}
-    # Tables that may legitimately be empty (pending seeds) stay CSV either way.
-    csv_always = {"seed_contrasts", "seed_coverage_gap"}
+                 "followup_m2m3_selection"}
     for name, obj in results.items():
-        if name in csv_always or (name not in json_only and isinstance(obj, list) and obj and isinstance(
-                obj[0], dict) and not any(isinstance(v, list) and v and isinstance(v[0], dict)
-                                          for v in obj[0].values())):
+        if name not in json_only and isinstance(obj, list) and obj and isinstance(obj[0], dict) and not any(
+                isinstance(v, list) and v and isinstance(v[0], dict) for v in obj[0].values()):
             _write_csv(out / f"{name}.csv", obj)
         else:
             _write_json(out / f"{name}.json", obj)

@@ -75,10 +75,6 @@ thresholds, nothing fitted on external data, aggregates only in `results/`):
 
 - per-site discrimination (AUROC) computed from the cached evaluation-tier
   predictions;
-- training-seed replicates 20260720, 20260721 and 20260722 on the model-train
-  tier, with thresholds and cutoffs re-selected on the calibration tier by the
-  frozen Stage 7 rule and scoring on both evaluation sites
-  (`scripts/run_seed_replicates.sh`, `c3e.revision.seeds`);
 - tools and documents for an expert-adjudication study.
 
 Expert adjudication is **not planned** (author decision, 2026-10-15); its tools

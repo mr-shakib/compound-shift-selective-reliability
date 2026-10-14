@@ -144,28 +144,22 @@ No `[AUTHOR INPUT REQUIRED]` markers remain in any file.
 
 The manuscript changed substantially on 2026-10-14: new title and framing,
 prespecified rather than preregistered, GitHub time stamp, deviations table,
-per-site AUROC, training-seed replicates, study-design figure (now six
-figures), eleven added references and a corrected TRIPOD+AI checklist. The
-co-author sign-offs of 2026-10-09 covered the earlier version, so:
+per-site AUROC, study-design figure (now six figures), eleven added references
+and a corrected TRIPOD+AI checklist. The co-author sign-offs of 2026-10-09
+covered the earlier version, so:
 
-1. **Seed replicates.** Run `bash scripts/run_seed_replicates.sh` (about 3
-   days). Then run `python -m c3e.revision.runner --only seeds`,
-   `python -m c3e.revision.report` and `./build.sh`. Rewrite the sentences that
-   still describe one replicate seed: the abstract ("a second training seed
-   shifted…"), Results ("A second training seed moved…", and the H4 sentence
-   "both training seeds"), the Discussion ("permutation and seed") and the
-   Limitations ("Two training seeds cannot establish…").
-2. **Expert labels: not planned** (author decision, 2026-10-15). The paper
-   states report-derived labels as a limitation and points to the adjudication
-   protocol (Supplementary Section S15); its tools stay in the repository in
-   case reviewers ask for expert labels.
-3. **Ethics.** If DIU issues a determination
-   (`docs/revision/ETHICS_DETERMINATION_REQUEST.md`), cite it in Methods.
-4. **Co-authors.** Adnan Rahman Sayeem re-runs `VERIFY.md` on the final commit
-   (12 claims). The Methods sentence on independent reproduction is true only
+1. **Co-authors.** Adnan Rahman Sayeem re-runs `VERIFY.md` on the final commit
+   (11 claims). The Methods sentence on independent reproduction is true only
    after this. Shahadat Hossain reviews and approves the final version.
-5. **Archive.** Create GitHub release v1.1.0 from the final commit; Zenodo
+2. **Ethics (optional).** If DIU issues a determination
+   (`docs/revision/ETHICS_DETERMINATION_REQUEST.md`), cite it in Methods.
+3. **Archive.** Create GitHub release v1.1.0 from the final commit; Zenodo
    adds it as a new version under the all-versions DOI the manuscript cites.
+
+Not planned (author decisions): expert adjudication (2026-10-15; the paper
+states report-derived labels as a limitation) and further training seeds
+(2026-10-15; the paper reports two training runs and states this as a
+limitation).
 
 ## Rebuild
 

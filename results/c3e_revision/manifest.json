@@ -156,36 +156,6 @@
    "sha256": "6483ac137e04d6efb2e1067b3a02dbdc28433b646eab17eaeeb1acc1fc3cd8d1"
   },
   {
-   "byte_size": 0,
-   "name": "seed_contrasts.csv",
-   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-  },
-  {
-   "byte_size": 0,
-   "name": "seed_coverage_gap.csv",
-   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-  },
-  {
-   "byte_size": 274,
-   "name": "seed_discrimination.csv",
-   "sha256": "1643fe2abc5035a78bdea62a7feb76926e41bb03174770535f465a8376277603"
-  },
-  {
-   "byte_size": 3,
-   "name": "seed_selection.json",
-   "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
-  },
-  {
-   "byte_size": 93,
-   "name": "seed_status.csv",
-   "sha256": "d2252e1637777cd6fb4be12551e3712ce89c6625e08506b9b61e95f07c016a52"
-  },
-  {
-   "byte_size": 5417,
-   "name": "seed_summary.csv",
-   "sha256": "978e1154f9197ad8c0422ef5b908582a8a1c995d2c014fa5d11010b4b4a0d068"
-  },
-  {
    "byte_size": 196,
    "name": "stage10_reproduction.csv",
    "sha256": "b5cdf6a2261cc3eece2013b528320c59935e9986e268079c126076d9e219e4f6"

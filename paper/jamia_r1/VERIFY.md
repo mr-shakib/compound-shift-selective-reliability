@@ -27,7 +27,7 @@ On Windows, use `.venv\Scripts\python` and `.venv\Scripts\pip` instead of
 .venv/bin/python -m pytest -q c3e_audit_toolkit/tests
 ```
 
-Expected: `239 passed`.
+Expected: `237 passed`.
 
 ## 3. Regenerate every number, table and figure
 
@@ -37,7 +37,7 @@ git status --porcelain
 ```
 
 Expected:
-- the first command prints `444 macros; tables and figures written`;
+- the first command prints `434 macros; tables and figures written`;
 - `git status` lists only the six `paper/revision/figures/*.pdf` files.
 
 Their pixels are identical; only the embedded creation date changes. Any change
@@ -69,7 +69,6 @@ For each claim below:
 | 9 | M3 H4 within each site, and the external result under seed 2 (Abstract; Figure 6) | `hypotheses.csv` (seed 1; add `analysis=primary`, `label_variant=primary`) and `followup_m2m3_contrasts.csv` (seed 2) | `hypothesis=H4`, `model=M3`, `estimator=evaluable_study`, by `site` |
 | 10 | Calibration resampling vs evaluation bootstrap (Results; Table 4) | `calibration_uncertainty.csv` | `estimator=evaluable_study`; column `h1_sd_calibration` |
 | 11 | Text-only model loses discrimination externally; image-only does not (Abstract; Results) | `discrimination.csv` | `pathology=macro`; columns `auroc_source`, `auroc_external`, `ci_low`, `ci_high` for `model` M1 and M2 |
-| 12 | Between-seed spread of the corrected H1 (Results; Table 4) | `seed_summary.csv` | `hypothesis=H1`, `estimator=evaluable_study`, `train_seed=all`; column `sd_between_seeds` |
 
 Example lookup for rows 2 and 3:
 
@@ -98,7 +97,7 @@ Answer these in writing:
 
 Send a short note to the corresponding author covering:
 1. the outputs of steps 2 and 3;
-2. for each of the 12 claims, whether it matched, with any mismatch quoted;
+2. for each of the 11 claims, whether it matched, with any mismatch quoted;
 3. your answers to step 5, with suggested changes.
 
 Every mismatch or disagreement is fixed in the analysis or the text before

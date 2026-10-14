@@ -351,19 +351,7 @@ unaffected. \Cref{stab:stage6} separates the runs.
 \begin{adjustbox}{max width=\linewidth}\input{../revision/generated/supp_stage6}\end{adjustbox}
 \end{table}
 
-\section{Training-seed replicates and additional C2 permutations}\label{ssec:gpu}
-Further training runs (seeds 20260720--20260722) were added after the external
-results were known (post hoc). Each trains M1, M2 and M4 on the model-train
-tier with the frozen settings; thresholds and the 80\% cutoff are re-selected
-on the calibration tier by the frozen Stage 7 rule, and nothing is fitted on
-external data. Seeds still training when this file was built are marked
-pending.
-\begin{table}[h]\centering\scriptsize
-\caption{H1 and H4 (corrected estimator unless stated; 95\% CI) and macro AUROC
-(source/external) for each training run, with the between-seed mean, SD and
-range.}\label{stab:seeds}
-\begin{adjustbox}{max width=\linewidth}\input{../revision/generated/supp_seeds}\end{adjustbox}
-\end{table}
+\section{Second training seed and additional C2 permutations}\label{ssec:gpu}
 \input{../revision/generated/supp_gpu_status}
 
 \section{Software and commands}\label{ssec:software}
