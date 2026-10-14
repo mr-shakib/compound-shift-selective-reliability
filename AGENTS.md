@@ -79,14 +79,12 @@ thresholds, nothing fitted on external data, aggregates only in `results/`):
   tier, with thresholds and cutoffs re-selected on the calibration tier by the
   frozen Stage 7 rule and scoring on both evaluation sites
   (`scripts/run_seed_replicates.sh`, `c3e.revision.seeds`);
-- preparing the expert-adjudication study: the stratified sample list (kept in
-  `data/`), the local reading tool and the study documents.
+- tools and documents for an expert-adjudication study.
 
-Still not authorized until the corresponding author confirms each item:
-downloading the CheXpert v1.0 validation labels, and showing any image to a
-reader. Both also need the conditions in
-`docs/revision/EXPERT_ADJUDICATION_PROTOCOL.md` (ethics determination, reader
-credentialing, a public registration of the reading plan).
+Expert adjudication is **not planned** (author decision, 2026-10-15); its tools
+and documents are kept only in case reviewers request expert labels.
+Downloading the CheXpert v1.0 validation labels and showing any image to a
+reader remain unauthorized.
 
 Report parsing is authorized for structural analysis and for labelling through
 the pinned CheXbert port. It does not authorize model input construction or

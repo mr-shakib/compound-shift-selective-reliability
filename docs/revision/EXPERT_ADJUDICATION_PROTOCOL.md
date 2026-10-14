@@ -1,7 +1,8 @@
 # Blinded expert adjudication protocol (ready to run, not executed)
 
-Status: **tools built and tested 2026-10-14; waiting for readers, an ethics
-determination and public registration (section 8).** No adjudication has been
+Status: **not planned for submission (author decision, 2026-10-15).** Kept,
+with its tools (built and tested 2026-10-14), in case reviewers ask for expert
+labels. No adjudication has been
 performed. No labels in this repository come from clinicians, and none may be
 simulated or produced by a language model and described as clinical ground
 truth. Run order: section 10.

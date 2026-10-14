@@ -1,8 +1,7 @@
 # Request for an ethics determination (draft)
 
 To send to the Research Ethics Committee (or equivalent) of Daffodil
-International University. Fill the bracketed items. Attach
-`EXPERT_ADJUDICATION_PROTOCOL.md`.
+International University. Fill the bracketed items.
 
 ---
 
@@ -38,12 +37,6 @@ American Medical Informatics Association*, which asks for an ethics statement.
 Both datasets are de-identified by their publishers. We have no means or
 intention of re-identifying anyone, no contact with patients, and no access to
 any data beyond the published releases.
-
-**Planned addition.** Two or three board-certified radiologists will view a
-sample of about 1,400 de-identified images from these datasets and record, for
-five findings, whether each is present. The radiologists act as investigators,
-not participants, and are credentialed under the same agreements. Images stay
-on credentialed machines and are never uploaded to any external service.
 
 **Risks.** Minimal: no new data are collected from people, all data are
 de-identified, and access is restricted by the publishers' agreements.

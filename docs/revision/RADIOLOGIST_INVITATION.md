@@ -1,5 +1,8 @@
 # Invitation to radiologist readers (draft)
 
+**Not in use:** expert adjudication is not planned (author decision,
+2026-10-15). Kept in case reviewers request expert labels.
+
 To send to prospective readers. Fill the bracketed items.
 
 ---

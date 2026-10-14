@@ -1,5 +1,8 @@
 # OSF registration text: blinded expert adjudication
 
+**Not in use:** expert adjudication is not planned (author decision,
+2026-10-15). Kept in case reviewers request expert labels.
+
 Paste into an OSF Registries "Secondary data preregistration" (or "OSF
 Preregistration") form **before any image is read**. Fill the bracketed items
 first. The full protocol is `EXPERT_ADJUDICATION_PROTOCOL.md`; attach it.

@@ -155,8 +155,10 @@ co-author sign-offs of 2026-10-09 covered the earlier version, so:
    shifted…"), Results ("A second training seed moved…", and the H4 sentence
    "both training seeds"), the Discussion ("permutation and seed") and the
    Limitations ("Two training seeds cannot establish…").
-2. **Expert labels**, if done before submission: Phase 0 and Phase 1 in
-   `docs/revision/EXPERT_ADJUDICATION_PROTOCOL.md`, section 10.
+2. **Expert labels: not planned** (author decision, 2026-10-15). The paper
+   states report-derived labels as a limitation and points to the adjudication
+   protocol (Supplementary Section S15); its tools stay in the repository in
+   case reviewers ask for expert labels.
 3. **Ethics.** If DIU issues a determination
    (`docs/revision/ETHICS_DETERMINATION_REQUEST.md`), cite it in Methods.
 4. **Co-authors.** Adnan Rahman Sayeem re-runs `VERIFY.md` on the final commit
