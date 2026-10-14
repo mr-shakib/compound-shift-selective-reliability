@@ -68,6 +68,26 @@ Not authorized:
 - external-site tuning;
 - implementation of post-hoc mitigation methods.
 
+### Pre-submission revision (authorized by the corresponding author, 2026-10-14)
+
+All post hoc, labelled as such, and governed by the rules above (frozen
+thresholds, nothing fitted on external data, aggregates only in `results/`):
+
+- per-site discrimination (AUROC) computed from the cached evaluation-tier
+  predictions;
+- training-seed replicates 20260720, 20260721 and 20260722 on the model-train
+  tier, with thresholds and cutoffs re-selected on the calibration tier by the
+  frozen Stage 7 rule and scoring on both evaluation sites
+  (`scripts/run_seed_replicates.sh`, `c3e.revision.seeds`);
+- preparing the expert-adjudication study: the stratified sample list (kept in
+  `data/`), the local reading tool and the study documents.
+
+Still not authorized until the corresponding author confirms each item:
+downloading the CheXpert v1.0 validation labels, and showing any image to a
+reader. Both also need the conditions in
+`docs/revision/EXPERT_ADJUDICATION_PROTOCOL.md` (ethics determination, reader
+credentialing, a public registration of the reading plan).
+
 Report parsing is authorized for structural analysis and for labelling through
 the pinned CheXbert port. It does not authorize model input construction or
 export of report text. Section content may be measured and summarised in

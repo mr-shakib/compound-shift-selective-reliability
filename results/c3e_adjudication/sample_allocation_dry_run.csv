@@ -1,0 +1,17 @@
+site,stratum,group,frame_studies,sampled,inclusion_prob
+source,L0A0P0,deferred,308,16,0.05194805194805195
+source,L0A0P1,deferred,1168,59,0.05051369863013699
+source,L0A1P0,accepted_label_less,1439,39,0.027102154273801252
+source,L0A1P1,accepted_label_less,4053,111,0.027387120651369355
+source,L1A0P0,deferred,119,6,0.05042016806722689
+source,L1A0P1,deferred,1361,69,0.050698016164584865
+source,L1A1P0,accepted_labelled,753,36,0.04780876494023904
+source,L1A1P1,accepted_labelled,5565,264,0.04743935309973046
+external,L0A0P0,deferred,512,3,0.005859375
+external,L0A0P1,deferred,5437,30,0.0055177487585065296
+external,L0A1P0,accepted_label_less,1631,13,0.00797057020232986
+external,L0A1P1,accepted_label_less,17241,137,0.007946174815845948
+external,L1A0P0,deferred,1463,8,0.005468215994531784
+external,L1A0P1,deferred,19847,109,0.0054920139063838365
+external,L1A1P0,accepted_labelled,4974,17,0.003417772416566144
+external,L1A1P1,accepted_labelled,81818,283,0.0034588965753257228

@@ -19,9 +19,10 @@
 \renewcommand{\thesection}{S\arabic{section}}
 \makeatletter\renewcommand*\l@section{\@dottedtocline{1}{0pt}{2.6em}}\makeatother
 
-\title{Supplementary material\\[2pt]\large Frozen selective prediction for
-multimodal chest-radiograph models across two hospitals: a preregistered
-compound-shift evaluation with label-dependent cross-site conclusions}
+\title{Supplementary material\\[2pt]\large Label availability, not model
+error, produced an apparent cross-site failure of frozen selective prediction
+for multimodal chest-radiograph models: a prespecified two-hospital
+evaluation}
 \author{}
 \date{}
 
@@ -33,10 +34,19 @@ compound-shift evaluation with label-dependent cross-site conclusions}
 \section{Protocol history and analysis status}\label{ssec:protocol}
 The record below is reconstructed from the project's version-control history,
 the protocol amendment log and the stage artifacts. Commit times are recorded
-by the authors' own system. Content hashes establish that a file existed in a
-given form, not when it was written, and no independently time-stamped
-registration exists. The history is an auditable account, not independent
-proof of timing.
+by the authors' own system, and content hashes establish that a file existed in
+a given form, not when it was written. The protocol was not lodged in a public
+registry. The earliest independent time stamp is GitHub's server-side activity
+log for the public repository
+(\url{https://github.com/mr-shakib/compound-shift-selective-reliability/activity}).
+It records the creation of the main branch at commit \texttt{d293c53} at 20:53:27
+UTC on 6 August 2026, and the push of the external evaluation results (commit
+\texttt{02d4403}) at 02:15:54 UTC on 7 August 2026. Commit \texttt{d293c53}
+contains the machine-readable protocol, identical to the version that governed
+every later analysis, and the Stage 7 manifest with SHA-256 digests of the
+frozen thresholds. Events before that time stamp, including source-site
+training, threshold selection and source-site evaluation, rest on the authors'
+own records.
 
 \begin{center}\small
 \begin{tabular}{p{0.2\linewidth}p{0.74\linewidth}}
@@ -48,11 +58,12 @@ Date (UTC+6) & Event\\
 28 Jul 2026 & v0.2.0 (context mapping, informativeness rule, structural exclusions); v0.3.0 (prespecified evaluation partition). No labels, models or external results existed.\\
 3--4 Aug 2026 & v0.4.0--v0.4.2 (backbones, precision, learning rates); the image-only model had been trained and its internal-validation AUROC seen before v0.4.2.\\
 6 Aug 2026 & Decision-rule and bootstrap code committed, including the H4 direction-only rule.\\
-7 Aug 2026, 08:15 & External point estimates first inspected.\\
+7 Aug 2026, 02:53 & First push to GitHub (commit \texttt{d293c53}; 20:53 UTC on 6 Aug in GitHub's server-side log): protocol and frozen-threshold digests.\\
+7 Aug 2026, 08:15 & External point estimates first inspected; results pushed at 08:15 (02:15 UTC in GitHub's log).\\
 7 Aug 2026, 15:08 & Contrast code: H3 as transfer-gap difference; interaction under C2 (post hoc).\\
-7 Aug 2026, 18:11 & Findings-label sensitivity implemented with re-selected thresholds and a findings-restricted source cohort (post hoc implementation of a registered sensitivity).\\
+7 Aug 2026, 18:11 & Findings-label sensitivity implemented with re-selected thresholds and a findings-restricted source cohort (post hoc implementation of a prespecified sensitivity).\\
 8--21 Aug 2026 & $T=5,10$ sensitivities; second training seed for M1 and M4 (not prespecified).\\
-6--7 Oct 2026 & Revision audit: estimator correction; all analyses in this supplement marked post hoc, including M2 retrained under the second seed.\\
+6--7 Oct 2026 & Post hoc audit: estimator correction; all analyses in this supplement marked post hoc, including M2 retrained under the second seed.\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -65,6 +76,42 @@ split-conformal baselines and listed AUGRC as a primary threshold-free metric.
 None was run before the results were known. All except the one-image and
 concordant-study sensitivities, which need image-level predictions that were
 not cached, are reported here post hoc.
+
+\begin{table}[h]\centering\footnotesize
+\caption{Deviations and implementation defects found by the post hoc audit, with
+their effects. Only the first changes the H1 estimates.}\label{stab:deviations}
+\begin{tabular}{p{0.37\linewidth}p{0.27\linewidth}p{0.28\linewidth}}
+\toprule
+Deviation & Effect & Handling\\
+\midrule
+Selective-risk estimator counted accepted studies with no labelled target as
+correct, contrary to its own documentation & H1 confirmed under the original
+estimator, not under the corrected one & Corrected estimator reported beside the
+original (main text, Eq.~1)\\
+C2 applied per image rather than per study; some multi-image studies received
+context from several donors & C2 contrasts only (H4; interaction under C2); C0
+and C1 unaffected & Assignment replayed exactly (\cref{ssec:c2}); extra
+permutations (\cref{ssec:gpu})\\
+C2 diagnostics described \CTwoIdentSrc{} source and \CTwoIdentExt{} external
+studies as ``retaining their own context''; all received identical text from a
+different patient & None on any estimate & Description corrected; no recipient
+received its own patient's context\\
+Prespecified H3 equals H2 because M1 ignores text; a transfer-gap H3 was coded
+after inspection & Definitional & Both reported; the transfer-gap H3 labelled
+post hoc\\
+Findings-label sensitivity changed labels, source cohort, thresholds and C2
+donors at once & Did not isolate the effect of the labels & Controlled
+decomposition (main text Table 3; \cref{ssec:ls})\\
+Prose-plan one-image-per-study and concordant-study sensitivities not run & None
+on reported estimates & Image-level predictions were not cached; disclosed\\
+An earlier draft described the second training seed as prespecified & Documentation
+& Corrected; reported as post hoc\\
+An audit artifact spliced M2 epochs from a discarded run onto the valid run &
+Documentation; selected checkpoints unaffected & Runs separated
+(\cref{stab:stage6})\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 % =====================================================================
 \section{Extended methods}\label{ssec:methods}
@@ -80,7 +127,7 @@ informative, one not), and one image matches its checksum but does not decode
 and was excluded.
 
 \paragraph{Context.}
-Source context was the INDICATION and HISTORY sections (registered synonyms);
+Source context was the INDICATION and HISTORY sections (prespecified synonyms);
 WET READ, provisional findings, recommendation, notification, addendum and
 comment sections are post-diagnostic and never extracted. 17,551 source reports
 (7.70\%) contain a WET READ section and 181 place a pre-diagnostic section after
@@ -139,7 +186,7 @@ pathology-macro & $\frac15\sum_j\sum_ia_im_{ij}\mathbb{1}[\hat y_{ij}\ne y_{ij}]
 \end{center}
 Label variants change only $m$ and $y$: unmentioned$\to$negative sets blank
 cells to observed negatives; uncertain$\to$positive or $\to$negative recodes
-$-1$ cells. The uncertain variants were registered in the prose analysis plan;
+$-1$ cells. The uncertain variants were prespecified in the prose analysis plan;
 the unmentioned variant is a post hoc bracket, not a reference standard.
 
 \paragraph{Inference.}
@@ -205,6 +252,16 @@ AP or all PA).}\label{stab:views}
 \begin{adjustbox}{max width=\linewidth}\input{../revision/generated/tab_views}\end{adjustbox}
 \end{table}
 
+\begin{table}[h]\centering\scriptsize
+\caption{Discrimination at each site (post hoc): AUROC of each model's
+probability for each target over all labelled cells in the evaluation cohort
+(C0, primary labels, accepted or not), and the external-minus-source difference
+with a 95\% patient-clustered bootstrap interval (2,000 replicates). Macro is
+the mean of the five AUROCs. Labels are report-derived; atelectasis has few
+labelled negatives at either site.}\label{stab:discrim}
+\begin{adjustbox}{max width=\linewidth}\input{../revision/generated/supp_discrimination}\end{adjustbox}
+\end{table}
+
 % =====================================================================
 \section{Reproduction and alignment checks}\label{ssec:repro}
 The original prediction caches do not store study identifiers. Study identity
@@ -232,7 +289,7 @@ the five pathologies (post hoc).}\label{stab:path}
 \begin{adjustbox}{max width=\linewidth}\input{../revision/generated/tab_pathology}\end{adjustbox}
 \end{table}
 \begin{table}[h]\centering\small
-\caption{Multiplicity sensitivity for the six registered confirmatory contrasts
+\caption{Multiplicity sensitivity for the six prespecified confirmatory contrasts
 (post hoc).}\label{stab:mult}
 \begin{adjustbox}{max width=\linewidth}\input{../revision/generated/tab_multiplicity}\end{adjustbox}
 \end{table}
@@ -294,7 +351,19 @@ unaffected. \Cref{stab:stage6} separates the runs.
 \begin{adjustbox}{max width=\linewidth}\input{../revision/generated/supp_stage6}\end{adjustbox}
 \end{table}
 
-\section{Second training seed and additional C2 permutations}\label{ssec:gpu}
+\section{Training-seed replicates and additional C2 permutations}\label{ssec:gpu}
+Further training runs (seeds 20260720--20260722) were added after the external
+results were known (post hoc). Each trains M1, M2 and M4 on the model-train
+tier with the frozen settings; thresholds and the 80\% cutoff are re-selected
+on the calibration tier by the frozen Stage 7 rule, and nothing is fitted on
+external data. Seeds still training when this file was built are marked
+pending.
+\begin{table}[h]\centering\scriptsize
+\caption{H1 and H4 (corrected estimator unless stated; 95\% CI) and macro AUROC
+(source/external) for each training run, with the between-seed mean, SD and
+range.}\label{stab:seeds}
+\begin{adjustbox}{max width=\linewidth}\input{../revision/generated/supp_seeds}\end{adjustbox}
+\end{table}
 \input{../revision/generated/supp_gpu_status}
 
 \section{Software and commands}\label{ssec:software}

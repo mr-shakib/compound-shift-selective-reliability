@@ -204,8 +204,8 @@ class Gen:
                  r" & & & Estimate (95\% CI) & V & Estimate (95\% CI) & V\\", r"\midrule"]
         names = {"H1": "ext $-$ src, C0", "H2": "interaction", "H3": "gap $-$ gap(M1)", "H4": "C2 $-$ C1"}
         group_breaks = {6: r"\midrule\multicolumn{7}{l}{\emph{Secondary: H4 (direction only, no materiality)}}\\",
-                        10: r"\midrule\multicolumn{7}{l}{\emph{Not registered (computed by the original analysis code; descriptive)}}\\",
-                        4: r"\midrule\multicolumn{7}{l}{\emph{H3 as coded after inspection (registered H3 $\equiv$ H2-C1)}}\\"}
+                        10: r"\midrule\multicolumn{7}{l}{\emph{Not prespecified (computed by the original analysis code; descriptive)}}\\",
+                        4: r"\midrule\multicolumn{7}{l}{\emph{H3 as coded after inspection (prespecified H3 $\equiv$ H2-C1)}}\\"}
         for i, (hh, m, site, c, reg) in enumerate(spec):
             if i in group_breaks:
                 lines.append(group_breaks[i])
@@ -424,14 +424,17 @@ class Gen:
         cu = self.csv("calibration_uncertainty")
         e = self.H(est="evaluable_study")
         o = self.H(est="original")
-        lines = [r"\begin{tabular}{llrrrr}", r"\toprule",
-                 r"Model & Estimator & H1 & SD (evaluation bootstrap) & SD (calibration resample) & Calibration 2.5--97.5\%\\", r"\midrule"]
+        sm = self.csv("seed_summary")
+        sa = sm[(sm.train_seed.astype(str) == "all") & (sm.hypothesis == "H1")]
+        lines = [r"\begin{tabular}{llrrrrr}", r"\toprule",
+                 r"Model & Estimator & H1 & SD (evaluation bootstrap) & SD (calibration resample) & Calibration 2.5--97.5\% & SD (training seeds)\\", r"\midrule"]
         for m in ("M1", "M2", "M3", "M4"):
             for est, df in (("original", o), ("evaluable_study", e)):
                 x = df[(df.hypothesis == "H1") & (df.model == m)].iloc[0]
                 c = cu[(cu.model == m) & (cu.estimator == est)].iloc[0]
                 sd_eval = (x.ci_high - x.ci_low) / 3.92
-                lines.append(f"{m if est == 'original' else ''} & {'original' if est == 'original' else 'evaluable-study'} & {f(x.point_estimate)} & {sd_eval:.4f} & {c.h1_sd_calibration:.4f} & {ci(c.h1_q025, c.h1_q975)}\\\\")
+                g = sa[(sa.model == m) & (sa.estimator == est)].iloc[0]
+                lines.append(f"{m if est == 'original' else ''} & {'original' if est == 'original' else 'evaluable-study'} & {f(x.point_estimate)} & {sd_eval:.4f} & {c.h1_sd_calibration:.4f} & {ci(c.h1_q025, c.h1_q975)} & {g.sd_between_seeds:.4f}\\\\")
         lines += [r"\bottomrule", r"\end{tabular}"]
         self.write("tab_uncertainty", "\n".join(lines))
         ratios = []
@@ -525,6 +528,98 @@ class Gen:
         un = [g("M4", t, "unmentioned_negative") for t in TARGETS]
         self.mac("PathMFourUnmMax", f(max(un), 2))
         self.mac("PathMFourUnmMin", f(min(un), 2))
+
+    def t_discrimination(self):
+        """Post hoc: per-pathology and macro AUROC at each site (threshold- and policy-free)."""
+        d = self.csv("discrimination")
+        words = {"M1": "MOne", "M2": "MTwo", "M3": "MThree", "M4": "MFour"}
+        lines = [r"\begin{tabular}{llrrrrr}", r"\toprule",
+                 r"Model & Pathology & Pos/neg (source) & Pos/neg (external) & Source & External & Difference (95\% CI)\\",
+                 r"\midrule"]
+        for m in ("M1", "M2", "M3", "M4"):
+            for _, r in d[d.model == m].iterrows():
+                if r.pathology == "macro":
+                    lines.append(f" & Macro & & & {r.auroc_source:.3f} & {r.auroc_external:.3f} & "
+                                 f"{f(r.difference, 3)} {ci(r.ci_low, r.ci_high, 3)}\\\\")
+                    w = words[m]
+                    self.mac(f"Auc{w}Src", f"{r.auroc_source:.3f}")
+                    self.mac(f"Auc{w}Ext", f"{r.auroc_external:.3f}")
+                    self.mac(f"Auc{w}Diff", f(r.difference, 3))
+                    self.mac(f"Auc{w}DiffCI", ci(r.ci_low, r.ci_high, 3))
+                else:
+                    lines.append(f"{m if r.pathology == TARGETS[0] else ''} & {r.pathology} & "
+                                 f"{n(r.n_pos_source)}/{n(r.n_neg_source)} & {n(r.n_pos_external)}/{n(r.n_neg_external)} & "
+                                 f"{r.auroc_source:.3f} & {r.auroc_external:.3f} & {f(r.difference, 3)} {ci(r.ci_low, r.ci_high, 3)}\\\\")
+            if m != "M4":
+                lines.append(r"\midrule")
+        lines += [r"\bottomrule", r"\end{tabular}"]
+        self.write("supp_discrimination", "\n".join(lines))
+        atel = d[(d.model == "M1") & (d.pathology == "Atelectasis")].iloc[0]
+        self.mac("AtelNegSrc", n(atel.n_neg_source))
+        self.mac("AtelNegExt", n(atel.n_neg_external))
+
+    def t_seeds(self):
+        """Post hoc: training-seed replicates; seeds still running are shown as pending."""
+        sm, st = self.csv("seed_summary"), self.csv("seed_status")
+        dd = self.csv("seed_discrimination")
+        pdisc = self.csv("discrimination")
+        pdisc = pdisc[pdisc.pathology == "macro"]
+        per = sm[sm.train_seed.astype(str) != "all"].copy()
+        per["train_seed"] = per.train_seed.astype(int)
+        per["site"] = per.site.fillna("")
+        agg = sm[sm.train_seed.astype(str) == "all"].copy()
+        agg["site"] = agg.site.fillna("")
+        seeds = [20260718, 20260719] + [int(x) for x in st.train_seed]
+        done = [20260718, 20260719] + [int(x) for x in st[st.status == "done"].train_seed]
+
+        def cell(h, m, est, seed, site=""):
+            x = per[(per.hypothesis == h) & (per.model == m) & (per.estimator == est)
+                    & (per.site == site) & (per.train_seed == seed)]
+            return f"{f(x.iloc[0].point_estimate)} {ci(x.iloc[0].ci_low, x.iloc[0].ci_high)}" if len(x) else "pending"
+
+        def auc(m, seed):
+            if seed == 20260718:
+                x = pdisc[pdisc.model == m].iloc[0]
+                return f"{x.auroc_source:.3f}/{x.auroc_external:.3f}"
+            x = dd[(dd.model == m) & (dd.train_seed == seed)]
+            return f"{x.iloc[0].auroc_macro_source:.3f}/{x.iloc[0].auroc_macro_external:.3f}" if len(x) else "pending"
+
+        cols = [("H1", "M3", "evaluable_study", ""), ("H1", "M4", "evaluable_study", ""),
+                ("H1", "M4", "original", ""), ("H4", "M3", "evaluable_study", "external")]
+        lines = [r"\begin{tabular}{llllllll}", r"\toprule",
+                 r"Training seed & H1 M3 & H1 M4 & H1 M4 (original) & H4 M3 external & AUROC M1 & AUROC M2 & AUROC M4\\",
+                 r"\midrule"]
+        for sd in seeds:
+            tag = f"{sd}" + (" (primary)" if sd == 20260718 else "")
+            lines.append(f"{tag} & " + " & ".join(cell(h, m, est, sd, site) for h, m, est, site in cols)
+                         + " & " + " & ".join(auc(m, sd) for m in ("M1", "M2", "M4")) + "\\\\")
+        lines.append(r"\midrule")
+        row_mean, row_rng = ["Mean (SD)"], ["Range"]
+        for h, m, est, site in cols:
+            g = agg[(agg.hypothesis == h) & (agg.model == m) & (agg.estimator == est) & (agg.site == site)].iloc[0]
+            row_mean.append(f"{f(g['mean'])} ({g.sd_between_seeds:.4f})")
+            row_rng.append(f"{f(g['min'])} to {f(g['max'])}")
+        lines.append(" & ".join(row_mean) + " & & & \\\\")
+        lines.append(" & ".join(row_rng) + " & & & \\\\")
+        lines += [r"\bottomrule", r"\end{tabular}"]
+        self.write("supp_seeds", "\n".join(lines))
+
+        words = {2: "two", 3: "three", 4: "four", 5: "five"}
+        self.mac("SeedsN", words.get(len(done), str(len(done))))
+        for m, w in (("M3", "MThree"), ("M4", "MFour")):
+            g = agg[(agg.hypothesis == "H1") & (agg.model == m) & (agg.estimator == "evaluable_study")].iloc[0]
+            self.mac(f"SeedHOne{w}Min", f(g["min"]))
+            self.mac(f"SeedHOne{w}Max", f(g["max"]))
+            self.mac(f"SeedSDHOne{w}", f"{g.sd_between_seeds:.3f}")
+        g = agg[(agg.hypothesis == "H4") & (agg.model == "M3") & (agg.site == "external")
+                & (agg.estimator == "evaluable_study")].iloc[0]
+        self.mac("SeedHFourMThreeExtPos", f"{int(g.n_ci_above_zero)} of {int(g.n_seeds)}")
+        g = agg[(agg.hypothesis == "H4") & (agg.model == "M3") & (agg.site == "source")
+                & (agg.estimator == "evaluable_study")].iloc[0]
+        self.mac("SeedHFourMThreeSrcPos", f"{int(g.n_ci_above_zero)} of {int(g.n_seeds)}")
+        m2 = [float(pdisc[pdisc.model == "M2"].iloc[0].auroc_external)] + \
+            [float(x) for x in dd[dd.model == "M2"].auroc_macro_external]
+        self.mac("SeedAucMTwoExtMax", f"{max(m2):.3f}")
 
     def t_multiplicity(self):
         lines = [r"\begin{tabular}{lllrrr}", r"\toprule",
@@ -774,6 +869,66 @@ class Gen:
         self.write("supp_gpu_status", "\n".join(lines))
 
     # ------------------------------------------------------------------ figures
+    def fig_design(self, plt):
+        """Study design schematic (numbers from the partition and external cohort records)."""
+        from matplotlib.colors import to_rgba
+        from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+        ps = pd.read_csv(self.root / "results/c3e_mimic/stage3e/stage3e_partition_summary.csv").set_index("tier")
+        ext = json.loads((self.root / "results/c3e_chexpert_plus/stage9b_evaluation/stage9b_evaluation.json")
+                         .read_text())["cohort"]
+        src_c, ext_c, pol_c = PALETTE[0], PALETTE[1], PALETTE[2]
+        fig, ax = plt.subplots(figsize=(7.2, 5.0))
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 100)
+        ax.axis("off")
+
+        def box(x, y, w, h, title, body, color, fill=0.10):
+            ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.4,rounding_size=1.2",
+                                        fc=to_rgba(color, fill), ec=color, lw=1.0))
+            ax.text(x + w / 2, y + h - 2.2, title, ha="center", va="top", fontsize=7.6, weight="bold", color=INK)
+            ax.text(x + w / 2, y + h - 6.4, body, ha="center", va="top", fontsize=6.8, color=INK2,
+                    linespacing=1.35)
+
+        def arrow(x0, y0, x1, y1, color=INK2, text=None, tx=0, ty=0):
+            ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=9,
+                                         color=color, lw=1.0, shrinkA=2, shrinkB=2))
+            if text:
+                ax.text((x0 + x1) / 2 + tx, (y0 + y1) / 2 + ty, text, fontsize=6.4, color=INK2,
+                        ha="center", va="center", style="italic")
+
+        def tier(t):
+            r = ps.loc[t]
+            return f"{n(r.patients)} patients, {n(r.studies)} studies"
+
+        ax.text(22, 99, "Source hospital: MIMIC-CXR-JPG", ha="center", va="top", fontsize=8.6,
+                weight="bold", color=src_c)
+        ax.text(80, 99, "External hospital: CheXpert Plus", ha="center", va="top", fontsize=8.6,
+                weight="bold", color=ext_c)
+        box(1, 77, 42, 17, "Model-training tier", tier("model_train") + "\nTrain M1 (image), M2 (text), M4 (feature\n"
+            "fusion); M3 = mean of M1 and M2 probabilities", src_c)
+        box(1, 55, 42, 16, "Threshold-calibration tier", tier("threshold_calibration") +
+            "\nPer-finding thresholds (balanced accuracy)\nand an 80%-coverage abstention cutoff", src_c)
+        box(50, 53.5, 30, 18.5, "Frozen policy", "Models, thresholds and cutoff\nfixed before any external\nresult; applied unchanged",
+            pol_c, fill=0.16)
+        box(1, 30, 42, 17, "Prespecified evaluation tier", tier("prespecified_eval") +
+            "\nSelective error and coverage", src_c)
+        box(57, 30, 42, 17, "External cohort (evaluation only)",
+            f"{n(ext['n1_patients'])} patients, {n(ext['n1_studies'])} studies\nSelective error and coverage", ext_c)
+        arrow(22, 77, 22, 71.5)
+        arrow(43.5, 63, 49.3, 63)
+        arrow(58, 52.8, 30, 47.6, color=pol_c)
+        arrow(72, 52.8, 78, 47.6, color=pol_c)
+        box(1, 14.5, 98, 9.5, "Pre-diagnostic context at evaluation (indication and history)",
+            "C0 intact    C1 removed (constant placeholder)    C2 misaligned (another patient's context)", INK2, fill=0.05)
+        ax.text(50, 27.2, "Labels at both sites: CheXbert applied to report impressions; positive and negative cells "
+                "scored, uncertain and unmentioned cells masked", ha="center", va="center", fontsize=6.6, color=INK2)
+        ax.text(50, 8.6, "H1 transfer gap = external minus source selective error under C0 (M3, M4)", ha="center",
+                va="center", fontsize=7.2, color=INK, weight="bold")
+        ax.text(50, 3.6, "H2: does removing context (C1) hurt more externally?    H4: misaligned (C2) minus absent "
+                "(C1) context, within each site", ha="center", va="center", fontsize=6.8, color=INK)
+        fig.savefig(self.fig / "fig0_design.pdf", bbox_inches="tight")
+        plt.close(fig)
+
     def figures(self, sens: pd.DataFrame):
         import matplotlib
         matplotlib.use("Agg")
@@ -781,6 +936,8 @@ class Gen:
         plt.rcParams.update({"font.size": 8, "axes.edgecolor": INK2, "axes.labelcolor": INK,
                              "xtick.color": INK2, "ytick.color": INK2, "axes.linewidth": 0.6,
                              "font.family": "DejaVu Sans"})
+
+        self.fig_design(plt)
 
         # Figure 1: H1 across specifications.
         specs = list(dict.fromkeys(sens.spec))
@@ -973,6 +1130,8 @@ class Gen:
         self.t_subgroups()
         self.t_pathology()
         self.t_multiplicity()
+        self.t_discrimination()
+        self.t_seeds()
         self.s_tables()
         self.s_gpu_status()
         self.figures(sens)

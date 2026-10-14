@@ -33,7 +33,6 @@
 \usepackage{xcolor}
 \usepackage[noadjust]{cite}  % JAMIA: [n] directly after punctuation, no space
 \usepackage{setspace}
-\usepackage[modulo]{lineno}
 \usepackage{caption}
 \usepackage{float}
 \usepackage{microtype}
@@ -43,7 +42,6 @@
 \captionsetup{font=small,labelfont=bf,labelsep=period}
 \setlength{\emergencystretch}{3em}
 \doublespacing
-\linenumbers
 
 \externaldocument[S-]{supplement_jamia_r1}
 \input{../revision/generated/numbers}
@@ -58,11 +56,10 @@
 % ------------------------------------------------------------------ title page
 \begin{titlepage}
 \thispagestyle{empty}
-\nolinenumbers
 \begin{singlespace}
-\noindent{\Large\bfseries Frozen selective prediction for multimodal
-chest-radiograph models across two hospitals: a preregistered compound-shift
-evaluation with label-dependent cross-site conclusions\par}
+\noindent{\Large\bfseries Label availability, not model error, produced an
+apparent cross-site failure of frozen selective prediction for multimodal
+chest-radiograph models: a prespecified two-hospital evaluation\par}
 
 \vspace{1.5em}
 \noindent Shakib Howlader, BSc,\textsuperscript{1}
@@ -109,28 +106,30 @@ and to establish what the cross-site estimate measures.
 feature-fusion models were trained on MIMIC-CXR-JPG. Per-pathology thresholds
 and an 80\%-coverage abstention cutoff were selected at the source and applied
 unchanged to CheXpert Plus. Labels for five pathologies came from CheXbert
-applied to report impressions. The protocol was registered before data access;
-a post-results audit corrected a verified defect, and later analyses are
-labelled post hoc.
+applied to report impressions. The protocol was prespecified and
+independently time-stamped before any external result; a post hoc audit
+corrected a verified estimator defect.
 
 \noindent\textbf{Results:} The original estimator counted studies without a
 labelled target (\NoLabSrcImpression{} at the source, \NoLabExtImpression{}
 externally) as error-free, producing transfer gaps of \HOneMThreeOrigPt{} (late
 fusion) and \HOneMFourOrigPt{} (feature fusion). Over studies with a labelled
-target, the gaps were \HOneMThreeEvalPt{} and \HOneMFourEvalPt{}, with intervals
-inside $\pm$0.02. With predictions and thresholds fixed, label handling moved
+target, the gaps were \HOneMThreeEvalPt{} and \HOneMFourEvalPt{}. With predictions and thresholds fixed, label handling moved
 the feature-fusion gap from \SensUncPosHOneMFourPt{} to \SensUnmNegHOneMFourPt{},
 and a second training seed shifted both multimodal gaps by about $-$0.04. Frozen
 thresholds moved operating points (cardiomegaly specificity \MFourCardSpecSrc{}
 versus \MFourCardSpecExt{}), while coverage stayed within 0.05 of target.
+Macro AUROC held for the image model (\AucMOneSrc{} versus \AucMOneExt{}) but
+not the text model (\AucMTwoSrc{} versus \AucMTwoExt{}).
 
-\noindent\textbf{Discussion:} The originally reported transport failure reflected label
-availability, not model error. Misaligned context was worse than absent context
+\noindent\textbf{Discussion:} The originally computed transport failure
+reflected label availability, not model error. Misaligned context was worse than absent context
 for late fusion at the source under every specification, but not externally
 under the second seed.
 
 \noindent\textbf{Conclusion:} With report-derived labels available at
-different rates, cross-site selective-risk comparisons are not identified.
+different rates, the cross-site selective-risk comparison could not be
+determined.
 % ABSTRACT-END
 
 \clearpage
@@ -183,7 +182,7 @@ redistributed.\cite{johnson2024cxrdata,johnson2024jpgdata,chambon2024} The
 machine-readable protocol, its amendment log, all analysis code, tests,
 executable commands and every aggregate result reported here are available at
 \url{https://github.com/mr-shakib/compound-shift-selective-reliability}
-(archived release: \url{https://doi.org/10.5281/zenodo.23213133}).\cite{howlader2026zenodo} Row-level labels,
+(archived releases: \url{https://doi.org/10.5281/zenodo.23213132}).\cite{howlader2026zenodo} Row-level labels,
 predictions, model checkpoints and images cannot be shared under the data use
 agreements.
 
@@ -195,6 +194,21 @@ agreements.
 % end of the manuscript, each with its alt text directly underneath, preceded by "Alt text:".
 \clearpage
 \section*{Figure legends}
+
+\begin{figure}[H]
+\caption{Study design. Models, per-finding thresholds and the abstention cutoff
+were fixed at the source and applied unchanged to the external cohort; the
+context conditions C0--C2 were applied at evaluation at both sites.}
+\label{fig:design}
+\alttext{Flow diagram with a source-hospital column and an external-hospital
+column. At the source, a model-training tier feeds four models, and a
+threshold-calibration tier selects per-finding thresholds and an 80 percent
+coverage cutoff. Together these form a frozen policy, which arrows apply
+unchanged to the source evaluation tier and to the external cohort, each
+yielding selective error and coverage. A band below lists the three context
+conditions: intact, removed and misaligned. The bottom lines define the
+transfer gap H1 and the within-site contrasts H2 and H4.}
+\end{figure}
 
 \begin{figure}[H]
 \caption{Share of evaluation studies whose label for each target is positive,

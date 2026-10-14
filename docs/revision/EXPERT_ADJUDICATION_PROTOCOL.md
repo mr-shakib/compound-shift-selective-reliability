@@ -1,9 +1,10 @@
-# Blinded expert adjudication protocol (draft, not executed)
+# Blinded expert adjudication protocol (ready to run, not executed)
 
-Status: **draft for author and clinical-collaborator review, 2026-10-06.**
-No adjudication has been performed. No labels in this repository come from
-clinicians, and none may be simulated or produced by a language model and
-described as clinical ground truth.
+Status: **tools built and tested 2026-10-14; waiting for readers, an ethics
+determination and public registration (section 8).** No adjudication has been
+performed. No labels in this repository come from clinicians, and none may be
+simulated or produced by a language model and described as clinical ground
+truth. Run order: section 10.
 
 ## 1. Purpose
 
@@ -158,3 +159,60 @@ Uncommon findings will be estimated imprecisely. Image-only reading differs
 from clinical reporting, which also draws on history and priors, so the expert
 reference is a different construct from the report labels, not a corrected
 version of them.
+
+## 10. Why this settles the paper's open question, and how to run it
+
+**Precision needed.** The paper leaves the M4 transfer gap at about −0.02 or
++0.13, depending on how unmentioned report labels are treated (−0.01 or +0.08
+for M3). A 95% interval of ±0.05 on the expert-label gap separates these. From
+the models' actual study-level error spread (SD 0.27–0.29 with dense labels,
+80% accepted), an unstratified sample needs about 300–430 studies per site for
+±0.05, 800–1,200 for ±0.03 and 1,800–2,700 for ±0.02. The 600 per site above
+is therefore enough to decide between the paper's two readings, with margin
+for the design effect of unequal stratum weights.
+
+**Allocation on the real frames** (dry run, 2026-10-14;
+`results/c3e_adjudication/sample_allocation_dry_run.csv`): 600 studies per
+site, split 300 / 150 / 150 across accepted-labelled, accepted-label-less and
+deferred, with inclusion probabilities of about 3–5% at the source and
+0.3–0.8% externally.
+
+**Extra item sets** (analysed separately, never weighted into the estimates):
+- all 200 CheXpert validation studies, already on disk inside CheXpert Plus
+  and labelled by a three-radiologist consensus, mixed in unmarked as a check on
+  each reader's accuracy;
+- 30 practice studies from the model-train tier, shown first and discarded.
+
+**Order of work.**
+1. Ethics determination from the authors' institution (section 8;
+   `ETHICS_DETERMINATION_REQUEST.md`).
+2. Readers credentialed for both datasets (`RADIOLOGIST_INVITATION.md`).
+3. Register this protocol publicly before any image is read
+   (`OSF_PREREGISTRATION_ADJUDICATION.md`). The registration time stamp is the
+   independent record the main study lacked.
+4. Draw and freeze the sample; record its SHA-256 in the registration:
+   ```bash
+   cd <project root>
+   c3e_audit_toolkit/.venv/bin/python -m c3e.adjudication.sample
+   ```
+5. Fetch the full-resolution originals of the sampled images only (about
+   1,500 images; AWS CLI credentials for MIMIC and `REDIVIS_API_TOKEN` exported
+   in the shell for CheXpert Plus):
+   ```bash
+   c3e_audit_toolkit/.venv/bin/python -m c3e.adjudication.fetch
+   ```
+6. Each primary reader reads on a credentialed machine holding the data:
+   ```bash
+   c3e_audit_toolkit/.venv/bin/python -m c3e.adjudication.reader --reader A
+   # open http://127.0.0.1:8765 ; progress saves after every study
+   ```
+7. Adjudication of disagreements, then the analysis in section 7.
+
+**Phase 0 (no readers needed).** Download the CheXpert v1.0 validation labels
+(`valid.csv`) from the Stanford AIMI CheXpert dataset page, place the file at
+`data/chexpert/valid.csv` (gitignored), and run
+`c3e_audit_toolkit/.venv/bin/python -m c3e.revision.runner --only expert_valid`.
+It reports, for the external site, what each report-label category means on
+the image (in particular the share of unmentioned cells that radiologists call
+present) and the models' selective error against radiologist labels on 132
+studies.

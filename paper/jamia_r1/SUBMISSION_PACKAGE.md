@@ -16,14 +16,14 @@ reference list in JAMIA style, and fixed the tables where first cited.
 
 | Requirement | JAMIA rule | This build |
 |---|---|---|
-| Body words (Background → Conclusion) | ≤ 4,000 | **3,135** |
-| Structured abstract (Objective, Materials and Methods, Results, Discussion, Conclusion) | ≤ 250 words | **232** |
+| Body words (Background → Conclusion) | ≤ 4,000 | **3,507** |
+| Structured abstract (Objective, Materials and Methods, Results, Discussion, Conclusion) | ≤ 250 words | **249** |
 | Tables | ≤ 4, in the main text where first cited | **4**, fixed in place |
-| Figures | ≤ 6, uploaded as separate files; legends at the end of the manuscript; alt text directly under each legend, preceded by "Alt text:" | **5**; legends and alt text on the last pages; files in `figures_for_upload/` |
+| Figures | ≤ 6, uploaded as separate files; legends at the end of the manuscript; alt text directly under each legend, preceded by "Alt text:" | **6**; legends and alt text on the last pages; files in `figures_for_upload/` |
 | Title page | title; all authors' full names, degrees, department, institution, city, country; corresponding author's postal address, email and telephone; ≤ 5 keywords (MeSH); word count | yes |
 | Citations | numbered in order of citation, in square brackets immediately after punctuation (`text.[6]`), `[1, 4, 39]`, `[22-25]` | yes |
 | Reference list | all authors if ≤ 3, else first 3 + "et al."; italic Medline journal abbreviation; `Journal Year;Vol:pages.`; datasets as `[dataset] Authors, Year, Title, Publisher, Identifier` | yes (19 references, including the Zenodo archive) |
-| Spacing | double | yes (line numbers added for reviewers) |
+| Spacing | double | yes |
 | Required sections | Background and Significance, then sections matching the abstract headings | yes |
 | Data availability statement | required | yes |
 | CRediT contributions | required at submission | yes |
@@ -36,18 +36,19 @@ reference list in JAMIA style, and fixed the tables where first cited.
 |---|---|
 | Manuscript (PDF compiled from LaTeX) | `main_jamia_r1.pdf` |
 | LaTeX source | `source_for_upload/main_jamia_r1.tex`: one self-contained file (sections, numbers, tables and bibliography inlined) that compiles alone with pdflatex to the same text as the PDF |
-| Figures (separate files) | `figures_for_upload/Figure1–5.pdf` (vector) or `.png` (600 dpi) |
+| Figures (separate files) | `figures_for_upload/Figure1–6.pdf` (vector) or `.png` (600 dpi) |
 | Supplementary File | `supplement_jamia_r1.pdf` |
 | Supplementary File (reporting checklist) | `tripod_ai_checklist_r1.pdf` |
 | Cover letter | `cover_letter.pdf` |
 
 Upload the figures in the order in which they are cited:
 
-1. Label composition
-2. H1 across specifications
-3. Operating points
-4. Risk–coverage
-5. Within-site H4
+1. Study design
+2. Label composition
+3. H1 across specifications
+4. Operating points
+5. Risk–coverage
+6. Within-site H4
 
 As JAMIA asks, the manuscript PDF does not embed the figures. Their legends,
 each followed by its alt text, are on the last pages. If the system also asks
@@ -55,9 +56,9 @@ for alt text in a form field, copy it from there.
 
 ## Metadata to paste into the submission system
 
-- **Title:** Frozen selective prediction for multimodal chest-radiograph
-  models across two hospitals: a preregistered compound-shift evaluation with
-  label-dependent cross-site conclusions
+- **Title:** Label availability, not model error, produced an apparent
+  cross-site failure of frozen selective prediction for multimodal
+  chest-radiograph models: a prespecified two-hospital evaluation
 - **Keywords (MeSH):** Radiography, Thoracic; Machine Learning; Diagnosis,
   Computer-Assisted; Data Accuracy; Reproducibility of Results
 - **Abstract:** copy from page 2 of `main_jamia_r1.pdf`. The five headings are
@@ -72,7 +73,8 @@ Supplied by the author on 2026-10-07 and filled in:
 - CRediT roles;
 - AI use: ChatGPT, including its Codex agent, and Claude, with no row-level
   data entered;
-- the repository URL and Zenodo DOI 10.5281/zenodo.23213133 (v1.0.0);
+- the repository URL and Zenodo DOI (v1.0.0: 10.5281/zenodo.23213133; the
+  manuscript now cites the all-versions DOI 10.5281/zenodo.23213132);
 - no prior submission, no preprint and no related papers;
 - Adnan Rahman Sayeem's approval.
 
@@ -137,6 +139,31 @@ No `[AUTHOR INPUT REQUIRED]` markers remain in any file.
 - **Preprints still cited:** two, the MIMIC-CXR-JPG and CheXpert Plus
   descriptor papers. Both are the required dataset citations, and no journal
   version exists for either.
+
+## Before submission (pre-submission revision, 2026-10-14)
+
+The manuscript changed substantially on 2026-10-14: new title and framing,
+prespecified rather than preregistered, GitHub time stamp, deviations table,
+per-site AUROC, training-seed replicates, study-design figure (now six
+figures), eleven added references and a corrected TRIPOD+AI checklist. The
+co-author sign-offs of 2026-10-09 covered the earlier version, so:
+
+1. **Seed replicates.** Run `bash scripts/run_seed_replicates.sh` (about 3
+   days). Then run `python -m c3e.revision.runner --only seeds`,
+   `python -m c3e.revision.report` and `./build.sh`. Rewrite the sentences that
+   still describe one replicate seed: the abstract ("a second training seed
+   shifted…"), Results ("A second training seed moved…", and the H4 sentence
+   "both training seeds"), the Discussion ("permutation and seed") and the
+   Limitations ("Two training seeds cannot establish…").
+2. **Expert labels**, if done before submission: Phase 0 and Phase 1 in
+   `docs/revision/EXPERT_ADJUDICATION_PROTOCOL.md`, section 10.
+3. **Ethics.** If DIU issues a determination
+   (`docs/revision/ETHICS_DETERMINATION_REQUEST.md`), cite it in Methods.
+4. **Co-authors.** Adnan Rahman Sayeem re-runs `VERIFY.md` on the final commit
+   (12 claims). The Methods sentence on independent reproduction is true only
+   after this. Shahadat Hossain reviews and approves the final version.
+5. **Archive.** Create GitHub release v1.1.0 from the final commit; Zenodo
+   adds it as a new version under the all-versions DOI the manuscript cites.
 
 ## Rebuild
 

@@ -16,23 +16,36 @@ external cohort. Where both sections labelled a cell, impression and findings
 labels agreed in \AgreeMinSrc{}--\AgreeMaxExt{} of cells. The two endpoints
 differ mainly in which cells carry a label.
 
-\subsection*{Registered hypotheses after correction}
-\Cref{tab:hyp} reports every originally computed contrast under both
-estimators. The original estimator confirmed H1: \HOneMThreeOrig{} for late
+\subsection*{Discrimination at each site}
+Over all labelled cells, the image-only model's macro AUROC was \AucMOneSrc{} at
+the source and \AucMOneExt{} externally (difference \AucMOneDiff{}
+\AucMOneDiffCI{}), whereas the text-only model's fell from \AucMTwoSrc{} to
+\AucMTwoExt{} (\AucMTwoDiff{} \AucMTwoDiffCI{}). The multimodal models were
+within 0.01 of the image-only model at the source (\AucMThreeSrc{} for M3,
+\AucMFourSrc{} for M4) and below it externally (\AucMThreeExt{} and
+\AucMFourExt{}; \stab{stab:discrim}). Atelectasis had only \AtelNegSrc{}
+labelled negatives at the source and \AtelNegExt{} externally, so its AUROC is
+imprecise. These AUROCs are computed over report-derived labels and share their
+availability caveats.
+
+\subsection*{Prespecified hypotheses after correction}
+\Cref{tab:hyp} reports every contrast computed by the original analysis code
+under both estimators. The original estimator confirmed H1: \HOneMThreeOrig{} for late
 fusion (M3) and \HOneMFourOrig{} for feature fusion (M4). Over evaluable studies,
 the gaps were \HOneMThreeEval{} and \HOneMFourEval{}, so H1 was not confirmed.
-Both intervals lie inside $\pm$0.02, conditional on the calibration sample and
-training run. H2 was not confirmed under either estimator, and neither was the
-registered H3, which equals H2. The post hoc transfer-gap H3 was negative for
-both models; corrected, its magnitude fell below 0.02, so the previously
-reported ``reversal at materiality'' does not survive.
+Both bootstrap intervals lie inside $\pm$0.02, but they condition on one
+calibration sample and one training run, and resampling either moved the
+estimates by more (see Uncertainty beyond the evaluation bootstrap). H2 was not confirmed under either estimator, and neither was the
+prespecified H3, which equals H2. The post hoc transfer-gap H3 was negative for
+both models; corrected, its magnitude fell below 0.02, so the reversal at materiality seen
+under the original estimator does not survive.
 
 \begin{table}[H]
 \centering\footnotesize
 \caption{Contrasts under the original and corrected (evaluable-study)
-estimators, with verdicts (V) under the registered rule. C, confirmed; S, same
+estimators, with verdicts (V) under the prespecified rule. C, confirmed; S, same
 direction but below materiality; I, interval includes zero; O, opposite
-direction (below materiality, or none registered); O*, opposite direction with
+direction (below materiality, or none prespecified); O*, opposite direction with
 magnitude $\ge$0.02. H3 brackets show the verdict with the 0.02 materiality
 applied by the original code. Values are external minus source unless
 labelled C2 $-$ C1.}
@@ -54,12 +67,13 @@ its interval width. M4's gap was \ViewPAMFour{} in PA-only studies and
 \ViewAPMFour{} in AP-only studies, and AP films made up \APShareSrc{} of source
 and \APShareExt{} of external studies. Pathology-specific gaps for M4 were
 heterogeneous under the primary labels: \PathMFourCard{} for cardiomegaly and
-\PathMFourAtel{} for atelectasis (\ssec{ssec:path}).
+\PathMFourAtel{} for atelectasis (\ssec{ssec:path}). Exploratory external
+demographic strata are in \stab{stab:demo}.
 
 \subsection*{Controlled label-source decomposition}
-The original findings-label sensitivity changed four things at once: labels,
-source cohort, thresholds and C2 donors. Its reported reversal of H1 reproduces
-exactly (\cref{tab:ls}). Changing one factor at a time showed that, under the
+As originally implemented, the findings-label sensitivity changed four things
+at once: labels, source cohort, thresholds and C2 donors. Its reversal of H1
+reproduces exactly (\cref{tab:ls}). Changing one factor at a time showed that, under the
 original estimator, swapping labels on the same studies (A0$\to$A1) and
 restricting the source cohort (A1$\to$A2) produced most of the reversal. The
 restriction matters only because it removes label-less source studies that the
@@ -68,8 +82,8 @@ effect. Under the corrected estimator, the findings-label result does not
 reverse the primary: \LSAThreeMThreeEval{} for M3 and \LSAThreeMFourEval{} for
 M4. On cells labelled under both sources, the two label sets gave nearly the
 same contrasts (steps A1c). Re-selecting thresholds on findings labels also
-changed external decisions in \SOneCellsChanged{} cells, so the earlier
-argument that ``only the labels differ'' did not hold.
+changed external decisions in \SOneCellsChanged{} cells, so the original
+sensitivity did not isolate the effect of the labels.
 
 \begin{table}[H]
 \centering\footnotesize
@@ -118,23 +132,22 @@ moved corrected H1 estimates with standard deviations
 \CalRatioMin{}--\CalRatioMax{} times the evaluation-bootstrap standard
 deviations (\cref{tab:unc}). For M4 the calibration standard deviation was
 \CalSDMFour{} against \EvalSDMFour{} from the evaluation bootstrap, and
-per-pathology threshold standard deviations reached \ThrSDMaxMFour{}. The
-reported intervals therefore understate total uncertainty for cross-site
-contrasts.
+per-pathology threshold standard deviations reached \ThrSDMaxMFour{}. Across
+\SeedsN{} training runs, the corrected H1 ranged from \SeedHOneMThreeMin{} to
+\SeedHOneMThreeMax{} for M3 and from \SeedHOneMFourMin{} to \SeedHOneMFourMax{}
+for M4 (between-seed SD \SeedSDHOneMThree{} and \SeedSDHOneMFour{};
+\stab{stab:seeds}). The reported intervals therefore understate total
+uncertainty for cross-site contrasts, and training variation is its largest
+measured source.
 
 \begin{table}[H]
 \centering\footnotesize
 \caption{H1 variability from resampling evaluation patients (bootstrap SD,
-approximated from the 95\% interval) and from resampling calibration patients
-with the frozen selection rule re-applied (200 replicates).}
+approximated from the 95\% interval), from resampling calibration patients with
+the frozen selection rule re-applied (200 replicates), and across training
+runs (\SeedsN{} seeds, thresholds re-selected by the frozen rule for each).}
 \label{tab:unc}
 \begin{adjustbox}{max width=\linewidth}
 \input{../revision/generated/tab_uncertainty}
 \end{adjustbox}
 \end{table}
-
-\subsection*{Integrity checks}
-The previously reported studies ``retaining their own context'' under C2
-(\CTwoIdentSrc{} source, \CTwoIdentExt{} external) all received identical text
-from a different patient; no recipient received its own patient's context.
-Exploratory external demographic strata are in \stab{stab:demo}.

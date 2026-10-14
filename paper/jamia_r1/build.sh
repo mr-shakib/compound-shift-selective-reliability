@@ -21,7 +21,7 @@ fi
 rm -f source_for_upload/*.aux source_for_upload/*.log source_for_upload/*.out source_for_upload/main_jamia_r1.pdf
 mkdir -p figures_for_upload
 i=0
-for f in fig2_label_composition fig1_h1_specifications fig4_operating_points fig3_risk_coverage fig5_h4_within_site; do
+for f in fig0_design fig2_label_composition fig1_h1_specifications fig4_operating_points fig3_risk_coverage fig5_h4_within_site; do
   i=$((i+1))
   cp "../revision/figures/$f.pdf" "figures_for_upload/Figure${i}.pdf"
   pdftoppm -png -r 600 -singlefile "../revision/figures/$f.pdf" "figures_for_upload/Figure${i}"

@@ -1,10 +1,10 @@
 \section*{Discussion}
 
-The preregistered transport-failure hypothesis was not confirmed once a
+The prespecified transport-failure hypothesis was not confirmed once a
 verified estimator defect was corrected. The original analysis counted accepted
 studies whose report mentioned none of the five targets as correctly
 classified. These studies made up about half of the source cohort and a fifth
-of the external one, so the originally reported transfer gaps measured a difference in
+of the external one, so the transfer gaps computed by the original code measured a difference in
 label availability between two report corpora rather than a change in model
 error. The near-zero corrected gaps are themselves fragile: label handling,
 label source, aggregation, view and training seed each moved them by more than
@@ -21,12 +21,19 @@ The same effect at the external site did not survive the second seed. Third,
 better error ranking at the source, from a decision-aware score, did not make
 the operating point more transportable.
 
+Discrimination adds a further, threshold-free observation. The text pathway,
+not the image pathway, lost discrimination at the new hospital, and fusion did
+not protect against the loss: externally, both multimodal models discriminated
+less well than the image model alone, and at the source they were within 0.01
+of it. The premise that pre-diagnostic context helps did not transport, which
+is the compound-shift risk the protocol targets.
+
 \subsection*{Is the correction outcome-driven?}
 The correction was made after the external results were known, and it reverses
-the preregistered primary result, so it deserves scrutiny. Four features argue
+the prespecified primary result, so it deserves scrutiny. Four features argue
 against an outcome-driven choice. First, the defect contradicts the
 implementation's own documented intent, and the corrected estimator applies the
-registered definition without other changes. Second, the original estimator is
+prespecified definition without other changes. Second, the original estimator is
 an exact multiple of the corrected one, and the multiplier, the evaluable share
 of accepted studies, is reported for both sites. Third, the correction removes
 a confirmed hypothesis rather than creating one. Fourth, no alternative
@@ -45,8 +52,8 @@ from most external studies. Labeller accuracy may also differ, because report
 labels are imperfect image proxies and the external labelling settings are
 undocumented.\cite{jain2021} Matching aggregate positive rates therefore did
 not establish comparable labels. The controlled analysis shows that selective
-missingness, meaning which cells carry a label at all, drove the originally reported
-contrast and remains a first-order driver after correction. This sharpens an
+missingness, meaning which cells carry a label at all, drove the contrast in the
+original code and remains a first-order driver after correction. This sharpens an
 earlier argument that cross-dataset failure of chest-radiograph models reflects
 label shift.\cite{cohen2020} Here, label shift is not a competing explanation
 for model behaviour but a property of the measurement itself. It is strong
@@ -83,6 +90,11 @@ seed-independence, and the second seed changed several estimates materially.
 C2 was applied per image; synthetic context removal differs from naturally
 missing context; and the informativeness rule measures length, not content.
 The evaluation covers one pair of hospitals in one direction. Demographic
-analyses are external-only and exploratory. Two pre-data planning documents
-existed; the prose plan's one-image-per-study and concordant-study
-sensitivities were not run.
+analyses are external-only and exploratory, although chest-radiograph models
+are known to underdiagnose under-served groups.\cite{seyyed2021} Two sensitivity analyses in the
+prose plan were not run (\stab{stab:deviations}). The models are conventional
+architectures; stronger image or text encoders may transport differently. The
+frozen confidence score, the minimum margin across findings, is a common
+baseline that ranked errors only weakly; a stronger score could transport
+differently, although the decision-aware comparator, which ranked errors
+better, transported its coverage worse.

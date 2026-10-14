@@ -118,7 +118,7 @@ def run_family(src: Site, ext: Site, policy: Policy, *, models=("M1", "M2", "M3"
                 f = lambda S_s, S_e: ((R(S_e, I_e, m, c, est) - R(S_e, I_e, m, "C0", est))
                                       - (R(S_s, I_s, m, c, est) - R(S_s, I_s, m, "C0", est)))
                 add("H2", m, f"interaction {c}", f(Bs, Be), f(ps, pe), registered=(c == "C1"))
-        for m in multimodal:
+        for m in multimodal if "M1" in models else ():
             f = lambda S_s, S_e: ((R(S_e, I_e, m, "C0", est) - R(S_s, I_s, m, "C0", est))
                                   - (R(S_e, I_e, "M1", "C0", est) - R(S_s, I_s, "M1", "C0", est)))
             add("H3", m, f"transfer gap {m} - transfer gap M1", f(Bs, Be), f(ps, pe),

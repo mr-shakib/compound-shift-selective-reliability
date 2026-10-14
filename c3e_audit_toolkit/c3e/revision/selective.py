@@ -13,6 +13,8 @@
   |logit p - logit t_j| is reported alongside as the decision-aware analogue.
 * Per-pathology operating characteristics (TP, FP, TN, FN, sensitivity,
   specificity) among accepted studies and over the full cohort.
+* Discrimination: per-pathology and macro AUROC of each model at each site,
+  threshold- and policy-free, with external-minus-source intervals.
 """
 
 from __future__ import annotations
@@ -151,6 +153,83 @@ def curves(site: Site, policy: Policy, models=("M1", "M2", "M3", "M4"), conds=("
                 for cv, rk in zip(rc["coverage"], rc["risk"]):
                     rows.append({"site": site.name, "model": m, "condition": c, "score": score,
                                  "coverage_evaluable": float(cv), "risk_evaluable_study": float(rk)})
+    return rows
+
+
+def _auroc_prep(score: np.ndarray, positive: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Sort order, tie-group starts and sorted labels for repeated weighted AUROC."""
+    order = np.argsort(score, kind="mergesort")
+    _, starts = np.unique(np.asarray(score)[order], return_index=True)
+    return order, starts, np.asarray(positive, dtype=float)[order]
+
+
+def weighted_auroc(prep: tuple[np.ndarray, np.ndarray, np.ndarray], w: np.ndarray) -> float:
+    """Mann-Whitney AUROC with case weights (bootstrap multiplicities); ties count one half.
+
+    With unit weights it equals ``auroc``; with integer weights it equals
+    ``auroc`` on the data with each case repeated that many times.
+    """
+    order, starts, y = prep
+    ws = np.asarray(w, dtype=float)[order]
+    gp = np.add.reduceat(ws * y, starts)
+    gn = np.add.reduceat(ws * (1 - y), starts)
+    tp, tn = gp.sum(), gn.sum()
+    if tp == 0 or tn == 0:
+        return float("nan")
+    return float((gp * (np.cumsum(gn) - gn + 0.5 * gn)).sum() / (tp * tn))
+
+
+def discrimination(src: Site, ext: Site, models=("M1", "M2", "M3", "M4"), cond: str = "C0",
+                   variant: str = "primary", replicates: int = 2000,
+                   seed: int = 20260718) -> list[dict[str, Any]]:
+    """Per-pathology and macro AUROC of each model at each site, and the
+    external-minus-source difference with a patient-clustered interval.
+
+    Threshold-free and policy-free: every labelled cell in the evaluation
+    cohort counts, accepted or not. Descriptive; nothing is fitted.
+    """
+    sites = {"source": src, "external": ext}
+    prep, cells = {}, {}
+    for tag, site in sites.items():
+        lab, msk = labels_from_raw(site.raw, variant)
+        for j, name in enumerate(TARGETS):
+            obs = np.flatnonzero(msk[:, j] > 0)
+            cells[(tag, name)] = (obs, int(lab[obs, j].sum()), int(len(obs) - lab[obs, j].sum()))
+            for m in models:
+                prep[(tag, m, name)] = _auroc_prep(site.probs[(m, cond)][obs, j], lab[obs, j])
+    # Joint draw in the order used by threshold_free and Stage 10.
+    rng = np.random.default_rng(seed)
+    ps, pe = (PatientIndex(s.cohort["patient"].to_numpy().astype(str)) for s in (src, ext))
+    keys = [(m, name) for m in models for name in (*TARGETS, "macro")]
+    draws = {k: np.empty(replicates) for k in keys}
+    for b in range(replicates):
+        w = {"source": np.bincount(rng.integers(0, ps.n, ps.n), minlength=ps.n)[ps.inverse].astype(float),
+             "external": np.bincount(rng.integers(0, pe.n, pe.n), minlength=pe.n)[pe.inverse].astype(float)}
+        for m in models:
+            diffs = []
+            for name in TARGETS:
+                a = {t: weighted_auroc(prep[(t, m, name)], w[t][cells[(t, name)][0]]) for t in sites}
+                diffs.append(a["external"] - a["source"])
+                draws[(m, name)][b] = diffs[-1]
+            draws[(m, "macro")][b] = float(np.mean(diffs))
+    rows = []
+    for m in models:
+        pts = {}
+        for name in TARGETS:
+            pts[name] = {t: weighted_auroc(prep[(t, m, name)], np.ones(len(cells[(t, name)][0]))) for t in sites}
+        pts["macro"] = {t: float(np.mean([pts[k][t] for k in TARGETS])) for t in sites}
+        for name in (*TARGETS, "macro"):
+            lo, hi = percentile_interval(draws[(m, name)])
+            cnt = {t: cells[(t, name)] for t in sites} if name != "macro" else None
+            rows.append({"model": m, "condition": cond, "label_variant": variant, "pathology": name,
+                         "auroc_source": pts[name]["source"], "auroc_external": pts[name]["external"],
+                         "difference": pts[name]["external"] - pts[name]["source"],
+                         "ci_low": lo, "ci_high": hi,
+                         "n_pos_source": cnt["source"][1] if cnt else None,
+                         "n_neg_source": cnt["source"][2] if cnt else None,
+                         "n_pos_external": cnt["external"][1] if cnt else None,
+                         "n_neg_external": cnt["external"][2] if cnt else None,
+                         "population": "labelled cells, full evaluation cohort"})
     return rows
 
 

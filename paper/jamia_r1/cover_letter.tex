@@ -12,16 +12,17 @@
 \begin{letter}{The Editor-in-Chief\\ Journal of the American Medical Informatics Association}
 \opening{Dear Editor,}
 
-We submit our manuscript, ``Frozen selective prediction for multimodal
-chest-radiograph models across two hospitals: a preregistered compound-shift
-evaluation with label-dependent cross-site conclusions'', for consideration as
-a Research and Applications article.
+We submit our manuscript, ``Label availability, not model error, produced an
+apparent cross-site failure of frozen selective prediction for multimodal
+chest-radiograph models: a prespecified two-hospital evaluation'', for
+consideration as a Research and Applications article.
 
 Selective-prediction systems defer uncertain chest radiographs to a human
 reader using thresholds chosen at the developing hospital. Whether such a
 frozen policy keeps its error rate and referral rate at another hospital is an
 informatics question about deployed artifacts, not only about models. We
-evaluated this under a protocol registered before data access, using
+evaluated this under a prespecified protocol, independently time-stamped on
+GitHub before any external result existed, using
 MIMIC-CXR-JPG and CheXpert Plus and crossing institutional shift with
 controlled changes to pre-diagnostic clinical context.
 
@@ -30,13 +31,15 @@ interest to JAMIA readers. An audit carried out after the first external
 results showed that the apparent cross-site degradation came from the
 selective-risk estimator. Studies whose report labelled none of the target
 findings were counted as correct, and such studies were far more common at one
-hospital than the other. After correction, the cross-site contrast was not
-identified. Defensible choices about uncertain and unmentioned report labels,
+hospital than the other. After correction, the cross-site contrast could not be
+determined from these labels. Defensible choices about uncertain and unmentioned report labels,
 together with the training seed, moved it from below zero to well above.
 Holding predictions and thresholds fixed, we show which choices drive the sign
 and why. We also report what remained stable: frozen thresholds kept coverage
 but not per-pathology operating points, and some within-site context effects
-were robust. We report the original and corrected estimates side by side, date
+were robust. Threshold-free discrimination adds that the text pathway, not the
+image pathway, lost discrimination at the new hospital, and fusion did not
+protect against the loss. We report the original and corrected estimates side by side, date
 every post hoc decision, and provide a blinded adjudication protocol as the
 route to a decisive answer.
 

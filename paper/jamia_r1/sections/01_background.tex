@@ -1,7 +1,7 @@
 \section*{Background and Significance}
 
 A selective classifier issues a decision only when its confidence clears a
-cutoff and refers the remaining cases to a human reader. For chest
+cutoff and refers the remaining cases to a human reader.\cite{chow1970,geifman2017} For chest
 radiographs, the per-finding decision thresholds and the abstention cutoff are
 normally chosen on data from the developing hospital. If the system is deployed
 elsewhere unchanged, the operational question is whether that frozen policy
@@ -25,21 +25,26 @@ evaluated within and across datasets, including leave-one-dataset-out
 shift.\cite{aperstein2026} Clinical indication
 and history improve chest-radiograph classification within a single
 source,\cite{jacenkow2022,yang2025} and missing modalities have been treated as
-an architectural problem.\cite{wang2025} Cross-dataset failure of
-chest-radiograph models has been attributed to shift in labels more than in
+an architectural problem.\cite{wang2025} Chest-radiograph models can lose
+performance at hospitals other than the one that developed them,\cite{zech2018}
+and cross-dataset failure has been attributed to shift in labels more than in
 images,\cite{cohen2020} and report-derived labels are imperfect proxies for
 image findings.\cite{jain2021} Using the same labeller, such as
 CheXbert,\cite{smit2020} at two sites does not guarantee equal labelling
 accuracy or equal label availability.
 
-We found no study that carries a frozen selective policy to a second hospital
-while manipulating pre-diagnostic context under preregistered rules. We also
-found none that isolates, with predictions and thresholds held fixed, how label
-availability and handling determine the transported risk. This paper does
-both. It reports a preregistered compound-shift evaluation, then an audit,
-carried out after the external results were seen, which found that the
-originally reported cross-site degradation was an artifact of the selective-risk
-estimator. The significance is methodological and practical. Cross-site
-selective-risk benchmarks built on report-derived labels can reach opposite
-conclusions under defensible analysis choices, and we show how to detect and
-bound this.
+We found no study that isolates, with predictions and thresholds held fixed,
+how label availability and label handling determine transported selective risk.
+Image-only rejection has been carried across datasets,\cite{aperstein2026} but
+we found none that does so for a multimodal policy while manipulating
+pre-diagnostic context under prespecified rules. This paper does both. Its
+central result concerns measurement. When per-study error is averaged over
+report-derived labels, a difference between hospitals in how often reports
+label any target appears as a difference in risk. In our prespecified analysis
+code this produced a confirmed cross-site degradation that disappeared once
+studies without a labelled target were excluded; an audit after the external
+results were seen traced it to the estimator. We give the mechanism in closed
+form, quantify it with predictions and thresholds held fixed, and propose
+checks that detect it. The significance is methodological and practical:
+cross-site selective-risk benchmarks built on report-derived labels can reach
+opposite conclusions under defensible analysis choices.
