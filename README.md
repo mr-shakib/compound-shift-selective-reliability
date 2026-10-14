@@ -18,9 +18,10 @@ result should be cited from this repository yet.
 |---|---|
 | `protocols/C3E6_stage2/` | machine-readable protocol, hash-manifested, with an amendment log and an automated validator |
 | `c3e_audit_toolkit/c3e/` | intake, labelling, training, calibration, evaluation and analysis code |
-| `c3e_audit_toolkit/tests/` | 160+ tests, all fixtures synthetic |
+| `c3e_audit_toolkit/tests/` | 237 tests, all fixtures synthetic |
 | `results/` | aggregate artifacts only, each with a manifest of SHA-256 digests |
-| `paper/` | LaTeX source |
+| `paper/jamia_r1/` | the manuscript as submitted to JAMIA, with supplement, TRIPOD+AI checklist and cover letter (`./build.sh`; see `VERIFY.md` to reproduce every number) |
+| `paper/revision/` | full-length version; its `generated/` tables and numbers and its figures feed the manuscript |
 | `docs/` | research log, statistical analysis plan, data-safety and provenance policies, related-work tracking |
 
 ## What is deliberately not here

@@ -9,10 +9,9 @@
 - `references_revised.bib`: bibliography re-verified on 2026-10-06; entries
   that could not be read in full say so.
 
-The original draft (`../main.tex`, `../main.pdf`, 21 Aug 2026) and the venue
-builds (`../jamia`, `../npjdm`) are unchanged. The venue builds carry the
-superseded conclusions and must be re-derived from this revision before any
-submission.
+The original draft (21 Aug 2026) and the earlier venue builds carried the
+superseded conclusions and were never submitted (removed from the current tree on 2026-10-15; in git history and the Zenodo v1.0.0 archive). The submission
+build is `../jamia_r1/`.
 
 Rebuild everything from the verified caches:
 
