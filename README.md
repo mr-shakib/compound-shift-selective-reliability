@@ -9,8 +9,8 @@ retrospective pre-deployment evaluation that crosses two shifts deliberately —
 institution and context availability — so their interaction can be estimated
 rather than assumed away.
 
-**Status: work in progress.** The confirmatory analysis is not complete, and no
-result should be cited from this repository yet.
+**Status: analysis complete.** The manuscript is in preparation for journal
+submission; please cite the preprint once it is posted.
 
 ## What is here
 
@@ -20,7 +20,7 @@ result should be cited from this repository yet.
 | `c3e_audit_toolkit/c3e/` | intake, labelling, training, calibration, evaluation and analysis code |
 | `c3e_audit_toolkit/tests/` | 237 tests, all fixtures synthetic |
 | `results/` | aggregate artifacts only, each with a manifest of SHA-256 digests |
-| `paper/jamia_r1/` | the manuscript as submitted to JAMIA, with supplement, TRIPOD+AI checklist and cover letter (`./build.sh`; see `VERIFY.md` to reproduce every number) |
+| `paper/jamia_r1/` | the manuscript prepared for submission to JAMIA, with supplement, TRIPOD+AI checklist and cover letter (`./build.sh`; see `VERIFY.md` to reproduce every number) |
 | `paper/revision/` | full-length version; its `generated/` tables and numbers and its figures feed the manuscript |
 | `docs/` | research log, statistical analysis plan, data-safety and provenance policies, related-work tracking |
 
@@ -50,12 +50,15 @@ fusion, and feature-concatenation fusion. Backbones are conventional and held
 constant, so architecture cannot serve as a competing explanation for any
 transport effect observed.
 
-## Preregistration
+## Prespecified protocol
 
-The protocol was frozen in a machine-readable registry before any label, model
-output, or metric existed. Every amendment is dated with its rationale and its
-confirmatory status; changes made after external-result inspection are labelled
-post-hoc exploratory by protocol rule.
+Hypotheses, endpoints and decision rules were fixed in a machine-readable
+protocol under version control. Its first version is dated 18 July 2026, before
+any MIMIC data were accessed, and the earliest independent time stamp is
+GitHub's push log of 6 August 2026, before any external result. The protocol was
+not lodged in a public registry. Every amendment is dated with its rationale and
+its confirmatory status; changes made after external-result inspection are
+labelled post-hoc exploratory by protocol rule.
 
 ```bash
 python protocols/C3E6_stage2/scripts/validate_protocol.py
