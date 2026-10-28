@@ -76,7 +76,12 @@ Supplied by the author on 2026-10-07 and filled in:
 - the repository URL and Zenodo DOI (v1.0.0: 10.5281/zenodo.23213133; the
   manuscript now cites the all-versions DOI 10.5281/zenodo.23213132);
 - no prior submission, no preprint and no related papers;
-- Adnan Rahman Sayeem's approval.
+- Adnan Rahman Sayeem's and Marzia Chowa's approval.
+
+Marzia Chowa (BSc; Department of Nutrition and Food Engineering, Daffodil
+International University; ORCID 0009-0006-5659-0048) was added as second
+author on 2026-10-29. Her contribution predates the addition; she was not
+listed earlier only because she had no ORCID iD.
 
 The supervisor, Shahadat Hossain, was added as third author on 2026-10-07. His
 degree (MSc) and ORCID (0000-0003-4545-2898) were taken from his public ORCID
@@ -112,6 +117,10 @@ co-author therefore has a real task before submission:
 
   Add Conceptualization or Methodology to his roles only if he actually
   shaped those.
+- **Marzia Chowa** (Investigation; Writing -- review & editing):
+  - critically reviews the final manuscript and returns written comments;
+  - approves the final version;
+  - confirms that she has no competing interests.
 
 **Completed (confirmed by the corresponding author on 2026-10-09):**
 - Adnan Rahman Sayeem returned the `VERIFY.md` check with no mismatches.
@@ -150,7 +159,9 @@ covered the earlier version, so:
 
 1. **Co-authors.** Adnan Rahman Sayeem re-runs `VERIFY.md` on the final commit
    (11 claims). The Methods sentence on independent reproduction is true only
-   after this. Shahadat Hossain reviews and approves the final version.
+   after this. Shahadat Hossain and Marzia Chowa review and approve the final
+   version. **Done:** all four authors approved the final version (confirmed
+   by the corresponding author on 2026-10-29).
 2. **Ethics (optional).** If DIU issues a determination
    (`docs/revision/ETHICS_DETERMINATION_REQUEST.md`), cite it in Methods.
 3. **Archive.** Create GitHub release v1.1.0 from the final commit; Zenodo
